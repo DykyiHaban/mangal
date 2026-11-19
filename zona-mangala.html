@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 19 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 20 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -85,18 +85,18 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   </div>
 </header>
 
-<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cargo"> Карго</label><label class="tg"><input type="checkbox" id="tg-door"> Дверцята під мийкою</label></div></details><div id="hint">Клік по кришці, ящику, карго чи дверцятах — відкрити або закрити · тягніть, щоб обертати · коліщатко, щоб наблизити</div></div>
+<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cargo2"> Карго зліва (шампури)</label><label class="tg"><input type="checkbox" id="tg-cargo"> Карго біля печі</label><label class="tg"><input type="checkbox" id="tg-door"> Дверцята під мийкою</label></div></details><div id="hint">Клік по кришці, ящику, карго чи дверцятах — відкрити або закрити · тягніть, щоб обертати · коліщатко, щоб наблизити</div></div>
 
 <aside>
   <h2>Загальне</h2>
   <dl>
     <dt>Майданчик</dt><dd>3000 × 1500</dd>
     <dt>Стовпи</dt><dd>4 × 100×100</dd>
-    <dt>Стійка</dt><dd>2500 + габіон 200 = 2700 × 600</dd>
-    <dt>Розміщення</dt><dd>справа впритул до стовпа, зліва 100</dd>
+    <dt>Стійка</dt><dd>карго 200 + мангал 650 + 30 + піч 500 + тумба 1370 = 2750 × 600</dd>
+    <dt>Розміщення</dt><dd>справа впритул до стовпа, зліва 50</dd>
     <dt>Висота</dt><dd>800</dd>
     <dt>Шамот</dt><dd>ША-5, 230×114×65</dd>
-    <dt>Шамот, шт</dt><dd>≈ 80</dd>
+    <dt>Шамот, шт</dt><dd>≈ 75</dd>
     <dt>Облицювальна</dt><dd>250×120×65, ≈ 7 шт (навпіл)</dd>
     <dt>Камінь</dt><dd>80–120, ≈ 0,26 м³ (~420 кг) + 40–70 ≈ 15 кг на фальшгабіон</dd>
   </dl>
@@ -104,7 +104,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   <div class="block">
     <h3>Три частини на болтах</h3>
     <ul>
-      <li>Частина 1: мангал 800 × 600, з шамотом і кришкою ≈ 210 кг</li>
+      <li>Частина 1: мангал 650 × 600, з шамотом і кришкою ≈ 180 кг, зліва до нього прикручене карго для шампурів</li>
       <li>Частина 2: казан 500 × 600, з кладкою ≈ 180 кг</li>
       <li>Частина 3: тумба з габіонами, 1370 × 600 і 700 × 700</li>
       <li>Мангал–казан: 4 болти M10 через стійки (на 120 і 300) з дистанційними втулками 30 мм, зазор лишається для тепла</li>
@@ -114,35 +114,34 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
     </ul>
   </div>
   <div class="block">
-    <h3>Мангал 800 × 600</h3>
+    <h3>Мангал 650 × 600</h3>
     <ul>
       <li>Короб з листа 3 мм, глибина ≈ 300, низ на 500</li>
       <li>Під: цегла плашмя, 65 мм</li>
       <li>Стінки: на ребро, 2 ряди (≈ 230 мм)</li>
       <li>Шамот врівень зі стільницею, верх на 800</li>
-      <li>Торці переднього і заднього рядів накриті кутником 75×50×6 на всю довжину 800</li>
+      <li>Торці переднього і заднього рядів накриті кутником 75×50×6 на всю довжину 650; 10 пропилів, перший і останній за 55 від краю</li>
       <li>Полиця 75 лежить на цеглі й краї короба, полиця 50 продовжує зовнішню стінку вгору до 850</li>
       <li>Пропили під шампури 12 × 10, крок 60 — шампур на 840 (+40 над стільницею)</li>
       <li>Кутник кріпиться до короба (прихватки або болти), цегла під ним лежить вільно</li>
       <li>Від вугілля до шампура ≈ 260</li>
-      <li>Робоча зона ≈ 654 × 454; шампур лягає на обидва кутники (600 між зовнішніми гранями), тож лезо від ≈ 610, загальна довжина ≈ 650–700</li>
+      <li>Робоча зона ≈ 504 × 454; шампур лягає на обидва кутники (600 між зовнішніми гранями), тож лезо від ≈ 610, загальна довжина ≈ 650–700</li>
       <li>Ручки шампурів спереду, задній кінець виходить за кутник не більше ніж на 20</li>
-      <li>Під мангалом замість дров висувний ящик для пательні, казана, кришок: корпус 700 × 545 × 275 з листа 1,5 мм, фасад 710 × 304, ручка-рейлінг 320</li>
+      <li>Під мангалом замість дров висувний ящик для пательні, казана, кришок: корпус 550 × 545 × 275 з листа 1,5 мм, фасад 560 × 304, ручка-рейлінг 320</li>
       <li>Ящик на 2 напрямних повного висуву 500 (45 кг), нижнього кріплення на полицю 140; висув 450</li>
       <li>Між ящиком і дном короба повітряний зазор ≈ 55, дно короба під 65 мм шамоту</li>
-      <li>Тримач шампурів на лівому боці: шампури лежать по діагоналі, вістря ззаду внизу, ручки спереду вгорі на 610–750, виходять на 40 за передній край — під ліву руку кухаря. Нахил 31°. Дві гребінки зі смуги 40×4: задня на 62 від заднього краю (на бічних обв'язках), передня на 560 (на ніжці і стінці короба); по 9 прорізів 12 × 30 з кроком 24. Шампури за 45 від стінки, збоку і нижче краю короба (800), ручки не гріються</li>
     </ul>
   </div>
   <div class="block">
     <h3>Кришка мангала</h3>
     <ul>
-      <li>Ковпак з листа 2 мм, зовні 806 × 606, верх на 1000 — на 150 вище за опору шампурів; перед тим як закрити, шампури знімають</li>
+      <li>Ковпак з листа 2 мм, зовні 656 × 606, верх на 1000 — на 150 вище за опору шампурів; перед тим як закрити, шампури знімають</li>
       <li>Передній і задній борт заходять на 20 нижче верху кутника (до 830), бокові — до 805, над накладкою зазору</li>
       <li>Зсередини по верхньому краю рамка з кутника 25×25×3 для жорсткості</li>
-      <li>Ззаду 2 приварні петлі Ø20 × 80 на 150 від країв: нижня половина приварена до кутника мангала нижче борту кришки, верхня — до заднього борту кришки; вісь на 840, на 16 за кутником</li>
+      <li>Ззаду 2 приварні петлі Ø20 × 80 на 50 від країв: нижня половина приварена до кутника мангала нижче борту кришки, верхня — до заднього борту кришки; вісь на 840, на 16 за кутником</li>
       <li>Відкривається на 100°, тримають 2 ланцюжки-обмежувачі</li>
       <li>Спереду дерев'яна ручка Ø28 × 220 на двох кронштейнах зі смуги, винос 40</li>
-      <li>Вага ≈ 19 кг; фарба термостійка</li>
+      <li>Вага ≈ 16 кг; фарба термостійка</li>
     </ul>
   </div>
   <div class="block">
@@ -188,6 +187,17 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   </div>
 
   <div class="block">
+    <h3>Карго для шампурів зліва від мангала</h3>
+    <ul>
+      <li>Корпус 200 × 600, верх на 800 врівень з мангалом: стінки з листа 2 мм з відбортовками, без стійок — уся ширина під карго; дно 2 мм, задня 1,5 мм, верх 3 мм — бічна полиця</li>
+      <li>4 регульовані ніжки; бік до мангала — лист 2 мм + базальтовий картон 8, прикручений 2 болтами M8 до ніжок мангала через втулки; до стовпа 50</li>
+      <li>Механізм карго 200, нижнє кріплення, повний висув 500, зверху напрямна на зовнішній стінці; висув 450</li>
+      <li>Шампури до ≈ 700 висять за ручку в рейці на 715 (10 прорізів, крок 45), вістря стоять у ловці на дні; ручки внизу під верхом, далеко від жару</li>
+      <li>Поруч, на ребрі, решітка-гриль до ≈ 450 × 350 з ручкою (загалом до ≈ 650): стоїть у П-профілі на дні, верхом спирається на скобу</li>
+      <li>Фасад — фальшгабіон 182 × 731 × 80, як біля печі; спереду рейок немає, щоб ручки шампурів проходили під верхом</li>
+    </ul>
+  </div>
+  <div class="block">
     <h3>Карго між піччю і тумбою</h3>
     <ul>
       <li>Ніша: дві стійки з труби 40×40 на ніжках (ззаду і спереду), кільця збоку і ззаду на 20–60 і 690–730, спереду лише верхнє — під ним відкрито</li>
@@ -203,6 +213,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v20</strong> Мангал звужено з 800 до 650 (праворуч усе як було). Тримач шампурів прибрано, натомість зліва від мангала карго 200 з фальшгабіоном: шампури висять за ручку, поруч решітка-гриль. Ящик і кришка мангала теж вужчі.</li>
     <li><strong>v19</strong> Тримач шампурів переробено: шампури лежать по діагоналі в двох гребінках, ручки спереду вгорі під ліву руку кухаря, збоку і нижче краю короба — не гріються, поки палає вогонь.</li>
     <li><strong>v18</strong> Тримач шампурів на лівому боці мангала (у v19 перенесено нижче). Дверцята під мийкою теж відкриваються кліком або галочкою.</li>
     <li><strong>v17</strong> Під мангалом замість дров висувний ящик для пательні й казана. Габіон між піччю і тумбою замінено нішею з карго: фасад — фальшгабіон, усередині рейка з гачками під приладдя. Кришка, ящик і карго відкриваються і закриваються кліком по деталі або галочками на панелі.</li>
@@ -378,125 +389,98 @@ box(0, -40, 0, 3000, 0, 1500, M.paving);
 [[0, 0], [2900, 0], [0, 1400], [2900, 1400]].forEach(([x, z]) => box(x, 0, z, x + 100, 2400, z + 100, M.post));
 
 parent = rig;
-/* mangal: x 100..900 (whole rig shifted by SHIFT) */
-frame(100, 900, 0, 600, 498, [100, 458]);
-box(140, 140, 40, 860, 143, 560, M.tube);
-tray(100, 900, 0, 600, 498, 800);
-floorBricks(108, 892, 8, 592, 501);
-wallRing(108, 892, 8, 592, 569, 2, 3, null);
-for (let i = 0; i < 80; i++) {
-  const s = 25 + rnd() * 20, x = 190 + rnd() * 620, z = 90 + rnd() * 420;
+/* mangal: v20 narrowed to 650: x MX0..MX1 = 250..900 (whole rig shifted by SHIFT); the right side (joint with the kazan) stays */
+const MX0 = 250, MX1 = 900, MXC = (MX0 + MX1) / 2;
+frame(MX0, MX1, 0, 600, 498, [100, 458]);
+box(MX0 + 40, 140, 40, MX1 - 40, 143, 560, M.tube);
+tray(MX0, MX1, 0, 600, 498, 800);
+floorBricks(MX0 + 8, MX1 - 8, 8, 592, 501);
+wallRing(MX0 + 8, MX1 - 8, 8, 592, 569, 2, 3, null);
+for (let i = 0; i < 64; i++) {
+  const s = 25 + rnd() * 20, x = MX0 + 90 + rnd() * (MX1 - MX0 - 180), z = 90 + rnd() * 420;
   const m = box(x, 566, z, x + s, 566 + s * 0.7, z + s * 0.8, rnd() < 0.25 ? M.ember : M.coal);
   m.rotation.y = rnd() * Math.PI;
 }
 /* v12: front and rear chamotte rows capped with angle 75x50x6, fixed to the tray.
    Horizontal leg 75 lies on the brick ends and the tray edge; vertical leg 50 continues the outer wall
-   up to 850 and is the skewer rest: notches 12 wide, 10 deep, pitch 60 -> skewer on 840 (+40 above worktop) */
+   up to 850 and is the skewer rest: notches 12 wide, 10 deep, pitch 60 -> skewer on 840 (+40 above worktop).
+   v20: 10 notches, the first and last 55 from the ends */
 const SUP = 40, RY = 800 + SUP;
 const capAngle = std(0xc4521c, { metalness: 0.5, roughness: 0.45 });
 const NOTCH = [];
-for (let x = 140; x <= 860; x += 60) NOTCH.push(x);
+for (let x = MX0 + 55; x <= MX1 - 55; x += 60) NOTCH.push(x);
 [[0, 1], [600, -1]].forEach(([zo, s]) => {
   const zi = zo + s * 75, zv = zo + s * 6;
-  box(100, 800, Math.min(zo, zi), 900, 806, Math.max(zo, zi), capAngle);
-  box(100, 806, Math.min(zo, zv), 900, RY, Math.max(zo, zv), capAngle);
-  let prev = 100;
+  box(MX0, 800, Math.min(zo, zi), MX1, 806, Math.max(zo, zi), capAngle);
+  box(MX0, 806, Math.min(zo, zv), MX1, RY, Math.max(zo, zv), capAngle);
+  let prev = MX0;
   NOTCH.forEach(x => { box(prev, RY, Math.min(zo, zv), x - 6, RY + 10, Math.max(zo, zv), capAngle); prev = x + 6; });
-  box(prev, RY, Math.min(zo, zv), 900, RY + 10, Math.max(zo, zv), capAngle);
+  box(prev, RY, Math.min(zo, zv), MX1, RY + 10, Math.max(zo, zv), capAngle);
 });
 /* skewers: handles at the front, the rear tip stops 20 behind the angle so it does not foul the lid hinges */
 const skewerG = new THREE.Group(); rig.add(skewerG); parent = skewerG;
-[320, 380, 440, 500].forEach(x => {
+NOTCH.slice(3, 7).forEach(x => {
   cyl(4, 760, [x, RY + 4, 360], 'z', M.skewer, 8);
   box(x - 6, RY + 2, 690, x + 6, RY + 14, 740, M.log);
   for (let z = 170; z <= 430; z += 52) box(x - 20, RY - 12, z, x + 20, RY + 28, z + 40, M.meat);
 });
 parent = rig;
-/* v15: lid. Hood of 2 mm sheet, outer 806 x 606, top on 1000 (150 above the skewer rest, room for skewers with meat).
+/* v15: lid. Hood of 2 mm sheet, outer 656 x 606 (v20), top on 1000 (150 above the skewer rest).
    Front and rear walls hang 20 over the angle legs (down to 830), sides down to 805 (clear of the joint cover strip on 803).
    Stiffening frame of angle 25x25x3 inside along the top edge. Handle in front: wooden bar on two brackets.
-   Two weld-on hinges Ø20 x 80 at the rear, pin on y 840, z -16: the lower leaf is welded to the rear angle leg
-   below the lid wall, the upper leaf to the lid rear wall. Opens to 100°, held by two stop chains. */
+   Two weld-on hinges Ø20 x 80 at the rear, 50 from the ends, pin on y 840, z -16: the lower leaf is welded to the rear
+   angle leg below the lid wall, the upper leaf to the lid rear wall. Opens to 100°, held by two stop chains. */
 const LID_P = [840, -16]; /* hinge pin: y, z */
 const LID_TOP = 1000;
 const lidPivot = new THREE.Group(); lidPivot.position.set(0, LID_P[0], LID_P[1]); rig.add(lidPivot);
 const lidG = new THREE.Group(); lidG.position.set(0, -LID_P[0], -LID_P[1]); lidPivot.add(lidG);
 parent = lidG;
-box(97, LID_TOP - 2, -3, 903, LID_TOP, 603, M.sheet);        /* top */
-box(97, 830, -3, 903, LID_TOP - 2, -1, M.sheet);             /* rear wall */
-box(97, 830, 601, 903, LID_TOP - 2, 603, M.sheet);           /* front wall */
-box(97, 805, -1, 99, LID_TOP - 2, 601, M.sheet);             /* left wall */
-box(901, 805, -1, 903, LID_TOP - 2, 601, M.sheet);           /* right wall */
-box(99, LID_TOP - 27, -1, 901, LID_TOP - 2, 2, M.angle);     /* stiffening angle 25x25x3 inside the top edge */
-box(99, LID_TOP - 27, 598, 901, LID_TOP - 2, 601, M.angle);
-box(99, LID_TOP - 27, 2, 102, LID_TOP - 2, 598, M.angle);
-box(898, LID_TOP - 27, 2, 901, LID_TOP - 2, 598, M.angle);
-[420, 580].forEach(x => box(x - 3, 915, 603, x + 3, 945, 643, M.angle)); /* handle brackets, strip 25x6 */
-cyl(14, 220, [500, 930, 640], 'x', M.log, 14);              /* wooden handle */
-[150, 850].forEach(x => box(x - 40, 846, -7, x + 40, 900, -3, M.angle)); /* upper hinge leaves on the lid */
+const LX0 = MX0 - 3, LX1 = MX1 + 3;
+box(LX0, LID_TOP - 2, -3, LX1, LID_TOP, 603, M.sheet);        /* top */
+box(LX0, 830, -3, LX1, LID_TOP - 2, -1, M.sheet);             /* rear wall */
+box(LX0, 830, 601, LX1, LID_TOP - 2, 603, M.sheet);           /* front wall */
+box(LX0, 805, -1, LX0 + 2, LID_TOP - 2, 601, M.sheet);        /* left wall */
+box(LX1 - 2, 805, -1, LX1, LID_TOP - 2, 601, M.sheet);        /* right wall */
+box(LX0 + 2, LID_TOP - 27, -1, LX1 - 2, LID_TOP - 2, 2, M.angle); /* stiffening angle 25x25x3 inside the top edge */
+box(LX0 + 2, LID_TOP - 27, 598, LX1 - 2, LID_TOP - 2, 601, M.angle);
+box(LX0 + 2, LID_TOP - 27, 2, LX0 + 5, LID_TOP - 2, 598, M.angle);
+box(LX1 - 5, LID_TOP - 27, 2, LX1 - 2, LID_TOP - 2, 598, M.angle);
+[MXC - 80, MXC + 80].forEach(x => box(x - 3, 915, 603, x + 3, 945, 643, M.angle)); /* handle brackets, strip 25x6 */
+cyl(14, 220, [MXC, 930, 640], 'x', M.log, 14);              /* wooden handle */
+const HINGE_X = [MX0 + 50, MX1 - 50];
+HINGE_X.forEach(x => box(x - 40, 846, -7, x + 40, 900, -3, M.angle)); /* upper hinge leaves on the lid */
 parent = rig;
-[150, 850].forEach(x => {
+HINGE_X.forEach(x => {
   cyl(10, 80, [x, LID_P[0], LID_P[1]], 'x', M.skewer, 16);  /* hinge knuckle with pin */
   box(x - 40, 806, -8, x + 40, 829, 0, M.angle);            /* lower leaf on the rear angle leg */
 });
-/* v19: diagonal skewer rack on the left side: skewers run from the rear-bottom up to the front-top,
-   handles at the front, at 600..730, towards the cook's left hand. Slope 0.6 (31°), skewer ~700.
-   Rear comb at z 62: spine flat bar 40x4 from the bottom to the top side ring (y 100..498), teeth 55 out, 9 slots 12 x 30,
-   pitch 24, at 210..402. Front comb at z 560: spine on the front leg and the tray wall (y 480..790), slots at 510..702.
-   Skewers sit 45 off the tray wall, outside the grill opening and under its edge (800), so the handles stay cool. */
-const RACK_K = 0.6, RACK_Y = [];
-for (let i = 0; i < 9; i++) RACK_Y.push(210 + i * 24);
-function comb(z, y0, y1, slots) {
-  box(85, y0, z, 100, y1, z + 4, M.angle);
-  const t0 = slots[0] - 20, t1 = slots[slots.length - 1] + 20;
-  let prev = t0; slots.forEach(y => { box(30, prev, z, 85, y - 6, z + 4, M.angle); prev = y + 6; });
-  box(30, prev, z, 85, t1, z + 4, M.angle);
-  box(60, t0, z, 85, t1, z + 4, M.angle);                          /* slot bottoms: skewer rests at x 55 */
-}
-comb(62, 100, 498, RACK_Y);
-comb(560, 480, 790, RACK_Y.map(y => y + RACK_K * 498));
-function rod(p0, p1, w, h, mat) {
-  const a = new THREE.Vector3(...p0), b = new THREE.Vector3(...p1), d = b.clone().sub(a);
-  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d.length()), mat);
-  m.position.copy(a).add(b).multiplyScalar(0.5);
-  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), d.normalize());
-  m.castShadow = m.receiveShadow = true; parent.add(m); return m;
-}
-{
-  const rackG = new THREE.Group(); rig.add(rackG); parent = rackG;
-  RACK_Y.filter((_, i) => i % 2 === 0).forEach(yr => {
-    const y = z => yr + RACK_K * (z - 62);
-    rod([55, y(22), 22], [55, y(570), 570], 2, 10, M.skewer);     /* blade */
-    rod([55, y(570), 570], [55, y(640), 640], 14, 14, M.log);     /* handle, front-top */
-  });
-  parent = rig;
-  window.__rackG = rackG;
-}
 const LID_OPEN = -100 * Math.PI / 180;
 let lidTarget = LID_OPEN;
 lidPivot.rotation.x = LID_OPEN;
 /* v17: drawer under the mangal instead of firewood: for a pan, kazan, lids.
    Fixed: 2 bottom-mount full-extension runners 500 (45 kg) on the shelf (y 143). Moving: drawer body of 1.5 mm sheet
-   700 x 545 x 275 (x 150..850, z 50..595, y 166..441), front 710 x 304 of 3 mm sheet between the front rings, bar handle.
+   550 x 545 x 275 (v20: x 300..850, z 50..595, y 166..441), front 560 x 304 between the front rings, bar handle.
    Air gap ~55 between the drawer and the coal tray bottom (498), which is lined with 65 mm of chamotte. Travel 450. */
 const DRAWER_TRAVEL = 450;
-[[200, 215], [785, 800]].forEach(([x0, x1]) => box(x0, 143, 45, x1, 158, 560, M.angle));
+const DX0 = MX0 + 50, DX1 = MX1 - 50;
+const RUN = [[DX0 + 50, DX0 + 65], [DX1 - 65, DX1 - 50]];
+RUN.forEach(([x0, x1]) => box(x0, 143, 45, x1, 158, 560, M.angle));
 const drawerG = new THREE.Group(); rig.add(drawerG); parent = drawerG;
-[[200, 215], [785, 800]].forEach(([x0, x1]) => box(x0, 158, 50, x1, 166, 595, M.skewer));
-box(150, 166, 50, 850, 168, 595, M.body);              /* bottom */
-box(150, 168, 50, 152, 441, 595, M.body);              /* sides */
-box(848, 168, 50, 850, 441, 595, M.body);
-box(152, 168, 50, 848, 441, 52, M.body);               /* back */
-box(145, 148, 597, 855, 452, 600, M.body);            /* front 3 mm */
-[360, 640].forEach(x => box(x - 4, 386, 600, x + 4, 404, 625, M.angle));
-cyl(8, 320, [500, 395, 622], 'x', M.skewer, 12);      /* bar handle */
+RUN.forEach(([x0, x1]) => box(x0, 158, 50, x1, 166, 595, M.skewer));
+box(DX0, 166, 50, DX1, 168, 595, M.body);              /* bottom */
+box(DX0, 168, 50, DX0 + 2, 441, 595, M.body);          /* sides */
+box(DX1 - 2, 168, 50, DX1, 441, 595, M.body);
+box(DX0 + 2, 168, 50, DX1 - 2, 441, 52, M.body);       /* back */
+box(DX0 - 5, 148, 597, DX1 + 5, 452, 600, M.body);     /* front */
+[MXC - 140, MXC + 140].forEach(x => box(x - 4, 386, 600, x + 4, 404, 625, M.angle));
+cyl(8, 320, [MXC, 395, 622], 'x', M.skewer, 12);      /* bar handle */
 const drawerFood = new THREE.Group(); drawerG.add(drawerFood); parent = drawerFood;
-cyl(130, 40, [330, 190, 320], 'y', M.iron, 32);       /* frying pan */
-cyl(10, 120, [330, 200, 130], 'z', M.log, 10);    /* pan handle, towards the back */
-const kz2 = new THREE.Mesh(new THREE.SphereGeometry(140, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), M.iron);
-kz2.position.set(650, 310, 320); kz2.castShadow = true; drawerFood.add(kz2); /* spare kazan */
-const kz2rim = new THREE.Mesh(new THREE.TorusGeometry(140, 6, 8, 48), M.iron);
-kz2rim.rotation.x = Math.PI / 2; kz2rim.position.set(650, 310, 320); drawerFood.add(kz2rim);
+cyl(115, 40, [DX0 + 125, 190, 320], 'y', M.iron, 32); /* frying pan */
+cyl(10, 120, [DX0 + 125, 200, 145], 'z', M.log, 10);  /* pan handle, towards the back */
+const kz2 = new THREE.Mesh(new THREE.SphereGeometry(130, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), M.iron);
+kz2.position.set(DX1 - 140, 300, 320); kz2.castShadow = true; drawerFood.add(kz2); /* spare kazan */
+const kz2rim = new THREE.Mesh(new THREE.TorusGeometry(130, 6, 8, 48), M.iron);
+kz2rim.rotation.x = Math.PI / 2; kz2rim.position.set(DX1 - 140, 300, 320); drawerFood.add(kz2rim);
 parent = rig;
 
 /* kazan block: x 930..1430 (its own part) */
@@ -604,7 +588,7 @@ parent = modK;
 box(897, 800, 0, 933, 803, 600, M.angle);
 /* joint bolts M10: through kazan legs at 120 and 300, plus rear plate at the top */
 [20, 580].forEach(z => [120, 300].forEach(y => {
-  cyl(6, 120, [1430, y, z], 'x', M.skewer, 10);
+  cyl(6, 96, [1418, y, z], 'x', M.skewer, 10); /* M10 x 100: nut inside the niche post, clear of the cargo */
   box(1382, y - 10, z - 10, 1390, y + 10, z + 10, M.angle);
 }));
 box(1340, 690, -6, 1430, 790, -1, M.angle);
@@ -657,12 +641,12 @@ const nicheM = std(0x44484d, { metalness: 0.45, roughness: 0.55, side: THREE.Dou
   box(1470, y0, 0, 1630, y1, 40, M.tube);                /* rear ring */
 });
 box(1470, 690, 560, 1630, 730, 600, M.tube);             /* front top ring */
-box(1470, 60, 40, 1630, 62, 560, nicheM);                /* floor */
+box(1470, 60, 40, 1630, 62, 515, nicheM);                /* floor, stops behind the front cassette */
 box(1430, 20, -2, 1630, 730, 0, nicheM);                 /* back */
-box(1470, 62, 40, 1472, 690, 560, nicheM);               /* wall to the oven + basalt */
-box(1472, 62, 40, 1480, 690, 560, basaltM);
-box(1628, 62, 40, 1630, 690, 560, nicheM);               /* wall to the fridge bay */
-box(1545, 62, 45, 1555, 72, 555, M.angle);               /* fixed runner */
+box(1470, 62, 40, 1472, 690, 515, nicheM);               /* wall to the oven + basalt */
+box(1472, 62, 40, 1480, 690, 515, basaltM);
+box(1628, 62, 40, 1630, 690, 515, nicheM);               /* wall to the fridge bay */
+box(1545, 62, 45, 1555, 72, 515, M.angle);               /* fixed runner, ends behind the front cassette */
 box(1540, 686, 40, 1560, 690, 560, M.angle);             /* top guide on a flat bar between the rings */
 const cargoG = new THREE.Group(); mod2.add(cargoG); parent = cargoG;
 box(1543, 72, 50, 1557, 76, 516, M.skewer);              /* moving runner parts */
@@ -681,8 +665,8 @@ cyl(6, 466, [1550, 650, 283], 'z', M.skewer, 10);        /* hanging rail Ø12 */
     box(x0 + t, y, z0, x1 - t, y + t, z0 + t, M.tube); box(x0 + t, y, z1 - t, x1 - t, y + t, z1, M.tube);
     box(x0, y, z0 + t, x0 + t, y + t, z1 - t, M.tube); box(x1 - t, y, z0 + t, x1, y + t, z1 - t, M.tube);
   });
-  spots(x0 + 8, x1 - 8, 48).forEach(x => spots(z0 + 6, z1 - 6, 40).forEach(z => spots(y0 + 8, y1 - 8, 44).forEach(y => {
-    const r = 20 + rnd() * 8;
+  spots(x0 + 26, x1 - 26, 40).forEach(x => spots(z0 + 22, z1 - 22, 36).forEach(z => spots(y0 + 26, y1 - 26, 38).forEach(y => {
+    const r = 15 + rnd() * 5; /* stones stay inside the mesh */
     const s = new THREE.Mesh(stoneGeo, stoneMats[Math.floor(rnd() * stoneMats.length)]);
     s.scale.set(r * (0.9 + rnd() * 0.35), r * (0.7 + rnd() * 0.3), r * (0.9 + rnd() * 0.35));
     s.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
@@ -812,6 +796,86 @@ box(1430, 690, -6, 1520, 790, -1, M.angle);
 [[1460, 715], [1500, 715], [1460, 765], [1500, 765]].forEach(([x, y]) => box(x - 9, y - 9, -10, x + 9, y + 9, -6, M.angle));
 parent = rig;
 
+/* v20: second cargo on the left of the mangal, for skewers (up to ~700) and the grill grate.
+   Carcass 200 x 600, top 800 flush with the mangal: walls of 2 mm sheet with bent flanges (no posts, so the whole width
+   is the opening), bottom 2 mm on 60, back 1.5 mm, top 3 mm on 797..800 as a small side shelf, no front rails (the skewer handles pass under the top).
+   Wall to the mangal: sheet 2 + basalt board 8, bolted to the mangal legs with 2 M8 through spacers.
+   4 adjustable feet M10. 50 to the post.
+   Cargo 200: bottom-mount full-extension runner 500 + top guide, travel 450. Basket 170 x 466; slotted rail at 715
+   (10 slots, pitch 45): skewers hang by the handle, tips stand in a catcher on the basket bottom.
+   Front: false-gabion cassette 182 x 731 x 80 (angle 25x25x3, mesh 25x25, stone 40-70). */
+parent = rig;
+const CL0 = 50, CL1 = 250, CARGO2_TRAVEL = 450;
+box(CL0, 20, 0, CL0 + 2, 797, 600, nicheM);             /* outer wall */
+box(CL1 - 12, 20, 0, CL1 - 10, 797, 600, nicheM);       /* inner wall */
+box(CL1 - 10, 20, 0, CL1 - 2, 797, 600, basaltM);       /* basalt towards the mangal */
+box(CL0 + 2, 60, 0, CL1 - 12, 62, 515, nicheM);         /* bottom, stops behind the front cassette */
+box(CL0, 20, -2, CL1, 797, 0, nicheM);                  /* back */
+box(CL0, 797, 0, CL1, 800, 600, M.body);                /* top 3 mm */
+/* no front rails: the skewer handles pass under the top when the cargo runs out */
+[[CL0 + 10, 10], [CL0 + 10, 570], [CL1 - 40, 10], [CL1 - 40, 570]].forEach(([x, z]) => box(x, 0, z, x + 20, 20, z + 20, M.skewer));
+[[150, 300], [450, 300]].forEach(([y]) => cyl(5, 30, [CL1 + 5, y, 300], 'x', M.skewer, 8)); /* M8 to the mangal leg (symbolic) */
+const CMX = (CL0 + 2 + CL1 - 12) / 2;                    /* 144: runner line */
+box(CMX - 5, 62, 5, CMX + 5, 72, 515, M.angle);          /* fixed runner, ends behind the front cassette */
+box(CL0 + 2, 756, 0, CL0 + 8, 762, 560, M.angle);        /* top guide on the outer wall */
+const cargo2G = new THREE.Group(); rig.add(cargo2G); parent = cargo2G;
+box(CMX - 7, 72, 10, CMX + 7, 76, 516, M.skewer);        /* moving runner parts */
+box(CL0 + 8, 750, 10, CL0 + 14, 756, 516, M.skewer);
+const BX0 = CL0 + 14, BX1 = CL1 - 19;                    /* basket 64..231 */
+box(BX0, 76, 10, BX1, 79, 516, nicheM);
+box(BX0, 79, 10, BX1, 120, 12, nicheM);
+box(BX0, 79, 10, BX0 + 2, 120, 516, nicheM); box(BX1 - 2, 79, 10, BX1, 120, 516, nicheM);
+box(BX0, 79, 10, BX1, 752, 13, nicheM);                  /* rear upright */
+box(CL0 + 4, 30, 516, CL1 - 14, 754, 519, nicheM);       /* back plate of the front cassette */
+/* slotted rail at 715 along the depth, flat bar 40x4, 10 slots 9 wide, pitch 45; tip catcher angle on the bottom */
+const RAIL_Z = []; for (let i = 0; i < 10; i++) RAIL_Z.push(55 + i * 45);
+box(CMX - 20, 715, 13, CMX - 5, 719, 516, M.angle); box(CMX + 5, 715, 13, CMX + 20, 719, 516, M.angle);
+{ let prev = 13; RAIL_Z.forEach(z => { box(CMX - 5, 715, prev, CMX + 5, 719, z - 4.5, M.angle); prev = z + 4.5; }); box(CMX - 5, 715, prev, CMX + 5, 719, 516, M.angle); }
+box(CMX - 15, 79, 13, CMX + 15, 82, 516, M.angle); box(CMX - 15, 82, 13, CMX - 12, 104, 516, M.angle);
+/* false-gabion cassette */
+{
+  const x0 = CL0 + 3, x1 = CL1 - 13, y0 = 25, y1 = 756, z0 = 520, z1 = 600, t = 25;
+  [[x0, z0], [x1 - t, z0], [x0, z1 - t], [x1 - t, z1 - t]].forEach(([x, z]) => box(x, y0, z, x + t, y1, z + t, M.tube));
+  [y0, y1 - t].forEach(y => {
+    box(x0 + t, y, z0, x1 - t, y + t, z0 + t, M.tube); box(x0 + t, y, z1 - t, x1 - t, y + t, z1, M.tube);
+    box(x0, y, z0 + t, x0 + t, y + t, z1 - t, M.tube); box(x1 - t, y, z0 + t, x1, y + t, z1 - t, M.tube);
+  });
+  spots(x0 + 26, x1 - 26, 40).forEach(x => spots(z0 + 22, z1 - 22, 36).forEach(z => spots(y0 + 26, y1 - 26, 38).forEach(y => {
+    const r = 15 + rnd() * 5; /* stones stay inside the mesh */
+    const s = new THREE.Mesh(stoneGeo, stoneMats[Math.floor(rnd() * stoneMats.length)]);
+    s.scale.set(r * (0.9 + rnd() * 0.35), r * (0.7 + rnd() * 0.3), r * (0.9 + rnd() * 0.35));
+    s.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
+    s.position.set(x + (rnd() - 0.5) * 8, y + (rnd() - 0.5) * 6, z + (rnd() - 0.5) * 8);
+    s.castShadow = s.receiveShadow = true; cargo2G.add(s);
+  })));
+  const p = [], o = 2, c = 25;
+  for (let x = x0; x <= x1 + 0.1; x += c) p.push(x, y0, z1 + o, x, y1, z1 + o);
+  for (let y = y0; y <= y1 + 0.1; y += c) p.push(x0, y, z1 + o, x1, y, z1 + o, x0 - o, y, z0, x0 - o, y, z1, x1 + o, y, z0, x1 + o, y, z1);
+  for (let z = z0; z <= z1 + 0.1; z += c) p.push(x0 - o, y0, z, x0 - o, y1, z, x1 + o, y0, z, x1 + o, y1, z);
+  const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.Float32BufferAttribute(p, 3));
+  cargo2G.add(new THREE.LineSegments(gg, meshMat));
+  box(x0 + 2, 330, 600, x0 + 14, 450, 616, M.angle);     /* vertical grip on the left edge */
+}
+const cargo2Food = new THREE.Group(); cargo2G.add(cargo2Food); parent = cargo2Food;
+RAIL_Z.filter((_, i) => i % 2 === 0).forEach(z => {
+  box(CMX - 1, 90, z - 5, CMX + 1, 719, z + 5, M.skewer); /* flat skewer blade */
+  box(CMX - 7, 719, z - 7, CMX + 7, 789, z + 7, M.log);   /* handle above the rail */
+});
+/* grill grate on edge beside the skewers (outer side): grid 450 x 350 of rod, handle up, total ~620;
+   stands in a U-channel on the basket bottom and leans on a clip at the top of the rear upright */
+{
+  const gx0 = 95, gz0 = 40, gz1 = 490, gy0 = 110, gy1 = 460, r = 3;
+  [gy0, gy1].forEach(y => cyl(r, gz1 - gz0, [gx0, y, (gz0 + gz1) / 2], 'z', toolM, 6));
+  [gz0, gz1].forEach(z => cyl(r, gy1 - gy0, [gx0, (gy0 + gy1) / 2, z], 'y', toolM, 6));
+  for (let z = gz0 + 25; z < gz1; z += 25) cyl(2, gy1 - gy0, [gx0, (gy0 + gy1) / 2, z], 'y', toolM, 5);
+  [250, 280].forEach(z => cyl(r, 200, [gx0, gy1 + 100, z], 'y', toolM, 6));
+  box(gx0 - 7, gy1 + 200, 240, gx0 + 7, gy1 + 280, 290, M.log);  /* wooden handle, top at 740 */
+}
+parent = cargo2G;
+box(80, 79, 30, 110, 82, 500, M.angle); box(80, 82, 30, 83, 100, 500, M.angle); box(107, 82, 30, 110, 100, 500, M.angle); /* U-channel */
+box(80, 600, 13, 110, 620, 16, M.angle);                                                                                /* top clip */
+parent = rig;
+
 /* v16 layers: every part of the model belongs to one layer, each layer can be hidden to look inside */
 const LAYERS = [
   { id: 'brick', name: 'Цегла і кладка', mats: [...brickMats, ...clinkerMats, basaltM, mortarM, cordM] },
@@ -824,7 +888,7 @@ const LAYERS = [
 ];
 LAYERS.forEach(l => { l.objs = []; });
 const byId = Object.fromEntries(LAYERS.map(l => [l.id, l]));
-const foodObjs = new Set([kz, rim]); [skewerG, drawerFood, cargoTools, window.__rackG].forEach(gr => gr.traverse(o => foodObjs.add(o)));
+const foodObjs = new Set([kz, rim]); [skewerG, drawerFood, cargoTools, cargo2Food].forEach(gr => gr.traverse(o => foodObjs.add(o)));
 const unassigned = [];
 scene.traverse(o => {
   if (!(o.isMesh || o.isLineSegments) || o === g) return;
@@ -869,20 +933,22 @@ function dim(a, b, text) {
 parent = scene;
 dim([0, 0, 1620], [3000, 0, 1620], '3000');
 dim([-120, 0, 0], [-120, 0, 1500], '1500');
-dim([100, 0, 650], [100 + SHIFT, 0, 650], String(SHIFT));
+dim([100, 0, 650], [SHIFT + CL0, 0, 650], String(CL0)); /* v20: gap from the post to the left cargo */
 parent = rig;
-dim([100, 1080, 640], [900, 1080, 640], '800');
-dim([60, 0, 660], [60, 800, 660], '800');
+dim([MX0, 1080, 640], [MX1, 1080, 640], '650');
+dim([CL0, 1080, 640], [CL1, 1080, 640], '200');
+dim([CL0 - 40, 0, 660], [CL0 - 40, 800, 660], '800');
 dim([940, 800, 590], [940, 840, 590], '+40');
-label('Мангал', [500, 1180, 300], 'lbl name');
-label('Ящик', [500, 300, 680], 'lbl name');
-label('Частина 1', [500, 1300, 300], 'lbl');
+label('Мангал', [MXC, 1180, 300], 'lbl name');
+label('Ящик', [MXC, 300, 680], 'lbl name');
+label('Карго', [150, 420, 660], 'lbl name');
+label('Частина 1', [MXC, 1300, 300], 'lbl');
 parent = modK;
 dim([930, 1080, 640], [1430, 1080, 640], '500');
 label('Казан', [1180, 1180, 300], 'lbl name');
 label('Частина 2', [1180, 1300, 300], 'lbl');
 parent = rig;
-dim([100, 1200, 640], [2800, 1200, 640], '2700');
+dim([CL0, 1200, 640], [2800, 1200, 640], '2750');
 parent = mod2;
 dim([1430, 1080, 640], [2800, 1080, 640], '1370');
 dim([2100, 800, 1380], [2600, 800, 1380], '500');
@@ -926,7 +992,10 @@ document.getElementById('tg-lid').addEventListener('change', e => {
   if (!e.target.checked) skewerG.visible = false; /* skewers come off before the lid is shut */
   if (reduceMotion) { lidPivot.rotation.x = lidTarget; skewerG.visible = e.target.checked; }
 });
-let drawerTarget = 0, cargoTarget = 0, doorTarget = 0;
+let drawerTarget = 0, cargoTarget = 0, doorTarget = 0, cargo2Target = 0;
+document.getElementById('tg-cargo2').addEventListener('change', e => {
+  cargo2Target = e.target.checked ? CARGO2_TRAVEL : 0; if (reduceMotion) cargo2G.position.z = cargo2Target;
+});
 document.getElementById('tg-door').addEventListener('change', e => {
   doorTarget = e.target.checked ? DOOR_OPEN : 0; if (reduceMotion) doorPivot.rotation.y = doorTarget;
 });
@@ -937,7 +1006,7 @@ document.getElementById('tg-cargo').addEventListener('change', e => {
   cargoTarget = e.target.checked ? CARGO_TRAVEL : 0; if (reduceMotion) cargoG.position.z = cargoTarget;
 });
 /* click on a moving part toggles it; a drag (orbit) is not a click */
-const MOVING = [[lidPivot, 'tg-lid'], [drawerG, 'tg-drawer'], [cargoG, 'tg-cargo'], [doorPivot, 'tg-door']];
+const MOVING = [[lidPivot, 'tg-lid'], [drawerG, 'tg-drawer'], [cargoG, 'tg-cargo'], [cargo2G, 'tg-cargo2'], [doorPivot, 'tg-door']];
 const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
 const shown = o => { for (; o; o = o.parent) if (!o.visible) return false; return true; };
 function pick(ev) {
@@ -988,6 +1057,7 @@ function tick(now) {
   lidPivot.rotation.x += (lidTarget - lidPivot.rotation.x) * 0.1;
   drawerG.position.z += (drawerTarget - drawerG.position.z) * 0.12;
   cargoG.position.z += (cargoTarget - cargoG.position.z) * 0.12;
+  cargo2G.position.z += (cargo2Target - cargo2G.position.z) * 0.12;
   doorPivot.rotation.y += (doorTarget - doorPivot.rotation.y) * 0.1;
   if (lidTarget !== 0 && lidPivot.rotation.x < LID_OPEN * 0.95) skewerG.visible = true;
   controls.update();
@@ -996,5 +1066,5 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-window.__mangal = { scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cargo: cargoG, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+window.__mangal = { scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cargo: cargoG, cargo2: cargo2G, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
 </script>
