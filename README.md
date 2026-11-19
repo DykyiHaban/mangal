@@ -1,2 +1,15 @@
 # mangal
 for Serg
+
+Зона мангала: мангал, піч під казан і тумба з умивальником на майданчику 3000 × 1500.
+
+| Файл | Що це |
+|---|---|
+| [zona-mangala.html](zona-mangala.html) | 3D-модель, версія 13 (відкрити в браузері) |
+| [kreslennia-kompleks.html](kreslennia-kompleks.html) | Креслення всього комплексу: план, фасад, розріз, мангал, кришка тумби, габіон + перелік матеріалів |
+| [kreslennia-pich.html](kreslennia-pich.html) | Креслення каркаса печі під казан для зварювальника |
+| [materialy.md](materialy.md) | Перелік матеріалів |
+| [kreslennia/](kreslennia) | Окремі види у SVG (відкриваються прямо на GitHub) |
+| [tools/](tools) | Скрипти, що генерують креслення і перелік: `python tools/gen_kompleks.py`, `python tools/gen_pich.py` |
+| mangal.html | Окрема 3D-модель мангала |
+| zona-mangala.glb, .usdz, -iphone.zip | Модель для iPhone — ще версія 12, без нової печі |
