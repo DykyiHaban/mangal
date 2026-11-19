@@ -62,7 +62,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 13 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 14 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -141,7 +141,9 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   <div class="block">
     <h3>Модуль 2: стільниця і тумба</h3>
     <ul>
-      <li>Каркас і обшивка тумби з металу, верх каркаса на 730</li>
+      <li>Каркас тумби: труба 40×40×2, 9 стійок на регульованих ніжках M10, обв'язки на 20–60 і 690–730, верх каркаса на 730</li>
+      <li>Обшивка лист 1,5 мм: зад, перегородка, бік і перед повернення зсередини (біля габіонів), дно, полиця над холодильником</li>
+      <li>Дверцята 440 × 650 під умивальником, на боці до вільної зони, отвір 420 × 630</li>
       <li>Кришка окремо, Г-подібна 1370 × 620 + 720 × 700, товщина 70</li>
       <li>Кришка: рамка-борт зі сталі 3 мм висотою 70, дно — решітка з квадрата 10×10 з кроком 100</li>
       <li>На решітку незнімна опалубка (ЦСП 8–10 мм або плівка + сітка), бетон 50, плитка на клею</li>
@@ -152,15 +154,16 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
       <li>Габіон на торці тумби 500 × 200 × 730</li>
       <li>Габіон справа біля стовпа 200 × 1300 × 730</li>
       <li>Габіони: рамка з кутника 30×30, сітка 50×50 дріт 4–5 мм, камінь 80–120</li>
-      <li>Відсік холодильника 502 × 540, поличка над ним</li>
-      <li>Холодильник Ardesto DFM-50X: 492 × 472 × 450, 50 л</li>
-      <li>Умивальник у стільниці тумби, чаша ≈ 380 × 380, змішувач з правого боку</li>
+      <li>Відсік холодильника: просвіт 502 між стійками, полиця на 600 на двох напрямних</li>
+      <li>Холодильник Ardesto DFM-50X: висота 492, ширина 472, глибина 450, 50 л</li>
+      <li>Умивальник у стільниці тумби, чаша 380 × 380 за 60 мм від зовнішніх країв повернення, змішувач з правого боку</li>
       <li>Під умивальником сифон і крани, дверцята в бік вільної зони</li>
     </ul>
   </div>
 
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v14</strong> Каркас тумби з труби 40×40 замість суцільного блока: 9 стійок на ніжках, обшивка, дверцята під умивальником. Перегородку відсіку зсунуто, просвіт під холодильник 502. Умивальник зсунуто на 50 мм від країв, щоб не лягав на обв'язку; змішувач праворуч.</li>
     <li><strong>v13</strong> Об'єднано дві гілки: кутник на мангалі з v12 і нова піч під казан (шамот на ребро, спереду облицювальна цегла лежма, розрізана вздовж; плита в поясі на шнурі; глуха задня стінка; саморобні дверцята на каркасі).</li>
     <li><strong>v12</strong> Знімні опори на пінах прибрано. Торці переднього і заднього рядів шамоту накриті кутником 75×50×6: він захищає цеглу, продовжує стінку і тримає шампури в пропилах на 840.</li>
     <li><strong>v11</strong> Піч під казан без металевого короба: шамот на ребро в каркасі з кутників, спереду облицювальна цегла лежма, розрізана вздовж. Пояс на 5 мм вищий за шамот, верхня плита вкладається в нього на шнур. Задня стінка глуха з листа, до неї кріпиться димохід. Дверцята саморобні, на стійках каркаса.</li>
@@ -505,17 +508,40 @@ function gabion(x0, x1, z0, z1, y0, y1) {
 /* gabion A next to kazan (support + heat barrier), fridge bay, corner, return cabinet with sink, gabion C at return end */
 const LID = 730; /* top of cabinet frame; lid 70 mm on top -> 800 */
 gabion(1430, 1630, 0, 600, 0, LID);
-box(1630, 0, 0, 2150, LID, 20, M.body);
-box(1630, 0, 20, 2150, 60, 600, M.body);
-box(2132, 60, 20, 2150, LID, 600, M.body);
-box(1630, 600, 20, 2132, 618, 590, M.body);
+/* cabinet frame: tube 40x40x2, posts 20..730 on adjustable M10 feet, rings 20..60 and 690..730.
+   Fridge bay clear 502 (x 1670..2172), sink cabinet x 2172..2600 + return x 2100..2600, z 600..1100; door in the x = 2100 face */
+const TF = 40, FB = 20, FT = LID;
+const tubeM = M.tube;
+const POSTS3 = [[1630, 0], [1630, 560], [2172, 0], [2172, 560], [2560, 0], [2560, 560], [2560, 1060], [2100, 1060], [2100, 600]];
+POSTS3.forEach(([x, z]) => { box(x, FB, z, x + TF, FT, z + TF, tubeM); box(x + 8, 0, z + 8, x + 32, FB, z + 32, M.skewer); });
+const RING3 = [
+  [1670, 2172, 0, 40], [2212, 2560, 0, 40],            /* rear */
+  [1630, 1670, 40, 560], [2172, 2212, 40, 560],        /* fridge bay left, partition */
+  [1670, 2172, 560, 600],                              /* fridge bay front */
+  [2560, 2600, 40, 560], [2560, 2600, 600, 1060],      /* right side */
+  [2140, 2560, 1060, 1100], [2100, 2140, 640, 1060],   /* return front, door side */
+  [2140, 2560, 600, 640]                               /* inner tie */
+];
+[[FB, FB + TF], [FT - TF, FT]].forEach(([y0, y1]) => RING3.forEach(([x0, x1, z0, z1]) => box(x0, y0, z0, x1, y1, z1, tubeM)));
+box(1630, 560, 40, 1670, 600, 560, tubeM); box(2172, 560, 40, 2212, 600, 560, tubeM); /* shelf rails */
+/* cladding 1.5 mm: back, partition, right and front of the return (inside faces next to gabions), floors, shelf */
+const cladM = std(0x44484d, { metalness: 0.45, roughness: 0.55, side: THREE.DoubleSide });
+box(1630, FB, -2, 2600, FT, 0, cladM);
+box(2191, FB + TF, 40, 2193, FT - TF, 560, cladM);
+box(2558, FB + TF, 40, 2560, FT - TF, 1060, cladM);
+box(2140, FB + TF, 1058, 2560, FT - TF, 1060, cladM);
+box(1670, 60, 0, 2172, 62, 560, cladM);
+box(2212, 60, 40, 2560, 62, 600, cladM); box(2140, 60, 600, 2560, 62, 1060, cladM);
+box(1670, 600, 0, 2172, 602, 560, cladM);
+/* door 440 x 650 on the free-zone side, hinges at the front post */
+box(2096, 50, 630, 2098, 700, 1070, cladM);
+box(2088, 300, 650, 2096, 420, 662, M.angle);
+[150, 600].forEach(y => cyl(6, 50, [2097, y, 1068], 'y', M.skewer, 10));
 const fridgeM = std(0xb9bec3, { metalness: 0.5, roughness: 0.35 });
-box(1645, 60, 110, 2117, 552, 556, fridgeM);
-box(1645, 64, 556, 2117, 548, 560, fridgeM);
-box(2070, 200, 560, 2085, 420, 575, M.tube);
-box(1645, 548, 556, 2117, 552, 561, M.tube);
-box(2150, 0, 0, 2600, LID, 600, M.body);
-box(2100, 0, 600, 2600, LID, 1100, M.body);
+box(1685, 62, 110, 2157, 554, 556, fridgeM);
+box(1685, 66, 556, 2157, 550, 560, fridgeM);
+box(2110, 200, 560, 2125, 420, 575, M.tube);
+box(1685, 550, 556, 2157, 554, 561, M.tube);
 gabion(2100, 2600, 1100, 1300, 0, LID);
 gabion(2600, 2800, 0, 1300, 0, LID);
 /* separate lid: steel tray 3 mm with 70 mm rim, 50 mm concrete, tile on adhesive; overhangs 20 mm over gabions */
@@ -524,7 +550,7 @@ const lidShape = () => {
   const s = new THREE.Shape();
   s.moveTo(1430, 0); s.lineTo(2800, 0); s.lineTo(2800, -1320); s.lineTo(2080, -1320); s.lineTo(2080, -620); s.lineTo(1430, -620); s.lineTo(1430, 0);
   const h = new THREE.Path();
-  h.moveTo(2110, -690); h.lineTo(2110, -1070); h.lineTo(2490, -1070); h.lineTo(2490, -690); h.lineTo(2110, -690);
+  h.moveTo(2160, -660); h.lineTo(2160, -1040); h.lineTo(2540, -1040); h.lineTo(2540, -660); h.lineTo(2160, -660);
   s.holes.push(h); return s;
 };
 const tileM = std(0xcfc6b8, { roughness: 0.4 });
@@ -542,7 +568,7 @@ box(2080, rimY0, 620, 2083, rimY1, 1317, M.tube);
 box(1430, rimY0, 617, 2080, rimY1, 620, M.tube);
 box(1430, rimY0, 3, 1433, rimY1, 617, M.tube);
 /* lid bottom: grating of 10x10 bar, 100 mm pitch, split around the sink cut-out */
-const SX0 = 2110, SX1 = 2490, SZ0 = 690, SZ1 = 1070;
+const SX0 = 2160, SX1 = 2540, SZ0 = 660, SZ1 = 1040;
 for (let z = 50; z < 1320; z += 100) {
   const x0 = z < 620 ? 1433 : 2083, x1 = 2797;
   if (z > SZ0 && z < SZ1) { box(x0, LID, z - 5, SX0, LID + 10, z + 5, M.tube); box(SX1, LID, z - 5, x1, LID + 10, z + 5, M.tube); }
@@ -556,7 +582,7 @@ for (let x = 1480; x < 2800; x += 100) {
 parent = mod2;
 {
   const p = [], y = LID + 70.6, T = 300;
-  const inHole = (x, z) => x > 2110 && x < 2490 && z > 690 && z < 1070;
+  const inHole = (x, z) => x > 2160 && x < 2540 && z > 660 && z < 1040;
   const seg = (a, b, n = 40) => { for (let i = 0; i < n; i++) { const t0 = i / n, t1 = (i + 1) / n;
     const x0 = a[0] + (b[0] - a[0]) * t0, z0 = a[1] + (b[1] - a[1]) * t0, x1 = a[0] + (b[0] - a[0]) * t1, z1 = a[1] + (b[1] - a[1]) * t1;
     if (!inHole((x0 + x1) / 2, (z0 + z1) / 2)) p.push(x0, y, z0, x1, y, z1); } };
@@ -566,14 +592,14 @@ parent = mod2;
   lidGroup.add(gl);
 }
 const sinkM = std(0xd0d4d8, { metalness: 0.85, roughness: 0.25, side: THREE.DoubleSide });
-box(2110, 600, 690, 2490, 604, 1070, sinkM);
-box(2110, 600, 690, 2114, 800, 1070, sinkM); box(2486, 600, 690, 2490, 800, 1070, sinkM);
-box(2114, 600, 690, 2486, 800, 694, sinkM); box(2114, 600, 1066, 2486, 800, 1070, sinkM);
-cyl(25, 6, [2300, 606, 880], 'y', M.tube, 16);
-cyl(18, 260, [2550, 930, 880], 'y', sinkM, 16);
-cyl(12, 190, [2455, 1050, 880], 'x', sinkM, 12);
-box(2355, 1040, 868, 2370, 1052, 892, sinkM);
-box(2098, 60, 850, 2101, 700, 852, M.tube);
+/* sink 380 x 380 moved 50 mm inside the cabinet frame (v14); mixer on the right edge */
+box(2160, 600, 660, 2540, 604, 1040, sinkM);
+box(2160, 600, 660, 2164, 800, 1040, sinkM); box(2536, 600, 660, 2540, 800, 1040, sinkM);
+box(2164, 600, 660, 2536, 800, 664, sinkM); box(2164, 600, 1036, 2536, 800, 1040, sinkM);
+cyl(25, 6, [2350, 606, 850], 'y', M.tube, 16);
+cyl(18, 260, [2600, 930, 850], 'y', sinkM, 16);
+cyl(12, 190, [2505, 1050, 850], 'x', sinkM, 12);
+box(2405, 1040, 838, 2420, 1052, 862, sinkM);
 box(1430, 690, -6, 1520, 790, -1, M.angle);
 [[1460, 715], [1500, 715], [1460, 765], [1500, 765]].forEach(([x, y]) => box(x - 9, y - 9, -10, x + 9, y + 9, -6, M.angle));
 parent = rig;
