@@ -27,20 +27,20 @@ RING = [
 SINK = (2160, 2540, 660, 1040)
 
 # ---------- plan ----------
-p = View(-200, 1170, 0, 1250, pad=(90, 60, 70, 110), flip=False, k=1.7)
+p = View(-200, 1170, 0, 1250, pad=(90, 60, 70, 170), flip=False, k=1.7)
 p.poly([(0, 0), (970, 0), (970, 1100), (470, 1100), (470, 600), (0, 600)], 'hid')
 p.rect(-200, 0, 0, 600, 'hid'); p.text(-100, 300, 'габіон', 'note', 'middle')
 p.rect(970, 0, 1170, 1100, 'hid')
-p.rect(470, 1100, 970, 1250, 'hid'); p.text(720, 1190, 'габіон', 'note', 'middle')
+p.rect(470, 1100, 970, 1250, 'hid'); p.text(720, 1165, 'габіон', 'note', 'middle')
 for _, x0, x1, z0, z1 in RING: p.rect(L(x0), z0, L(x1), z1, 'ol')
 for x, z in POSTS: p.rect(L(x), z, L(x) + T, z + T, 'fill')
 p.rect(L(1685), 110, L(2157), 556, 'hid'); p.text(L(1921), 330, 'холодильник', 'note', 'middle')
 p.rect(L(SINK[0]), SINK[2], L(SINK[1]), SINK[3], 'hid'); p.text(L(2350), 860, 'умивальник', 'note', 'middle')
-p.text(L(2085), 860, 'дверцята', 'note', 'end')
+p.text(300, 860, 'дверцята →', 'note', 'end')
 p.dimH(0, 970, -30, ext_from=0)
 p.dimH(0, 40, 1150, ext_from=600); p.dimH(40, 542, 1150, '502'); p.dimH(542, 582, 1150, '40')
-p.dimH(582, 930, 1210, '348', ext_from=40); p.dimH(930, 970, 1210, '40')
-p.dimH(470, 970, 1290, '500', ext_from=1100)
+p.dimH(582, 930, 1310, '348', ext_from=40); p.dimH(930, 970, 1310, '40')
+p.dimH(470, 970, 1380, '500', ext_from=1100)
 p.dimV(0, 600, -240, '600', ext_from=-200); p.dimV(0, 1100, 1220, '1100', ext_from=970, side='right')
 p.dimV(640, 1060, 420, '420', ext_from=470, side='left')
 p.dimH(L(2100), L(SINK[0]), 1000, '60'); p.dimV(SINK[3], 1100, L(2350), '60', side='right')
@@ -50,11 +50,13 @@ plan_svg = p.svg('План каркаса')
 # ---------- front view (looking at the fridge opening and the return end) ----------
 f = View(0, 970, 0, 730, pad=(130, 130, 60, 110), k=1.5)
 f.line(-60, 0, 1030, 0, 'ol')
-for x in (1630, 2172, 2100, 2560):
+# the return (x 470..970) stands in front, so the partition post and the right end of the fridge-bay rails are hidden
+for x in (1630, 2100, 2560):
     f.rect(L(x), FB, L(x) + T, FT); f.rect(L(x) + 8, 0, L(x) + 32, FB, 'ol thin')
+f.rect(L(2172), FB, L(2172) + T, FT, 'hid')
 for y0 in (FB, FT - T):
-    f.rect(40, y0, 542, y0 + T); f.rect(L(2140), y0, L(2560), y0 + T)
-f.rect(40, 600, 542, 602, 'ol thin')
+    f.rect(40, y0, 470, y0 + T); f.rect(470, y0, 542, y0 + T, 'hid'); f.rect(L(2140), y0, L(2560), y0 + T)
+f.rect(40, 600, 470, 602, 'ol thin')
 f.rect(L(1685), 62, L(2157), 554, 'hid'); f.text(L(1921), 300, 'холодильник', 'note', 'middle')
 f.rect(L(2140), 60, L(2560), FT - T, 'brick')
 f.text(L(2350), 380, 'обшивка зсередини', 'note', 'middle')
@@ -62,11 +64,11 @@ f.dimV(0, 730, -40, '730', ext_from=0); f.dimV(0, 20, -95, '20', ext_from=0); f.
 f.dimV(FT - T, FT, -95, '40')
 f.dimV(62, 600, 560, '538', ext_from=542, side='right')
 f.dimH(0, 582, -40, '582', ext_from=0); f.dimH(470, 970, -40, '500', ext_from=0)
-f.pos(1, 20, 300, -70, 400); f.pos(4, 300, 710, 300, 800); f.pos(6, 720, 40, 720, -70) if False else f.pos(6, 720, 710, 720, 800)
+f.pos(1, 20, 300, -70, 400); f.pos(2, 300, 710, 300, 800); f.pos(6, 720, 40, 720, -70) if False else f.pos(6, 720, 710, 720, 800)
 front_svg = f.svg('Вид спереду')
 
 # ---------- left view: free-zone side (door) ----------
-s = View(0, 1100, 0, 730, pad=(130, 120, 60, 110), k=1.5)
+s = View(0, 1100, 0, 730, pad=(130, 230, 60, 110), k=1.5)
 s.line(-60, 0, 1160, 0, 'ol')
 for z in (0, 560):
     s.rect(z, FB, z + T, FT); s.rect(z + 8, 0, z + 32, FB, 'ol thin')
@@ -83,7 +85,7 @@ s.dimH(640, 1060, 650, '420 отвір')
 s.dimV(60, 690, 1140, '630 отвір', ext_from=1100, side='right')
 s.dimV(0, 560, -40, '560', ext_from=0); s.dimV(560, 600, -40, '40')
 s.text(300, 640, 'бік відсіку холодильника — до габіона', 'note', 'middle')
-s.pos(7, 300, 580, 300, 450)
+s.pos(4, 300, 580, 300, 450)
 side_svg = s.svg('Вид зліва')
 
 # ---------- right view: next to the gabion by the post ----------

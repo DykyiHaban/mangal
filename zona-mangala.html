@@ -213,7 +213,7 @@ labelRenderer.domElement.className = 'labels';
 view.appendChild(labelRenderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.maxPolarAngle = Math.PI * 0.495;
+controls.maxPolarAngle = Math.PI; /* free orbit, the model can be turned to any side, also from below */
 controls.minDistance = 400;
 controls.maxDistance = 15000;
 
@@ -654,10 +654,10 @@ parent = scene;
 /* views */
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const VIEWS = {
-  persp: { p: [3700, 2400, 4000], t: [1550, 450, 650] },
-  front: { p: [1600, 700, 5600], t: [1600, 500, 650] },
-  top:   { p: [1500, 6000, 760], t: [1500, 0, 750] },
-  side:  { p: [6000, 800, 650], t: [1600, 500, 650] }
+  persp: { p: [3650, 2350, 4010], t: [1500, 420, 660] }, /* target = middle of the complex */
+  front: { p: [1500, 520, 5700], t: [1500, 420, 660] },
+  top:   { p: [1500, 6200, 670], t: [1500, 420, 660] },
+  side:  { p: [6200, 520, 660], t: [1500, 420, 660] }
 };
 let anim = null;
 function goView(k, instant) {

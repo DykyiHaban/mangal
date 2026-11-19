@@ -84,7 +84,7 @@ side_svg = s.svg('Вид зліва')
 
 # ---------- rear wall pos. 8, seen from the front ----------
 RH = TOP - SHEET   # 419
-r = View(0, W, 0, RH, pad=(70, 70, 40, 60))
+r = View(0, W, 0, RH, pad=(70, 70, 80, 60))
 r.rect(0, 0, W, RH)
 fy = FLUE_Y - SHEET   # 323
 r.circle(250, fy, 57.5); r.circle(250, fy, 80, 'hid')
@@ -95,9 +95,9 @@ jp = (410, 500, 690 - SHEET, 790 - SHEET)
 r.rect(jp[0], jp[2], jp[1], jp[3], 'hid')
 for x in (430, 480):
     for y in (715 - SHEET, 765 - SHEET): r.circle(x, y, 4.5)
-r.dimH(0, W, -30, ext_from=0); r.dimH(0, 250, fy - 110, '250', ext_from=fy)
+r.dimH(0, W, -30, ext_from=0); r.dimH(0, 250, 60, '250', ext_from=fy)
 r.dimV(0, RH, -30, ext_from=0); r.dimV(0, fy, 160, '323', side='left')
-r.dimH(250 - 48, 250 + 48, fy + 120, '96'); r.dimV(fy - 48, fy + 48, 360, '96', side='right')
+r.dimH(250 - 48, 250 + 48, fy - 100, '96'); r.dimV(fy - 48, fy + 48, 360, '96', side='right')
 r.dimH(430, 480, RH + 18, '50', ext_from=jp[3]); r.dimH(0, 430, RH + 40, '430', ext_from=RH)
 r.dimV(715 - SHEET, 765 - SHEET, W + 26, '50', ext_from=480, side='right'); r.dimV(0, 715 - SHEET, W + 26, '338', side='right')
 r.text(250, fy + 2 - 100, 'Ø115', 'dt', 'middle') if False else r.text(318, fy + 64, 'Ø115, 4× Ø9', 'note')

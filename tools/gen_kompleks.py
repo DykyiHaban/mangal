@@ -47,7 +47,7 @@ p.poly(lid)
 p.rect(gx(1430), 0, gx(1630), 600, 'hid'); p.text(gx(1530), 300, 'габіон', 'note', 'middle')
 p.rect(gx(2100), 1100, gx(2600), 1300, 'hid'); p.text(gx(2350), 1215, 'габіон', 'note', 'middle')
 p.rect(gx(2600), 0, gx(2800), 1300, 'hid'); p.text(gx(2700), 700, 'габіон', 'note', 'middle')
-p.rect(gx(1645), 110, gx(2117), 556, 'hid'); p.text(gx(1880), 340, 'холодильник', 'note', 'middle')
+p.rect(gx(1685), 110, gx(2157), 556, 'hid'); p.text(gx(1921), 340, 'холодильник', 'note', 'middle')
 p.rect(gx(2160), 660, gx(2540), 1040); p.rect(gx(2180), 680, gx(2520), 1020, 'ol thin')
 p.circle(gx(2350), 850, 25, 'ol thin'); p.circle(gx(2600), 850, 18)
 p.text(gx(2350), 1080, 'умивальник', 'note', 'middle')
@@ -105,8 +105,11 @@ f.poly(pts, 'fill'); f.rect(gx(1003), 876, gx(1357), 884, 'fill')
 f.rect(gx(1125), 884, gx(1235), 1150, 'hid'); f.text(gx(1235) + 10, 1120, 'труба Ø110 до ≈ 2300', 'note')
 # part 3
 stones(f, gx(1430), gx(1630), 0, 730)
-f.rect(gx(1630), 0, gx(2150), 60, 'fill'); f.rect(gx(1630), 600, gx(2132), 618, 'fill')
-f.rect(gx(1645), 60, gx(2117), 552, 'ol thin'); f.text(gx(1880), 300, 'холодильник', 'note', 'middle')
+for x in (1630, 2172):
+    f.rect(gx(x), 20, gx(x + 40), 730); f.rect(gx(x + 8), 0, gx(x + 32), 20, 'ol thin')
+for y0 in (20, 690): f.rect(gx(1670), y0, gx(2172), y0 + 40)
+f.rect(gx(1670), 600, gx(2172), 602, 'ol thin')
+f.rect(gx(1685), 62, gx(2157), 554, 'ol thin'); f.text(gx(1921), 300, 'холодильник', 'note', 'middle')
 stones(f, gx(2100), gx(2600), 0, 730)
 stones(f, gx(2600), gx(2800), 0, 730)
 f.rect(gx(1430), 730, gx(2800), 800, 'fill'); f.line(gx(1430), 790, gx(2800), 790, 'ol thin')
@@ -127,9 +130,12 @@ front_svg = f.svg('Фасад')
 # ======================= 3. SECTION A-A through the sink =======================
 a = View(-50, 1500, 0, 1000, pad=(110, 200, 60, 120), k=1.9)
 a.line(-50, 0, 1500, 0, 'ol')
-a.rect(0, 0, 1100, 730, 'ol')
-a.rect(0, 0, 20, 730, 'fill'); a.rect(0, 0, 1100, 60, 'fill')
-a.text(300, 400, 'тумба (каркас і обшивка)', 'note', 'middle')
+a.rect(-2, 20, 0, 730, 'fill')                                  # back cladding
+for z0 in (0, 600, 1060):                                         # cut rails: rear, inner tie, front
+    for y0 in (20, 690): a.rect(z0, y0, z0 + 40, y0 + 40, 'fill')
+for z0 in (0, 560, 1060): a.rect(z0, 20, z0 + 40, 730, 'hid')     # posts beyond the cut
+a.rect(0, 60, 1060, 62, 'ol thin'); a.rect(1058, 60, 1060, 690, 'ol thin')
+a.text(300, 400, 'каркас тумби, розріз', 'note', 'middle')
 stones(a, 1100, 1300, 0, 730)
 # lid layers
 a.rect(-20 + 20, 730, 1320, 740, 'hid')
@@ -160,11 +166,11 @@ m.rect(0, 498, 800, 800)
 m.rect(8, 501, 792, 800, 'hid')
 m.rect(0, 800, 800, 806); m.rect(0, 806, 800, 840)
 prev = 0
-for x in range(140, 861, 60):
+for x in range(40, 761, 60):  # notches relative to the mangal edge: 40 ... 760
     m.rect(prev, 840, x - 6, 850); prev = x + 6
 m.rect(prev, 840, 800, 850)
 m.dimH(0, 800, -40, ext_from=0)
-m.dimH(0, 140, 900, '140', ext_from=850); m.dimH(140, 200, 900, '60'); m.dimH(134, 146, 870, '12')
+m.dimH(0, 40, 900, '40', ext_from=850); m.dimH(40, 100, 900, '60'); m.dimH(760, 800, 900, '40', ext_from=850); m.dimH(34, 46, 870, '12')
 m.text(500, 905, '13 пропилів 12 × 10, крок 60', 'note', 'middle')
 m.dimV(0, 498, -40, ext_from=0); m.dimV(498, 800, -40, '302'); m.dimV(800, 850, -40, '50')
 m.dimV(0, 100, 840, '100', ext_from=800, side='right'); m.dimV(100, 140, 840, '40', side='right')
@@ -210,7 +216,7 @@ L.dimH(gx(2080), gx(2800), 1360, '720', ext_from=1320)
 L.dimV(0, 620, gx(1430) - 30, '620', ext_from=gx(1430))
 L.dimV(0, 1320, gx(2800) + 40, '1320', ext_from=gx(2800), side='right')
 L.dimH(gx(2540), gx(2800), 1010, '260'); L.dimV(0, 660, gx(2350), '660', side='right')
-L.dimH(gx(1430), gx(1530), 50, '100')
+L.dimH(gx(1430), gx(1480), 50, '50'); L.dimH(gx(1480), gx(1580), 50, '100')
 L.text(gx(1700), 1000, 'решітка: квадрат 10×10, крок 100', 'note', 'middle')
 L.text(gx(1700), 1030, '○ — вушка для підйому, 4 шт', 'note', 'middle')
 lid_svg = L.svg('Кришка тумби')
@@ -399,7 +405,7 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
         <li>Обв'язка — труба 40×40×2: 4 × 720 і 4 × 520, рівні 100 і 458.</li>
         <li>Полиця під дрова — лист 3 мм 800×600, вирізи 40×40 по кутах.</li>
         <li>Короб — лист 3 мм: дно 800×600 на 498, борти висотою 302 до 800.</li>
-        <li>Кутник 75×50×6, L 800, 2 шт: полиця 75 лягає на цеглу і край короба, полиця 50 вгору до 850, 13 пропилів 12×10 з кроком 60, перший на 140.</li>
+        <li>Кутник 75×50×6, L 800, 2 шт: полиця 75 лягає на цеглу і край короба, полиця 50 вгору до 850, 13 пропилів 12×10 з кроком 60, перший і останній за 40 від краю.</li>
       </ol>
     </section>
   </div>
