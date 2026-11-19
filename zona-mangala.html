@@ -62,7 +62,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 14 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 15 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -70,6 +70,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
       <button id="v-top" data-view="top" aria-pressed="false">Згори</button>
       <button id="v-side" data-view="side" aria-pressed="false">Збоку</button>
     </div>
+    <label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка відкрита</label>
     <label class="tg"><input type="checkbox" id="tg-split"> Розсунути частини</label>
     <label class="tg"><input type="checkbox" id="tg-xray"> Прозорий метал</label>
     <label class="tg"><input type="checkbox" id="tg-dims" checked> Розміри</label>
@@ -95,7 +96,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   <div class="block">
     <h3>Три частини на болтах</h3>
     <ul>
-      <li>Частина 1: мангал 800 × 600, з шамотом ≈ 190 кг</li>
+      <li>Частина 1: мангал 800 × 600, з шамотом і кришкою ≈ 210 кг</li>
       <li>Частина 2: казан 500 × 600, з кладкою ≈ 180 кг</li>
       <li>Частина 3: тумба з габіонами, 1370 × 600 і 700 × 700</li>
       <li>Мангал–казан: 4 болти M10 через стійки (на 120 і 300) з дистанційними втулками 30 мм, зазор лишається для тепла</li>
@@ -117,6 +118,19 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
       <li>Кутник кріпиться до короба (прихватки або болти), цегла під ним лежить вільно</li>
       <li>Від вугілля до шампура ≈ 260</li>
       <li>Робоча зона ≈ 654 × 454, шампури від 600 мм</li>
+      <li>Ручки шампурів спереду, задній кінець виходить за кутник не більше ніж на 20</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Кришка мангала</h3>
+    <ul>
+      <li>Ковпак з листа 2 мм, зовні 806 × 606, верх на 1000 — на 150 вище за опору шампурів; перед тим як закрити, шампури знімають</li>
+      <li>Передній і задній борт заходять на 20 нижче верху кутника (до 830), бокові — до 805, над накладкою зазору</li>
+      <li>Зсередини по верхньому краю рамка з кутника 25×25×3 для жорсткості</li>
+      <li>Ззаду 2 приварні петлі Ø20 × 80 на 150 від країв: нижня половина приварена до кутника мангала нижче борту кришки, верхня — до заднього борту кришки; вісь на 840, на 16 за кутником</li>
+      <li>Відкривається на 100°, тримають 2 ланцюжки-обмежувачі</li>
+      <li>Спереду дерев'яна ручка Ø28 × 220 на двох кронштейнах зі смуги, винос 40</li>
+      <li>Вага ≈ 19 кг; фарба термостійка</li>
     </ul>
   </div>
   <div class="block">
@@ -163,7 +177,8 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
   <h2>Що змінилось</h2>
   <ul class="log">
-    <li><strong>v14</strong> Каркас тумби з труби 40×40 замість суцільного блока: 9 стійок на ніжках, обшивка, дверцята під умивальником. Перегородку відсіку зсунуто, просвіт під холодильник 502. Умивальник зсунуто на 50 мм від країв, щоб не лягав на обв'язку; змішувач праворуч.</li>
+    <li><strong>v15</strong> На мангал додано кришку-ковпак з листа 2 мм на двох приварних петлях ззаду; перемикач «Кришка відкрита». Ручки шампурів перенесено наперед, щоб не заважали петлям.</li>
+    <li><strong>v14</strong>Каркас тумби з труби 40×40 замість суцільного блока: 9 стійок на ніжках, обшивка, дверцята під умивальником. Перегородку відсіку зсунуто, просвіт під холодильник 502. Умивальник зсунуто на 50 мм від країв, щоб не лягав на обв'язку; змішувач праворуч.</li>
     <li><strong>v13</strong> Об'єднано дві гілки: кутник на мангалі з v12 і нова піч під казан (шамот на ребро, спереду облицювальна цегла лежма, розрізана вздовж; плита в поясі на шнурі; глуха задня стінка; саморобні дверцята на каркасі).</li>
     <li><strong>v12</strong> Знімні опори на пінах прибрано. Торці переднього і заднього рядів шамоту накриті кутником 75×50×6: він захищає цеглу, продовжує стінку і тримає шампури в пропилах на 840.</li>
     <li><strong>v11</strong> Піч під казан без металевого короба: шамот на ребро в каркасі з кутників, спереду облицювальна цегла лежма, розрізана вздовж. Пояс на 5 мм вищий за шамот, верхня плита вкладається в нього на шнур. Задня стінка глуха з листа, до неї кріпиться димохід. Дверцята саморобні, на стійках каркаса.</li>
@@ -359,11 +374,44 @@ for (let x = 140; x <= 860; x += 60) NOTCH.push(x);
   NOTCH.forEach(x => { box(prev, RY, Math.min(zo, zv), x - 6, RY + 10, Math.max(zo, zv), capAngle); prev = x + 6; });
   box(prev, RY, Math.min(zo, zv), 900, RY + 10, Math.max(zo, zv), capAngle);
 });
+/* skewers: handles at the front, the rear tip stops 20 behind the angle so it does not foul the lid hinges */
+const skewerG = new THREE.Group(); rig.add(skewerG); parent = skewerG;
 [320, 380, 440, 500].forEach(x => {
-  cyl(4, 760, [x, RY + 4, 300], 'z', M.skewer, 8);
-  box(x - 6, RY + 2, -90, x + 6, RY + 14, -40, M.log);
+  cyl(4, 760, [x, RY + 4, 360], 'z', M.skewer, 8);
+  box(x - 6, RY + 2, 690, x + 6, RY + 14, 740, M.log);
   for (let z = 170; z <= 430; z += 52) box(x - 20, RY - 12, z, x + 20, RY + 28, z + 40, M.meat);
 });
+parent = rig;
+/* v15: lid. Hood of 2 mm sheet, outer 806 x 606, top on 1000 (150 above the skewer rest, room for skewers with meat).
+   Front and rear walls hang 20 over the angle legs (down to 830), sides down to 805 (clear of the joint cover strip on 803).
+   Stiffening frame of angle 25x25x3 inside along the top edge. Handle in front: wooden bar on two brackets.
+   Two weld-on hinges Ø20 x 80 at the rear, pin on y 840, z -16: the lower leaf is welded to the rear angle leg
+   below the lid wall, the upper leaf to the lid rear wall. Opens to 100°, held by two stop chains. */
+const LID_P = [840, -16]; /* hinge pin: y, z */
+const LID_TOP = 1000;
+const lidPivot = new THREE.Group(); lidPivot.position.set(0, LID_P[0], LID_P[1]); rig.add(lidPivot);
+const lidG = new THREE.Group(); lidG.position.set(0, -LID_P[0], -LID_P[1]); lidPivot.add(lidG);
+parent = lidG;
+box(97, LID_TOP - 2, -3, 903, LID_TOP, 603, M.sheet);        /* top */
+box(97, 830, -3, 903, LID_TOP - 2, -1, M.sheet);             /* rear wall */
+box(97, 830, 601, 903, LID_TOP - 2, 603, M.sheet);           /* front wall */
+box(97, 805, -1, 99, LID_TOP - 2, 601, M.sheet);             /* left wall */
+box(901, 805, -1, 903, LID_TOP - 2, 601, M.sheet);           /* right wall */
+box(99, LID_TOP - 27, -1, 901, LID_TOP - 2, 2, M.angle);     /* stiffening angle 25x25x3 inside the top edge */
+box(99, LID_TOP - 27, 598, 901, LID_TOP - 2, 601, M.angle);
+box(99, LID_TOP - 27, 2, 102, LID_TOP - 2, 598, M.angle);
+box(898, LID_TOP - 27, 2, 901, LID_TOP - 2, 598, M.angle);
+[420, 580].forEach(x => box(x - 3, 915, 603, x + 3, 945, 643, M.angle)); /* handle brackets, strip 25x6 */
+cyl(14, 220, [500, 930, 640], 'x', M.log, 14);              /* wooden handle */
+[150, 850].forEach(x => box(x - 40, 846, -7, x + 40, 900, -3, M.angle)); /* upper hinge leaves on the lid */
+parent = rig;
+[150, 850].forEach(x => {
+  cyl(10, 80, [x, LID_P[0], LID_P[1]], 'x', M.skewer, 16);  /* hinge knuckle with pin */
+  box(x - 40, 806, -8, x + 40, 829, 0, M.angle);            /* lower leaf on the rear angle leg */
+});
+const LID_OPEN = -100 * Math.PI / 180;
+let lidTarget = LID_OPEN;
+lidPivot.rotation.x = LID_OPEN;
 [[150, 188], [250, 188], [350, 188], [450, 188], [200, 270], [300, 270], [400, 270]].forEach(([z, y]) => cyl(44, 440, [500, y, z], 'x', M.log, 12));
 
 /* kazan block: x 930..1430 (its own part) */
@@ -677,6 +725,11 @@ document.getElementById('tg-xray').addEventListener('change', e => {
 document.getElementById('tg-dims').addEventListener('change', e => {
   const on = e.target.checked; dimGroup.visible = on; dimGroup2.visible = on; dimGroupR.visible = on; dimGroupK.visible = on; labels.forEach(l => { l.visible = on; });
 });
+document.getElementById('tg-lid').addEventListener('change', e => {
+  lidTarget = e.target.checked ? LID_OPEN : 0;
+  if (!e.target.checked) skewerG.visible = false; /* skewers come off before the lid is shut */
+  if (reduceMotion) { lidPivot.rotation.x = lidTarget; skewerG.visible = e.target.checked; }
+});
 let explodeX = 0;
 document.getElementById('tg-split').addEventListener('change', e => {
   explodeX = e.target.checked ? 300 : 0;
@@ -702,11 +755,13 @@ function tick(now) {
   }
   modK.position.x += (explodeX - modK.position.x) * 0.15;
   mod2.position.x += (explodeX * 2 - mod2.position.x) * 0.15;
+  lidPivot.rotation.x += (lidTarget - lidPivot.rotation.x) * 0.1;
+  if (lidTarget !== 0 && lidPivot.rotation.x < LID_OPEN * 0.95) skewerG.visible = true;
   controls.update();
   renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-window.__mangal = { scene, rig, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+window.__mangal = { scene, camera, controls, rig, lid: lidPivot, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
 </script>

@@ -5,7 +5,7 @@ for Serg
 
 | Файл | Що це |
 |---|---|
-| [zona-mangala.html](zona-mangala.html) | 3D-модель, версія 14 (відкрити в браузері) |
+| [zona-mangala.html](zona-mangala.html) | 3D-модель, версія 15: з кришкою на мангалі (відкрити в браузері) |
 | [kreslennia-kompleks.html](kreslennia-kompleks.html) | Креслення всього комплексу: план, фасад, розріз, мангал, кришка тумби, габіон + перелік матеріалів |
 | [kreslennia-pich.html](kreslennia-pich.html) | Креслення каркаса печі під казан для зварювальника |
 | [kreslennia-tumba.html](kreslennia-tumba.html) | Креслення каркаса тумби для зварювальника |
