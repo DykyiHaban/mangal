@@ -1,0 +1,593 @@
+<meta charset="utf-8">
+<title>Зона мангала</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: full-height 3D viewport on the left, spec sheet on the right; stacks on phones */
+:root {
+  --bg: #e9ecea; --panel: #ffffff; --fg: #1d2124; --muted: #5a646b; --line: #d3d9d7;
+  --accent: #c4521c; --chip: #f7e4d7; --chip-fg: #8a3510;
+  --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15181a; --panel: #1d2124; --fg: #e6eaeb; --muted: #98a2a8; --line: #2f363a;
+  --accent: #ee7d45; --chip: #3b2418; --chip-fg: #f6b48f; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #15181a; --panel: #1d2124; --fg: #e6eaeb; --muted: #98a2a8; --line: #2f363a;
+  --accent: #ee7d45; --chip: #3b2418; --chip-fg: #f6b48f; color-scheme: dark; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 14px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: auto minmax(0, 1fr); }
+header { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px;
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid var(--line); background: var(--panel); }
+h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: .01em; }
+.ver { font: 500 12px var(--font-mono); background: var(--chip); color: var(--chip-fg); padding: 3px 8px; border-radius: 4px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-left: auto; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: 500 13px var(--font-ui); background: transparent; color: var(--fg); border: 0; padding: 6px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.seg button:focus-visible, .tg input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tg { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; user-select: none; }
+.tg input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+#view { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+#view canvas { display: block; }
+.labels { position: absolute; inset: 0; pointer-events: none; }
+.lbl { font: 500 12px var(--font-mono); background: var(--panel); color: var(--fg); border: 1px solid var(--line);
+  padding: 1px 6px; border-radius: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.lbl.name { font-family: var(--font-ui); color: var(--accent); border-color: var(--accent); }
+#hint { position: absolute; left: 12px; bottom: 12px; font-size: 12px; color: var(--muted); background: var(--panel);
+  border: 1px solid var(--line); padding: 4px 8px; border-radius: 4px; pointer-events: none; }
+aside { overflow: auto; border-left: 1px solid var(--line); background: var(--panel);
+  padding-block: 16px 24px; padding-left: 20px; padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+aside h2 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 22px 0 8px; }
+aside h2:first-child { margin-top: 0; }
+dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; }
+dt { color: var(--muted); }
+dd { margin: 0; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.block { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
+.block h3 { font-size: 14px; font-weight: 600; margin: 0 0 6px; }
+ul { margin: 0; padding-left: 18px; line-height: 1.55; }
+.log li strong { font-family: var(--font-mono); font-weight: 500; color: var(--accent); }
+@media (max-width: 760px) {
+  html, body { height: auto; }
+  body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 62vh auto; }
+  .controls { margin-left: 0; }
+  aside { border-left: 0; border-top: 1px solid var(--line); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+</style>
+
+<header>
+  <h1>Зона мангала</h1>
+  <span class="ver" id="ver">Версія 10 · 19.11.2026</span>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Вид">
+      <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
+      <button id="v-front" data-view="front" aria-pressed="false">Спереду</button>
+      <button id="v-top" data-view="top" aria-pressed="false">Згори</button>
+      <button id="v-side" data-view="side" aria-pressed="false">Збоку</button>
+    </div>
+    <label class="tg"><input type="checkbox" id="tg-split"> Розсунути частини</label>
+    <label class="tg"><input type="checkbox" id="tg-xray"> Прозорий метал</label>
+    <label class="tg"><input type="checkbox" id="tg-dims" checked> Розміри</label>
+  </div>
+</header>
+
+<div id="view"><div id="hint">Тягніть, щоб обертати · коліщатко або два пальці, щоб наблизити</div></div>
+
+<aside>
+  <h2>Загальне</h2>
+  <dl>
+    <dt>Майданчик</dt><dd>3000 × 1500</dd>
+    <dt>Стовпи</dt><dd>4 × 100×100</dd>
+    <dt>Стійка</dt><dd>2500 + габіон 200 = 2700 × 600</dd>
+    <dt>Розміщення</dt><dd>справа впритул до стовпа, зліва 100</dd>
+    <dt>Висота</dt><dd>800</dd>
+    <dt>Шамот</dt><dd>ША-5, 230×114×65</dd>
+    <dt>Цегла</dt><dd>≈ 85 шт</dd>
+    <dt>Камінь</dt><dd>80–120, ≈ 0,35 м³ (~560 кг)</dd>
+  </dl>
+
+  <div class="block">
+    <h3>Три частини на болтах</h3>
+    <ul>
+      <li>Частина 1: мангал 800 × 600, з шамотом ≈ 190 кг</li>
+      <li>Частина 2: казан 500 × 600, з шамотом ≈ 165 кг</li>
+      <li>Частина 3: тумба з габіонами, 1370 × 600 і 700 × 700</li>
+      <li>Мангал–казан: 4 болти M10 через стійки (на 120 і 300) з дистанційними втулками 30 мм, зазор лишається для тепла</li>
+      <li>Зверху над зазором знімна накладка</li>
+      <li>Казан–тумба: 4 болти M10 через стійки + пластина ззаду вгорі на 4 болти</li>
+      <li>Гайки самоконтрячі або приварені</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Мангал 800 × 600</h3>
+    <ul>
+      <li>Короб з листа 3 мм, глибина ≈ 300, низ на 500</li>
+      <li>Під: цегла плашмя, 65 мм</li>
+      <li>Стінки: на ребро, 2 ряди (≈ 230 мм)</li>
+      <li>Шамот врівень зі стільницею, верх на 800</li>
+      <li>Дві знімні опори-кутники з пазами, +40 мм (840)</li>
+      <li>Від вугілля до шампура ≈ 260</li>
+      <li>Робоча зона ≈ 654 × 454, шампури від 600 мм</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Казан 500 × 600</h3>
+    <ul>
+      <li>Камера ≈ 354 × 454 × 350</li>
+      <li>Стінки на ребро, 3 ряди; під плашмя</li>
+      <li>Казан 8 л, по вінцю ≈ Ø340</li>
+      <li>Плита 5 мм з отвором Ø300 (казан сидить на ⅔ глибини)</li>
+      <li>Дверцята ≈ 250 × 230, труба Ø110 ззаду</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Модуль 2: стільниця і тумба</h3>
+    <ul>
+      <li>Каркас і обшивка тумби з металу, верх каркаса на 730</li>
+      <li>Кришка окремо, Г-подібна 1370 × 620 + 720 × 700, товщина 70</li>
+      <li>Кришка: рамка-борт зі сталі 3 мм висотою 70, дно — решітка з квадрата 10×10 з кроком 100</li>
+      <li>На решітку незнімна опалубка (ЦСП 8–10 мм або плівка + сітка), бетон 50, плитка на клею</li>
+      <li>Кришка звисає на 20 мм над габіонами, зверху їх не видно</li>
+      <li>Фіксація кришки: болти M8 знизу через раму каркаса в гайки, приварені до решітки</li>
+      <li>Кришка цільна, вага ≈ 210 кг: 4 приварні вушка на рамці для підйому, ставити вчотирьох або лебідкою</li>
+      <li>Габіон біля казана 200 × 600 × 730: опора і тепловий бар'єр</li>
+      <li>Габіон на торці тумби 500 × 200 × 730</li>
+      <li>Габіон справа біля стовпа 200 × 1300 × 730</li>
+      <li>Габіони: рамка з кутника 30×30, сітка 50×50 дріт 4–5 мм, камінь 80–120</li>
+      <li>Відсік холодильника 502 × 540, поличка над ним</li>
+      <li>Холодильник Ardesto DFM-50X: 492 × 472 × 450, 50 л</li>
+      <li>Умивальник у стільниці тумби, чаша ≈ 380 × 380, змішувач з правого боку</li>
+      <li>Під умивальником сифон і крани, дверцята в бік вільної зони</li>
+    </ul>
+  </div>
+
+  <h2>Що змінилось</h2>
+  <ul class="log">
+    <li><strong>v10</strong> Мангал, казан і тумба — три окремі частини на болтах. Між мангалом і казаном зазор 30 мм на втулках, зверху знімна накладка.</li>
+    <li><strong>v9</strong> Отвір під казан зменшено до Ø300 під казан 8 л.</li>
+    <li><strong>v8</strong> Кришка цільна, дно кришки — решітка з квадрата 10×10 замість листа.</li>
+    <li><strong>v7</strong> Кришка тумби окрема: сталевий лоток, 50 мм бетону і керамічна плитка. Габіони сховані під нею, видно тільки з боків. Конструкцію зсунуто вліво на 200, справа додано габіон 200 біля стовпа.</li>
+    <li><strong>v6</strong> Тумба металева. Бічні стінки модуля 2 стали габіонами з каменем 80–120: біля казана (замість ніші) і на торці тумби. Умивальник зсунуто від торця.</li>
+    <li><strong>v5</strong> Стійка подовжена до 2500. У модулі 2 додано відсік під холодильник Ardesto DFM-50X і умивальник у тумбі. Уся конструкція зсунута праворуч впритул до стовпа.</li>
+    <li><strong>v4</strong> Комплекс поділено на два модулі на болтах: мангал + казан на спільній рамі і стільниця + тумба. Додано перемикач «Розсунути модулі».</li>
+    <li><strong>v3</strong> Опори для шампурів опущено до 40 мм над стільницею (840).</li>
+    <li><strong>v2</strong> Шамот мангала опущено врівень зі стільницею (800). Шампури лежать на двох знімних опорах на 80 мм вище. Короб став глибшим, низ на 500.</li>
+    <li><strong>v1</strong> Перша 3D-модель за рішеннями з розмови: висота 800, стійка 2 м, мангал і казан окремо, шамот на ребро у 2 ряди з виступом 50 мм.</li>
+  </ul>
+
+  <h2>Ще не вирішено</h2>
+  <ul>
+    <li>Матеріал стільниці</li>
+    <li>Висота і матеріал стовпів, дах</li>
+    <li>Підведення води і злив для умивальника</li>
+    <li>Вулична розетка IP44 з УЗО для холодильника</li>
+  </ul>
+</aside>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+const view = document.getElementById('view');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 10, 80000);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setClearColor(0x000000, 0);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+view.appendChild(renderer.domElement);
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.domElement.className = 'labels';
+view.appendChild(labelRenderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.495;
+controls.minDistance = 400;
+controls.maxDistance = 15000;
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8b8070, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 2.4);
+sun.position.set(2600, 4200, 3200);
+sun.target.position.set(1200, 0, 700);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -2600, right: 2600, top: 2600, bottom: -2600, near: 100, far: 12000 });
+sun.shadow.bias = -0.0004;
+sun.shadow.normalBias = 1.5;
+scene.add(sun, sun.target);
+
+const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.8, ...o });
+const M = {
+  sheet: std(0x34373b, { metalness: 0.55, roughness: 0.45, side: THREE.DoubleSide }),
+  tube: std(0x2a2c2f, { metalness: 0.5, roughness: 0.5 }),
+  angle: std(0x4b4f54, { metalness: 0.6, roughness: 0.4 }),
+  iron: std(0x1d1d1f, { metalness: 0.5, roughness: 0.6, side: THREE.DoubleSide }),
+  body: std(0x44484d, { metalness: 0.45, roughness: 0.55 }),
+  slab: std(0x9fa4a7, { roughness: 0.55 }),
+  paving: std(0xb8b1a5, { roughness: 1 }),
+  ground: std(0x8f9a7f, { roughness: 1 }),
+  post: std(0x2f3134, { metalness: 0.4, roughness: 0.6 }),
+  log: std(0x7b5434),
+  meat: std(0x8a3f22, { roughness: 0.6 }),
+  coal: std(0x232323, { roughness: 1 }),
+  ember: std(0x3a1a0a, { emissive: 0xff5a1a, emissiveIntensity: 0.7 }),
+  skewer: std(0xc8ccd0, { metalness: 0.8, roughness: 0.3 })
+};
+const brickMats = [0xdcc097, 0xd3b487, 0xe3caa4, 0xcdab7e].map(c => std(c, { roughness: 0.95 }));
+let seed = 7;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const brick = () => brickMats[Math.floor(rnd() * brickMats.length)];
+
+const SHIFT = 100;
+const rig = new THREE.Group(); rig.position.x = SHIFT; scene.add(rig);
+const mod2 = new THREE.Group(); rig.add(mod2);
+const modK = new THREE.Group(); rig.add(modK);
+let parent = scene;
+function box(x0, y0, z0, x1, y1, z1, mat) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, y1 - y0, z1 - z0), mat);
+  m.position.set((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
+  m.castShadow = m.receiveShadow = true;
+  parent.add(m);
+  return m;
+}
+function cyl(r, len, pos, axis, mat, seg = 20) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, seg), mat);
+  if (axis === 'x') m.rotation.z = Math.PI / 2;
+  if (axis === 'z') m.rotation.x = Math.PI / 2;
+  m.position.set(...pos);
+  m.castShadow = m.receiveShadow = true;
+  parent.add(m);
+  return m;
+}
+
+/* bricks: 230 long, joint 3 */
+function run(axis, a0, a1, f0, f1, y0, h, offset) {
+  let c = a0, piece = offset > 0 ? offset : 230;
+  while (c < a1 - 1) {
+    const len = Math.min(piece, a1 - c);
+    if (len > 8) {
+      if (axis === 'x') box(c, y0, f0, c + len, y0 + h, f1, brick());
+      else box(f0, y0, c, f1, y0 + h, c + len, brick());
+    }
+    c += len + 3; piece = 230;
+  }
+}
+function floorBricks(x0, x1, z0, z1, y0) {
+  let zc = z0, i = 0;
+  while (zc < z1 - 1) {
+    const d = Math.min(114, z1 - zc);
+    run('x', x0, x1, zc, zc + d, y0, 65, i % 2 ? 115 : 0);
+    zc += d + 3; i++;
+  }
+}
+function wallRing(x0, x1, z0, z1, y0, courses, joint, gap) {
+  const t = 65, h = 114;
+  for (let i = 0; i < courses; i++) {
+    const y = y0 + i * (h + joint);
+    const even = i % 2 === 0;
+    const fa0 = even ? x0 : x0 + t, fa1 = even ? x1 : x1 - t, off = even ? 0 : 115;
+    if (gap && gap.c.includes(i)) {
+      run('x', fa0, gap.x0, z1 - t, z1, y, h, off);
+      run('x', gap.x1, fa1, z1 - t, z1, y, h, 0);
+    } else run('x', fa0, fa1, z1 - t, z1, y, h, off);
+    run('x', fa0, fa1, z0, z0 + t, y, h, off);
+    const sa0 = even ? z0 + t : z0, sa1 = even ? z1 - t : z1;
+    run('z', sa0, sa1, x0, x0 + t, y, h, even ? 0 : 115);
+    run('z', sa0, sa1, x1 - t, x1, y, h, even ? 0 : 115);
+  }
+}
+function frame(x0, x1, z0, z1, top, levels) {
+  const t = 40;
+  [[x0, z0], [x1 - t, z0], [x0, z1 - t], [x1 - t, z1 - t]].forEach(([x, z]) => box(x, 0, z, x + t, top, z + t, M.tube));
+  levels.forEach(y => {
+    box(x0 + t, y, z0, x1 - t, y + t, z0 + t, M.tube);
+    box(x0 + t, y, z1 - t, x1 - t, y + t, z1, M.tube);
+    box(x0, y, z0 + t, x0 + t, y + t, z1 - t, M.tube);
+    box(x1 - t, y, z0 + t, x1, y + t, z1 - t, M.tube);
+  });
+}
+function tray(x0, x1, z0, z1, yb, yt) {
+  box(x0, yb, z0, x1, yb + 3, z1, M.sheet);
+  box(x0, yb, z1 - 3, x1, yt, z1, M.sheet);
+  box(x0, yb, z0, x1, yt, z0 + 3, M.sheet);
+  box(x0, yb, z0 + 3, x0 + 3, yt, z1 - 3, M.sheet);
+  box(x1 - 3, yb, z0 + 3, x1, yt, z1 - 3, M.sheet);
+}
+
+/* ground and posts */
+const g = new THREE.Mesh(new THREE.PlaneGeometry(14000, 14000), M.ground);
+g.rotation.x = -Math.PI / 2; g.position.set(1500, -41, 750); g.receiveShadow = true; scene.add(g);
+box(0, -40, 0, 3000, 0, 1500, M.paving);
+[[0, 0], [2900, 0], [0, 1400], [2900, 1400]].forEach(([x, z]) => box(x, 0, z, x + 100, 2400, z + 100, M.post));
+
+parent = rig;
+/* mangal: x 100..900 (whole rig shifted by SHIFT) */
+frame(100, 900, 0, 600, 498, [100, 458]);
+box(140, 140, 40, 860, 143, 560, M.tube);
+tray(100, 900, 0, 600, 498, 800);
+floorBricks(108, 892, 8, 592, 501);
+wallRing(108, 892, 8, 592, 569, 2, 3, null);
+for (let i = 0; i < 80; i++) {
+  const s = 25 + rnd() * 20, x = 190 + rnd() * 620, z = 90 + rnd() * 420;
+  const m = box(x, 566, z, x + s, 566 + s * 0.7, z + s * 0.8, rnd() < 0.25 ? M.ember : M.coal);
+  m.rotation.y = rnd() * Math.PI;
+}
+/* removable skewer supports: pins in sockets + notched angle rails, SUP above worktop */
+const SUP = 40, RY = 800 + SUP;
+[[112, 18], [868, 18], [112, 562], [868, 562]].forEach(([x, z]) => box(x, 800, z, x + 20, RY, z + 20, M.angle));
+[[10, 50], [550, 590]].forEach(([z0, z1]) => {
+  box(104, RY, z0, 896, RY + 4, z1, M.angle);
+  box(104, RY - 36, z0 < 300 ? z0 : z1 - 4, 896, RY, z0 < 300 ? z0 + 4 : z1, M.angle);
+});
+[300, 380, 460, 540].forEach(x => {
+  cyl(4, 760, [x, RY + 8, 300], 'z', M.skewer, 8);
+  box(x - 6, RY + 2, -90, x + 6, RY + 14, -40, M.log);
+  for (let z = 170; z <= 430; z += 52) box(x - 20, RY - 12, z, x + 20, RY + 28, z + 40, M.meat);
+});
+[[150, 188], [250, 188], [350, 188], [450, 188], [200, 270], [300, 270], [400, 270]].forEach(([z, y]) => cyl(44, 440, [500, y, z], 'x', M.log, 12));
+
+/* kazan block: x 930..1430 (its own part) */
+parent = modK;
+frame(930, 1430, 0, 600, 374, [100, 334]);
+box(970, 140, 40, 1390, 143, 560, M.tube);
+tray(930, 1430, 0, 600, 374, 795);
+floorBricks(938, 1422, 8, 592, 377);
+wallRing(938, 1422, 8, 592, 445, 3, 2, { x0: 1060, x1: 1300, c: [0, 1] });
+const plate = new THREE.Shape();
+plate.moveTo(930, 0); plate.lineTo(1430, 0); plate.lineTo(1430, -600); plate.lineTo(930, -600); plate.lineTo(930, 0);
+const hole = new THREE.Path(); hole.absarc(1180, -300, 150, 0, Math.PI * 2, true); plate.holes.push(hole);
+const pm = new THREE.Mesh(new THREE.ExtrudeGeometry(plate, { depth: 5, bevelEnabled: false, curveSegments: 48 }), M.sheet);
+pm.rotation.x = -Math.PI / 2; pm.position.y = 795; pm.castShadow = pm.receiveShadow = true; modK.add(pm);
+const kz = new THREE.Mesh(new THREE.SphereGeometry(170, 48, 24, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), M.iron);
+kz.position.set(1180, 880, 300); kz.castShadow = true; modK.add(kz);
+const rim = new THREE.Mesh(new THREE.TorusGeometry(170, 7, 8, 64), M.iron);
+rim.rotation.x = Math.PI / 2; rim.position.set(1180, 880, 300); modK.add(rim);
+box(1050, 435, 600, 1310, 700, 606, M.iron);
+box(1070, 455, 606, 1290, 680, 610, M.tube);
+box(1250, 560, 610, 1270, 580, 640, M.angle);
+cyl(55, 95, [1180, 730, -45], 'z', M.sheet);
+const elbow = new THREE.Mesh(new THREE.SphereGeometry(55, 16, 12), M.sheet); elbow.position.set(1180, 730, -92); modK.add(elbow);
+cyl(55, 1570, [1180, 1515, -92], 'y', M.sheet);
+[[200, 188], [300, 188], [400, 188], [250, 270], [350, 270]].forEach(([z, y]) => cyl(44, 320, [1180, y, z], 'x', M.log, 12));
+
+/* mangal | kazan joint: 30 mm thermal gap kept by spacer bushings on M10 bolts; loose cover strip on top */
+parent = rig;
+[20, 580].forEach(z => [120, 300].forEach(y => {
+  cyl(6, 120, [915, y, z], 'x', M.skewer, 10);
+  cyl(13, 30, [915, y, z], 'x', M.angle, 12);
+}));
+parent = modK;
+box(897, 800, 0, 933, 803, 600, M.angle);
+/* joint bolts M10: through kazan legs at 120 and 300, plus rear plate at the top */
+[20, 580].forEach(z => [120, 300].forEach(y => {
+  cyl(6, 120, [1430, y, z], 'x', M.skewer, 10);
+  box(1382, y - 10, z - 10, 1390, y + 10, z + 10, M.angle);
+}));
+box(1340, 690, -6, 1430, 790, -1, M.angle);
+[[1360, 715], [1410, 715], [1360, 765], [1410, 765]].forEach(([x, y]) => cyl(6, 120, [x, y, -6], 'z', M.skewer, 10));
+
+/* module 2: worktop + side cabinet */
+parent = mod2;
+/* gabion: angle frame 30x30, welded mesh 50x50, stone 80-120 */
+const stoneMats = [0x9a948a, 0x7f7b74, 0xb3ab9e, 0x8a8276, 0xa39a8c].map(c => std(c, { roughness: 1, flatShading: true }));
+const stoneGeo = new THREE.IcosahedronGeometry(1, 0);
+const meshMat = new THREE.LineBasicMaterial({ color: 0x2b2d30 });
+const spots = (a0, a1, s) => { const n = Math.max(1, Math.round((a1 - a0) / s)), d = (a1 - a0) / n; return Array.from({ length: n }, (_, i) => a0 + d * (i + 0.5)); };
+function gabion(x0, x1, z0, z1, y0, y1) {
+  const t = 30;
+  [[x0, z0], [x1 - t, z0], [x0, z1 - t], [x1 - t, z1 - t]].forEach(([x, z]) => box(x, y0, z, x + t, y1, z + t, M.tube));
+  [y0, y1 - t].forEach(y => {
+    box(x0 + t, y, z0, x1 - t, y + t, z0 + t, M.tube); box(x0 + t, y, z1 - t, x1 - t, y + t, z1, M.tube);
+    box(x0, y, z0 + t, x0 + t, y + t, z1 - t, M.tube); box(x1 - t, y, z0 + t, x1, y + t, z1 - t, M.tube);
+  });
+  spots(x0, x1, 100).forEach(x => spots(z0, z1, 100).forEach(z => spots(y0, y1, 90).forEach(y => {
+    const r = 42 + rnd() * 16;
+    const s = new THREE.Mesh(stoneGeo, stoneMats[Math.floor(rnd() * stoneMats.length)]);
+    s.scale.set(r * (0.9 + rnd() * 0.35), r * (0.7 + rnd() * 0.3), r * (0.9 + rnd() * 0.35));
+    s.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
+    s.position.set(x + (rnd() - 0.5) * 20, y + (rnd() - 0.5) * 12, z + (rnd() - 0.5) * 20);
+    s.castShadow = s.receiveShadow = true; parent.add(s);
+  })));
+  const p = [], o = 2, c = 50;
+  for (let x = x0; x <= x1 + 0.1; x += c) p.push(x, y0, z0 - o, x, y1, z0 - o, x, y0, z1 + o, x, y1, z1 + o);
+  for (let z = z0; z <= z1 + 0.1; z += c) p.push(x0 - o, y0, z, x0 - o, y1, z, x1 + o, y0, z, x1 + o, y1, z);
+  for (let y = y0; y <= y1 + 0.1; y += c) p.push(x0 - o, y, z0 - o, x1 + o, y, z0 - o, x0 - o, y, z1 + o, x1 + o, y, z1 + o,
+                                               x0 - o, y, z0 - o, x0 - o, y, z1 + o, x1 + o, y, z0 - o, x1 + o, y, z1 + o);
+  const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.Float32BufferAttribute(p, 3));
+  parent.add(new THREE.LineSegments(gg, meshMat));
+}
+/* gabion A next to kazan (support + heat barrier), fridge bay, corner, return cabinet with sink, gabion C at return end */
+const LID = 730; /* top of cabinet frame; lid 70 mm on top -> 800 */
+gabion(1430, 1630, 0, 600, 0, LID);
+box(1630, 0, 0, 2150, LID, 20, M.body);
+box(1630, 0, 20, 2150, 60, 600, M.body);
+box(2132, 60, 20, 2150, LID, 600, M.body);
+box(1630, 600, 20, 2132, 618, 590, M.body);
+const fridgeM = std(0xb9bec3, { metalness: 0.5, roughness: 0.35 });
+box(1645, 60, 110, 2117, 552, 556, fridgeM);
+box(1645, 64, 556, 2117, 548, 560, fridgeM);
+box(2070, 200, 560, 2085, 420, 575, M.tube);
+box(1645, 548, 556, 2117, 552, 561, M.tube);
+box(2150, 0, 0, 2600, LID, 600, M.body);
+box(2100, 0, 600, 2600, LID, 1100, M.body);
+gabion(2100, 2600, 1100, 1300, 0, LID);
+gabion(2600, 2800, 0, 1300, 0, LID);
+/* separate lid: steel tray 3 mm with 70 mm rim, 50 mm concrete, tile on adhesive; overhangs 20 mm over gabions */
+const lidGroup = new THREE.Group(); mod2.add(lidGroup);
+const lidShape = () => {
+  const s = new THREE.Shape();
+  s.moveTo(1430, 0); s.lineTo(2800, 0); s.lineTo(2800, -1320); s.lineTo(2080, -1320); s.lineTo(2080, -620); s.lineTo(1430, -620); s.lineTo(1430, 0);
+  const h = new THREE.Path();
+  h.moveTo(2110, -690); h.lineTo(2110, -1070); h.lineTo(2490, -1070); h.lineTo(2490, -690); h.lineTo(2110, -690);
+  s.holes.push(h); return s;
+};
+const tileM = std(0xcfc6b8, { roughness: 0.4 });
+const concreteM = std(0x9a9a95, { roughness: 1 });
+[[LID + 10, 50, concreteM], [LID + 60, 10, tileM]].forEach(([y, d, mat]) => {
+  const m = new THREE.Mesh(new THREE.ExtrudeGeometry(lidShape(), { depth: d, bevelEnabled: false }), mat);
+  m.rotation.x = -Math.PI / 2; m.position.y = y; m.castShadow = m.receiveShadow = true; lidGroup.add(m);
+});
+parent = lidGroup;
+const rimY0 = LID, rimY1 = LID + 70;
+box(1430, rimY0, 0, 2800, rimY1, 3, M.tube);
+box(2797, rimY0, 3, 2800, rimY1, 1320, M.tube);
+box(2080, rimY0, 1317, 2797, rimY1, 1320, M.tube);
+box(2080, rimY0, 620, 2083, rimY1, 1317, M.tube);
+box(1430, rimY0, 617, 2080, rimY1, 620, M.tube);
+box(1430, rimY0, 3, 1433, rimY1, 617, M.tube);
+/* lid bottom: grating of 10x10 bar, 100 mm pitch, split around the sink cut-out */
+const SX0 = 2110, SX1 = 2490, SZ0 = 690, SZ1 = 1070;
+for (let z = 50; z < 1320; z += 100) {
+  const x0 = z < 620 ? 1433 : 2083, x1 = 2797;
+  if (z > SZ0 && z < SZ1) { box(x0, LID, z - 5, SX0, LID + 10, z + 5, M.tube); box(SX1, LID, z - 5, x1, LID + 10, z + 5, M.tube); }
+  else box(x0, LID, z - 5, x1, LID + 10, z + 5, M.tube);
+}
+for (let x = 1480; x < 2800; x += 100) {
+  const z1 = x < 2080 ? 617 : 1317;
+  if (x > SX0 && x < SX1) { box(x - 5, LID, 3, x + 5, LID + 10, SZ0, M.tube); box(x - 5, LID, SZ1, x + 5, LID + 10, z1, M.tube); }
+  else box(x - 5, LID, 3, x + 5, LID + 10, z1, M.tube);
+}
+parent = mod2;
+{
+  const p = [], y = LID + 70.6, T = 300;
+  const inHole = (x, z) => x > 2110 && x < 2490 && z > 690 && z < 1070;
+  const seg = (a, b, n = 40) => { for (let i = 0; i < n; i++) { const t0 = i / n, t1 = (i + 1) / n;
+    const x0 = a[0] + (b[0] - a[0]) * t0, z0 = a[1] + (b[1] - a[1]) * t0, x1 = a[0] + (b[0] - a[0]) * t1, z1 = a[1] + (b[1] - a[1]) * t1;
+    if (!inHole((x0 + x1) / 2, (z0 + z1) / 2)) p.push(x0, y, z0, x1, y, z1); } };
+  for (let x = 1430 + T; x < 2800; x += T) { seg([x, 3], [x, 617]); if (x > 2083) seg([x, 617], [x, 1317]); }
+  for (let z = T; z < 1320; z += T) { if (z < 617) seg([1433, z], [2797, z]); else seg([2083, z], [2797, z]); }
+  const gl = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(p, 3)), new THREE.LineBasicMaterial({ color: 0x8a8378 }));
+  lidGroup.add(gl);
+}
+const sinkM = std(0xd0d4d8, { metalness: 0.85, roughness: 0.25, side: THREE.DoubleSide });
+box(2110, 600, 690, 2490, 604, 1070, sinkM);
+box(2110, 600, 690, 2114, 800, 1070, sinkM); box(2486, 600, 690, 2490, 800, 1070, sinkM);
+box(2114, 600, 690, 2486, 800, 694, sinkM); box(2114, 600, 1066, 2486, 800, 1070, sinkM);
+cyl(25, 6, [2300, 606, 880], 'y', M.tube, 16);
+cyl(18, 260, [2550, 930, 880], 'y', sinkM, 16);
+cyl(12, 190, [2455, 1050, 880], 'x', sinkM, 12);
+box(2355, 1040, 868, 2370, 1052, 892, sinkM);
+box(2098, 60, 850, 2101, 700, 852, M.tube);
+box(1430, 690, -6, 1520, 790, -1, M.angle);
+[[1460, 715], [1500, 715], [1460, 765], [1500, 765]].forEach(([x, y]) => box(x - 9, y - 9, -10, x + 9, y + 9, -6, M.angle));
+parent = rig;
+
+/* labels and dimensions */
+const labels = [];
+const dimGroup = new THREE.Group(); scene.add(dimGroup);
+const dimLine = new THREE.LineBasicMaterial({ color: 0xd8642a, depthTest: false });
+const dimDot = new THREE.MeshBasicMaterial({ color: 0xd8642a, depthTest: false });
+function label(text, pos, cls = 'lbl') {
+  const el = document.createElement('div'); el.className = cls; el.textContent = text;
+  const o = new CSS2DObject(el); o.position.set(...pos); parent.add(o); labels.push(o);
+}
+const dimGroup2 = new THREE.Group(); mod2.add(dimGroup2);
+const dimGroupR = new THREE.Group(); rig.add(dimGroupR);
+const dimGroupK = new THREE.Group(); modK.add(dimGroupK);
+function dim(a, b, text) {
+  const dg = parent === mod2 ? dimGroup2 : parent === modK ? dimGroupK : parent === rig ? dimGroupR : dimGroup;
+  const ln = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]), dimLine);
+  ln.renderOrder = 10; dg.add(ln);
+  [a, b].forEach(p => { const s = new THREE.Mesh(new THREE.SphereGeometry(14, 8, 8), dimDot); s.position.set(...p); s.renderOrder = 10; dg.add(s); });
+  label(text, a.map((v, i) => (v + b[i]) / 2));
+}
+parent = scene;
+dim([0, 0, 1620], [3000, 0, 1620], '3000');
+dim([-120, 0, 0], [-120, 0, 1500], '1500');
+dim([100, 0, 650], [100 + SHIFT, 0, 650], String(SHIFT));
+parent = rig;
+dim([100, 1080, 640], [900, 1080, 640], '800');
+dim([60, 0, 660], [60, 800, 660], '800');
+dim([940, 800, 590], [940, 840, 590], '+40');
+label('Мангал', [500, 1180, 300], 'lbl name');
+label('Частина 1', [500, 1300, 300], 'lbl');
+parent = modK;
+dim([930, 1080, 640], [1430, 1080, 640], '500');
+label('Казан', [1180, 1180, 300], 'lbl name');
+label('Частина 2', [1180, 1300, 300], 'lbl');
+parent = rig;
+dim([100, 1200, 640], [2800, 1200, 640], '2700');
+parent = mod2;
+dim([1430, 1080, 640], [2800, 1080, 640], '1370');
+dim([2100, 800, 1380], [2600, 800, 1380], '500');
+dim([2600, 800, 1380], [2800, 800, 1380], '200');
+label('Габіон', [2700, 420, 1360], 'lbl name');
+label('Холодильник', [1880, 330, 640], 'lbl name');
+label('Умивальник', [2300, 1150, 880], 'lbl name');
+label('Габіон', [1530, 420, 660], 'lbl name');
+label('Габіон', [2300, 420, 1360], 'lbl name');
+label('Частина 3', [2015, 1300, 300], 'lbl');
+parent = scene;
+
+/* views */
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const VIEWS = {
+  persp: { p: [3700, 2400, 4000], t: [1550, 450, 650] },
+  front: { p: [1600, 700, 5600], t: [1600, 500, 650] },
+  top:   { p: [1500, 6000, 760], t: [1500, 0, 750] },
+  side:  { p: [6000, 800, 650], t: [1600, 500, 650] }
+};
+let anim = null;
+function goView(k, instant) {
+  const v = VIEWS[k];
+  anim = { fp: camera.position.clone(), ft: controls.target.clone(), tp: new THREE.Vector3(...v.p), tt: new THREE.Vector3(...v.t),
+           t0: performance.now(), dur: instant || reduceMotion ? 0 : 700 };
+  document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === k)));
+}
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => goView(b.dataset.view)));
+camera.position.set(...VIEWS.persp.p); controls.target.set(...VIEWS.persp.t); controls.update();
+controls.addEventListener('start', () => { anim = null; });
+
+document.getElementById('tg-xray').addEventListener('change', e => {
+  const on = e.target.checked;
+  M.sheet.transparent = on; M.sheet.opacity = on ? 0.18 : 1; M.sheet.depthWrite = !on; M.sheet.needsUpdate = true;
+});
+document.getElementById('tg-dims').addEventListener('change', e => {
+  const on = e.target.checked; dimGroup.visible = on; dimGroup2.visible = on; dimGroupR.visible = on; dimGroupK.visible = on; labels.forEach(l => { l.visible = on; });
+});
+let explodeX = 0;
+document.getElementById('tg-split').addEventListener('change', e => {
+  explodeX = e.target.checked ? 300 : 0;
+  if (reduceMotion) { modK.position.x = explodeX; mod2.position.x = explodeX * 2; }
+});
+
+function resize() {
+  const w = view.clientWidth, h = view.clientHeight;
+  if (!w || !h) return;
+  renderer.setSize(w, h); labelRenderer.setSize(w, h);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(view);
+resize();
+
+function tick(now) {
+  if (anim) {
+    const k = anim.dur ? Math.min(1, (now - anim.t0) / anim.dur) : 1;
+    const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    camera.position.lerpVectors(anim.fp, anim.tp, e);
+    controls.target.lerpVectors(anim.ft, anim.tt, e);
+    if (k >= 1) anim = null;
+  }
+  modK.position.x += (explodeX - modK.position.x) * 0.15;
+  mod2.position.x += (explodeX * 2 - mod2.position.x) * 0.15;
+  controls.update();
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+window.__mangal = { scene, rig, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+</script>
