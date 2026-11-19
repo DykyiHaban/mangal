@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 17 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 18 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -85,7 +85,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   </div>
 </header>
 
-<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cargo"> Карго</label></div></details><div id="hint">Клік по кришці, ящику чи карго — відкрити або закрити · тягніть, щоб обертати · коліщатко, щоб наблизити</div></div>
+<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cargo"> Карго</label><label class="tg"><input type="checkbox" id="tg-door"> Дверцята під мийкою</label></div></details><div id="hint">Клік по кришці, ящику, карго чи дверцятах — відкрити або закрити · тягніть, щоб обертати · коліщатко, щоб наблизити</div></div>
 
 <aside>
   <h2>Загальне</h2>
@@ -130,6 +130,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
       <li>Під мангалом замість дров висувний ящик для пательні, казана, кришок: корпус 700 × 545 × 275 з листа 1,5 мм, фасад 710 × 304, ручка-рейлінг 320</li>
       <li>Ящик на 2 напрямних повного висуву 500 (45 кг), нижнього кріплення на полицю 140; висув 450</li>
       <li>Між ящиком і дном короба повітряний зазор ≈ 55, дно короба під 65 мм шамоту</li>
+      <li>Тримач шампурів на лівому боці: угорі смуга 40×4 L 560 на 780, 12 прорізів 8 × 25 з кроком 45, на двох кронштейнах за 30 від стінки; унизу на 100 ловець вістер з кутника 25×25×3. Шампури ≈ 650–700 висять вертикально за ручку, виступ 50 від мангала</li>
     </ul>
   </div>
   <div class="block">
@@ -168,7 +169,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
     <ul>
       <li>Каркас тумби: труба 40×40×2, 9 стійок на регульованих ніжках M10, обв'язки на 20–60 і 690–730, верх каркаса на 730</li>
       <li>Обшивка лист 1,5 мм: зад, перегородка, бік і перед повернення зсередини (біля габіонів), дно, полиця над холодильником</li>
-      <li>Дверцята 440 × 650 під умивальником, на боці до вільної зони, отвір 420 × 630</li>
+      <li>Дверцята 440 × 650 під умивальником, на боці до вільної зони, отвір 420 × 630; відкриваються назовні на 95°, петлі біля передньої стійки</li>
       <li>Кришка окремо, Г-подібна 1370 × 620 + 720 × 700, товщина 70</li>
       <li>Кришка: рамка-борт зі сталі 3 мм висотою 70, дно — решітка з квадрата 10×10 з кроком 100</li>
       <li>На решітку незнімна опалубка (ЦСП 8–10 мм або плівка + сітка), бетон 50, плитка на клею</li>
@@ -202,6 +203,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v18</strong> Тримач шампурів на лівому боці мангала. Дверцята під мийкою теж відкриваються кліком або галочкою.</li>
     <li><strong>v17</strong> Під мангалом замість дров висувний ящик для пательні й казана. Габіон між піччю і тумбою замінено нішею з карго: фасад — фальшгабіон, усередині рейка з гачками під приладдя. Кришка, ящик і карго відкриваються і закриваються кліком по деталі або галочками на панелі.</li>
     <li><strong>v16</strong> Панель «Шари» на моделі: можна сховати цеглу, метал, камінь габіонів, бетон з плиткою, холодильник з умивальником, казан з дровами і шампурами, стовпи — і подивитися, що всередині.</li>
     <li><strong>v15</strong>На мангал додано кришку-ковпак з листа 2 мм на двох приварних петлях ззаду; перемикач «Кришка відкрита». Ручки шампурів перенесено наперед, щоб не заважали петлям.</li>
@@ -436,6 +438,26 @@ parent = rig;
   cyl(10, 80, [x, LID_P[0], LID_P[1]], 'x', M.skewer, 16);  /* hinge knuckle with pin */
   box(x - 40, 806, -8, x + 40, 829, 0, M.angle);            /* lower leaf on the rear angle leg */
 });
+/* v18: skewer holder on the left side of the mangal (in the 100 gap to the post).
+   Top rail: flat bar 40x4, L 560, at 780..784, 30 off the tray wall on two brackets 40x4; 12 slots 8 x 25, pitch 45.
+   Skewers hang by the handle, tips stand in a catcher of angle 25x25x3 at 100..125, on two brackets to the side ring.
+   Sticks out 50 from the mangal; the lid side wall (x 97) clears the handles. */
+{
+  const SL = [];
+  for (let i = 0; i < 12; i++) SL.push(52 + i * 45);
+  box(50, 780, 20, 62, 784, 580, M.angle); box(78, 780, 20, 90, 784, 580, M.angle);
+  let prev = 20; SL.forEach(z => { box(62, 780, prev, 78, 784, z - 4, M.angle); prev = z + 4; }); box(62, 780, prev, 78, 784, 580, M.angle);
+  [25, 565].forEach(z => box(90, 770, z, 100, 784, z + 10, M.angle));
+  box(55, 100, 20, 80, 103, 580, M.angle); box(55, 103, 20, 58, 125, 580, M.angle); /* catcher 25x25 */
+  [25, 565].forEach(z => box(80, 100, z, 100, 106, z + 10, M.angle));
+  const rackG = new THREE.Group(); rig.add(rackG); parent = rackG;
+  SL.filter((_, i) => i % 2 === 0).forEach(z => {
+    box(68, 106, z - 2, 72, 790, z + 2, M.skewer);       /* flat skewer blade */
+    box(63, 790, z - 7, 77, 850, z + 7, M.log);          /* handle above the rail */
+  });
+  parent = rig;
+  window.__rackG = rackG;
+}
 const LID_OPEN = -100 * Math.PI / 180;
 let lidTarget = LID_OPEN;
 lidPivot.rotation.x = LID_OPEN;
@@ -699,8 +721,14 @@ box(1670, 60, 0, 2172, 62, 560, cladM);
 box(2212, 60, 40, 2560, 62, 600, cladM); box(2140, 60, 600, 2560, 62, 1060, cladM);
 box(1670, 600, 0, 2172, 602, 560, cladM);
 /* door 440 x 650 on the free-zone side, hinges at the front post */
+/* v18: the door swings open on its hinges (pivot x 2097, z 1068), outwards into the free zone, up to 95° */
+const DOOR_OPEN = 95 * Math.PI / 180;
+const doorPivot = new THREE.Group(); doorPivot.position.set(2097, 0, 1068); mod2.add(doorPivot);
+const doorG = new THREE.Group(); doorG.position.set(-2097, 0, -1068); doorPivot.add(doorG);
+parent = doorG;
 box(2096, 50, 630, 2098, 700, 1070, cladM);
 box(2088, 300, 650, 2096, 420, 662, M.angle);
+parent = mod2;
 [150, 600].forEach(y => cyl(6, 50, [2097, y, 1068], 'y', M.skewer, 10));
 const fridgeM = std(0xb9bec3, { metalness: 0.5, roughness: 0.35 });
 box(1685, 62, 110, 2157, 554, 556, fridgeM);
@@ -782,7 +810,7 @@ const LAYERS = [
 ];
 LAYERS.forEach(l => { l.objs = []; });
 const byId = Object.fromEntries(LAYERS.map(l => [l.id, l]));
-const foodObjs = new Set([kz, rim]); [skewerG, drawerFood, cargoTools].forEach(gr => gr.traverse(o => foodObjs.add(o)));
+const foodObjs = new Set([kz, rim]); [skewerG, drawerFood, cargoTools, window.__rackG].forEach(gr => gr.traverse(o => foodObjs.add(o)));
 const unassigned = [];
 scene.traverse(o => {
   if (!(o.isMesh || o.isLineSegments) || o === g) return;
@@ -884,7 +912,10 @@ document.getElementById('tg-lid').addEventListener('change', e => {
   if (!e.target.checked) skewerG.visible = false; /* skewers come off before the lid is shut */
   if (reduceMotion) { lidPivot.rotation.x = lidTarget; skewerG.visible = e.target.checked; }
 });
-let drawerTarget = 0, cargoTarget = 0;
+let drawerTarget = 0, cargoTarget = 0, doorTarget = 0;
+document.getElementById('tg-door').addEventListener('change', e => {
+  doorTarget = e.target.checked ? DOOR_OPEN : 0; if (reduceMotion) doorPivot.rotation.y = doorTarget;
+});
 document.getElementById('tg-drawer').addEventListener('change', e => {
   drawerTarget = e.target.checked ? DRAWER_TRAVEL : 0; if (reduceMotion) drawerG.position.z = drawerTarget;
 });
@@ -892,7 +923,7 @@ document.getElementById('tg-cargo').addEventListener('change', e => {
   cargoTarget = e.target.checked ? CARGO_TRAVEL : 0; if (reduceMotion) cargoG.position.z = cargoTarget;
 });
 /* click on a moving part toggles it; a drag (orbit) is not a click */
-const MOVING = [[lidPivot, 'tg-lid'], [drawerG, 'tg-drawer'], [cargoG, 'tg-cargo']];
+const MOVING = [[lidPivot, 'tg-lid'], [drawerG, 'tg-drawer'], [cargoG, 'tg-cargo'], [doorPivot, 'tg-door']];
 const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
 const shown = o => { for (; o; o = o.parent) if (!o.visible) return false; return true; };
 function pick(ev) {
@@ -943,6 +974,7 @@ function tick(now) {
   lidPivot.rotation.x += (lidTarget - lidPivot.rotation.x) * 0.1;
   drawerG.position.z += (drawerTarget - drawerG.position.z) * 0.12;
   cargoG.position.z += (cargoTarget - cargoG.position.z) * 0.12;
+  doorPivot.rotation.y += (doorTarget - doorPivot.rotation.y) * 0.1;
   if (lidTarget !== 0 && lidPivot.rotation.x < LID_OPEN * 0.95) skewerG.visible = true;
   controls.update();
   renderer.render(scene, camera);
@@ -950,5 +982,5 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-window.__mangal = { scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cargo: cargoG, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+window.__mangal = { scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cargo: cargoG, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
 </script>
