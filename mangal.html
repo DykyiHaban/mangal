@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мангал 3D</title>
+<style>
+:root{--bg:#f3f2ee;--panel:#ffffff;--text:#1f1e1c;--muted:#5f5e5a;--border:#d3d1c7}
+@media (prefers-color-scheme: dark){:root{--bg:#232321;--panel:#2c2c2a;--text:#ecebe6;--muted:#b4b2a9;--border:#444441}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+body{display:flex;flex-direction:column}
+.bar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:10px 16px;font-size:14px;color:var(--muted);border-bottom:1px solid var(--border);background:var(--panel)}
+.bar label{display:flex;gap:6px;align-items:center;cursor:pointer}
+button{font:inherit;font-size:13px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text);cursor:pointer}
+button:hover{background:var(--bg)}
+#wrap{flex:1;min-height:300px;cursor:grab}
+.legend{display:flex;flex-wrap:wrap;gap:14px;padding:8px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);background:var(--panel)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<div class="bar">
+<label><input type="checkbox" id="lift"> Підняти кутники</label>
+<label><input type="checkbox" id="sk" checked> Шампури</label>
+<label><input type="checkbox" id="coal" checked> Вугілля</label>
+<label><input type="checkbox" id="cut"> Розріз посередині</label>
+<label><input type="checkbox" id="dm" checked> Розміри</label>
+<button id="v1">Загальний вигляд</button><button id="v2">Збоку (переріз)</button>
+</div>
+<div id="wrap"></div>
+<div class="legend">
+<span><span class="sw" style="background:#c4512a"></span>Кутник 63×63×6</span>
+<span><span class="sw" style="background:#e3c48f"></span>Шамот: стінки на ребро</span>
+<span><span class="sw" style="background:#d4a865"></span>Шамот: дно лежма</span>
+<span><span class="sw" style="background:#5f5e5a"></span>Сталь: корпус і суцільне дно</span>
+<span><span class="sw" style="background:#3a3a38"></span>Ніжки</span>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const wrap=document.getElementById('wrap');
+const dark=matchMedia('(prefers-color-scheme: dark)').matches;
+const scene=new THREE.Scene();scene.background=new THREE.Color(dark?0x232321:0xf3f2ee);
+const cam=new THREE.PerspectiveCamera(35,wrap.clientWidth/wrap.clientHeight,1,10000);
+const r=new THREE.WebGLRenderer({antialias:true});r.setPixelRatio(devicePixelRatio);r.setSize(wrap.clientWidth,wrap.clientHeight);
+r.localClippingEnabled=true;wrap.appendChild(r.domElement);
+const ctl=new THREE.OrbitControls(cam,r.domElement);ctl.enableDamping=true;
+scene.add(new THREE.HemisphereLight(0xffffff,0x555555,0.75));
+const dl=new THREE.DirectionalLight(0xffffff,0.7);dl.position.set(500,900,700);scene.add(dl);
+const dl2=new THREE.DirectionalLight(0xffffff,0.3);dl2.position.set(-600,300,-500);scene.add(dl2);
+const clip=new THREE.Plane(new THREE.Vector3(-1,0,0),0);const clips=[];
+function M(c,o){const m=new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.75,metalness:.15,side:THREE.DoubleSide},o||{}));clips.push(m);return m}
+const mSteel=M(0x5f5e5a),mBrick=M(0xe3c48f,{roughness:.95,metalness:0}),mFloor=M(0xd4a865,{roughness:.95,metalness:0}),mAng=M(0xc4512a,{metalness:.3}),mSk=M(0xcfcfcf,{metalness:.8,roughness:.3}),mCoal=M(0xd85a30,{emissive:0x7a2208,roughness:1}),mMeat=M(0x8a4a2e,{roughness:1}),mLeg=M(0x3a3a38);
+function box(w,h,d,x,y,z,m,g){const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);b.position.set(x,y,z);(g||scene).add(b);return b}
+const L=800,W=360,H=200,t=4,BT=65,FH=65,J=3,LEG=600;
+const root=new THREE.Group();root.position.y=LEG;scene.add(root);
+const B=(w,h,d,x,y,z,m,g)=>box(w,h,d,x,y,z,m,g||root);
+for(const sx of[1,-1])for(const sz of[1,-1])box(40,LEG,40,sx*(L/2-20),LEG/2,sz*(W/2-20),mLeg);
+const floorPlane=new THREE.Mesh(new THREE.PlaneGeometry(3000,3000),new THREE.MeshStandardMaterial({color:dark?0x2c2c2a:0xe6e4dc,roughness:1}));floorPlane.rotation.x=-Math.PI/2;scene.add(floorPlane);
+B(L,t,W,0,t/2,0,mSteel);
+B(L,H,t,0,H/2,W/2-t/2,mSteel);B(L,H,t,0,H/2,-W/2+t/2,mSteel);
+B(t,H,W,L/2-t/2,H/2,0,mSteel);B(t,H,W,-L/2+t/2,H/2,0,mSteel);
+const x0=-L/2+t,x1=L/2-t,z0=-W/2+t,z1=W/2-t;
+let row=0;for(let z=z0;z<z1-1;z+=113+J,row++){const ze=Math.min(z+113,z1);let x=x0-(row%2?115+J/2:0);
+for(;x<x1;x+=230+J){const a=Math.max(x,x0),b=Math.min(x+230,x1);if(b-a>5)B(b-a,FH,ze-z,(a+b)/2,t+FH/2,(z+ze)/2,mFloor)}}
+const yb=t+FH+1,BH=H-yb;
+for(const s of[1,-1]){const z=s*(W/2-t-BT/2);const inner=L-2*t;let n=Math.ceil(inner/233);const bl=(inner-(n-1)*J)/n;let x=x0;for(let i=0;i<n;i++){B(bl,BH,BT,x+bl/2,yb+BH/2,z,mBrick);x+=bl+J}}
+for(const s of[1,-1]){const x=s*(L/2-t-BT/2);const span=W-2*t-2*BT-2*J;B(BT,BH-30,span,x,yb+(BH-30)/2,0,mBrick)}
+const coal=new THREE.Group();root.add(coal);
+for(let i=0;i<160;i++){const c=new THREE.Mesh(new THREE.IcosahedronGeometry(10+Math.random()*8,0),mCoal);c.position.set((Math.random()-.5)*600,yb+10+Math.random()*14,(Math.random()-.5)*(W-2*BT-50));c.rotation.set(Math.random()*3,Math.random()*3,0);coal.add(c)}
+const A=63,AT=6,ND=10,NW=12,STEP=60,angles=[];
+for(const s of[1,-1]){const g=new THREE.Group();root.add(g);angles.push(g);
+const zOut=s*(W/2),zIn=s*(W/2-A);
+B(L,AT,A,0,H+AT/2,(zOut+zIn)/2,mAng,g);
+const zV=s*(W/2-AT/2);
+B(L,A-ND,AT,0,H+(A-ND)/2,zV,mAng,g);
+let xs=[];for(let x=-L/2+40;x<=L/2-40;x+=STEP)xs.push(x);
+let prev=-L/2;
+for(const x of xs){const a=prev,b=x-NW/2;if(b>a)B(b-a,ND,AT,(a+b)/2,H+A-ND/2,zV,mAng,g);prev=x+NW/2}
+B(L/2-prev,ND,AT,(prev+L/2)/2,H+A-ND/2,zV,mAng,g);
+g.userData.xs=xs}
+const sk=new THREE.Group();root.add(sk);
+angles[0].userData.xs.forEach((x,i)=>{if(i%2)return;const y=H+A-ND+2;B(10,3,W+160,x,y+1.5,40,mSk,sk);B(14,40,30,x,y+1.5,W/2+105,mSk,sk);
+for(let k=-2;k<=2;k++){const m=new THREE.Mesh(new THREE.DodecahedronGeometry(26,0),mMeat);m.position.set(x,y-2,k*52);m.rotation.set(k,k*2,0);sk.add(m)}});
+const dims=new THREE.Group();scene.add(dims);
+const dimMat=new THREE.LineBasicMaterial({color:dark?0xecebe6:0x1f1e1c});
+function label(txt,p){const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');
+x.fillStyle=dark?'rgba(44,44,42,.9)':'rgba(255,255,255,.9)';x.fillRect(0,0,256,64);x.fillStyle=dark?'#ecebe6':'#1f1e1c';x.font='500 34px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(txt,128,33);
+const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(150,37.5,1);s.position.copy(p);s.renderOrder=10;dims.add(s)}
+function dim(a,b,off,txt){const A=new THREE.Vector3(...a),Bv=new THREE.Vector3(...b),O=new THREE.Vector3(...off);
+const pts=[A,A.clone().add(O),A.clone().add(O),Bv.clone().add(O),Bv.clone().add(O),Bv];
+const l=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts),dimMat);l.renderOrder=9;dims.add(l);
+label(txt,A.clone().add(Bv).multiplyScalar(.5).add(O).add(O.clone().normalize().multiplyScalar(30)))}
+const TOP=LEG+H;
+dim([-L/2,TOP+A,W/2],[L/2,TOP+A,W/2],[0,80,60],'800');
+dim([L/2,TOP,-W/2],[L/2,TOP,W/2],[90,0,0],'360');
+dim([-L/2,LEG,W/2],[-L/2,TOP,W/2],[-90,0,40],'200');
+dim([-L/2,0,W/2],[-L/2,LEG,W/2],[-90,0,40],'600');
+dim([L/2,TOP,W/2],[L/2,TOP+A,W/2],[90,0,40],'63');
+dim([-L/2,0,W/2],[-L/2,TOP+A,W/2],[-260,0,40],(LEG+H+A)+'');
+function view(v){if(v==1){cam.position.set(1500,1500,2100);ctl.target.set(0,(LEG+H)/2,0)}else{cam.position.set(1100,LEG+200,0.01);ctl.target.set(0,LEG+150,0)}}
+view(1);
+document.getElementById('v1').onclick=()=>view(1);
+document.getElementById('v2').onclick=()=>{view(2);document.getElementById('cut').checked=true;setCut(true)};
+document.getElementById('sk').onchange=e=>sk.visible=e.target.checked;
+document.getElementById('dm').onchange=e=>dims.visible=e.target.checked;
+document.getElementById('coal').onchange=e=>coal.visible=e.target.checked;
+let liftT=0,lift=0;document.getElementById('lift').onchange=e=>liftT=e.target.checked?90:0;
+function setCut(on){clips.forEach(m=>{m.clippingPlanes=on?[clip]:[];m.needsUpdate=true})}
+document.getElementById('cut').onchange=e=>setCut(e.target.checked);
+addEventListener('resize',()=>{cam.aspect=wrap.clientWidth/wrap.clientHeight;cam.updateProjectionMatrix();r.setSize(wrap.clientWidth,wrap.clientHeight)});
+(function loop(){lift+=(liftT-lift)*.12;angles.forEach(g=>g.position.y=lift);ctl.update();r.render(scene,cam);requestAnimationFrame(loop)})();
+</script>
+</body>
+</html>

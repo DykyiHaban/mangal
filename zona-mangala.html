@@ -62,7 +62,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 11 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 12 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -111,7 +111,10 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
       <li>Під: цегла плашмя, 65 мм</li>
       <li>Стінки: на ребро, 2 ряди (≈ 230 мм)</li>
       <li>Шамот врівень зі стільницею, верх на 800</li>
-      <li>Дві знімні опори-кутники з пазами, +40 мм (840)</li>
+      <li>Торці переднього і заднього рядів накриті кутником 75×50×6 на всю довжину 800</li>
+      <li>Полиця 75 лежить на цеглі й краї короба, полиця 50 продовжує зовнішню стінку вгору до 850</li>
+      <li>Пропили під шампури 12 × 10, крок 60 — шампур на 840 (+40 над стільницею)</li>
+      <li>Кутник кріпиться до короба (прихватки або болти), цегла під ним лежить вільно</li>
       <li>Від вугілля до шампура ≈ 260</li>
       <li>Робоча зона ≈ 654 × 454, шампури від 600 мм</li>
     </ul>
@@ -156,6 +159,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v12</strong> Знімні опори на пінах прибрано. Торці переднього і заднього рядів шамоту накриті кутником 75×50×6: він захищає цеглу, продовжує стінку і тримає шампури в пропилах на 840.</li>
     <li><strong>v11</strong> Піч під казан без металевого короба: каркас з кутників, шамотна кладка, спереду облицювання клінкером. Казан зсунуто на 60 назад, над центр камери.</li>
     <li><strong>v10</strong> Мангал, казан і тумба — три окремі частини на болтах. Між мангалом і казаном зазор 30 мм на втулках, зверху знімна накладка.</li>
     <li><strong>v9</strong> Отвір під казан зменшено до Ø300 під казан 8 л.</li>
@@ -334,15 +338,23 @@ for (let i = 0; i < 80; i++) {
   const m = box(x, 566, z, x + s, 566 + s * 0.7, z + s * 0.8, rnd() < 0.25 ? M.ember : M.coal);
   m.rotation.y = rnd() * Math.PI;
 }
-/* removable skewer supports: pins in sockets + notched angle rails, SUP above worktop */
+/* v12: front and rear chamotte rows capped with angle 75x50x6, fixed to the tray.
+   Horizontal leg 75 lies on the brick ends and the tray edge; vertical leg 50 continues the outer wall
+   up to 850 and is the skewer rest: notches 12 wide, 10 deep, pitch 60 -> skewer on 840 (+40 above worktop) */
 const SUP = 40, RY = 800 + SUP;
-[[112, 18], [868, 18], [112, 562], [868, 562]].forEach(([x, z]) => box(x, 800, z, x + 20, RY, z + 20, M.angle));
-[[10, 50], [550, 590]].forEach(([z0, z1]) => {
-  box(104, RY, z0, 896, RY + 4, z1, M.angle);
-  box(104, RY - 36, z0 < 300 ? z0 : z1 - 4, 896, RY, z0 < 300 ? z0 + 4 : z1, M.angle);
+const capAngle = std(0xc4521c, { metalness: 0.5, roughness: 0.45 });
+const NOTCH = [];
+for (let x = 140; x <= 860; x += 60) NOTCH.push(x);
+[[0, 1], [600, -1]].forEach(([zo, s]) => {
+  const zi = zo + s * 75, zv = zo + s * 6;
+  box(100, 800, Math.min(zo, zi), 900, 806, Math.max(zo, zi), capAngle);
+  box(100, 806, Math.min(zo, zv), 900, RY, Math.max(zo, zv), capAngle);
+  let prev = 100;
+  NOTCH.forEach(x => { box(prev, RY, Math.min(zo, zv), x - 6, RY + 10, Math.max(zo, zv), capAngle); prev = x + 6; });
+  box(prev, RY, Math.min(zo, zv), 900, RY + 10, Math.max(zo, zv), capAngle);
 });
-[300, 380, 460, 540].forEach(x => {
-  cyl(4, 760, [x, RY + 8, 300], 'z', M.skewer, 8);
+[320, 380, 440, 500].forEach(x => {
+  cyl(4, 760, [x, RY + 4, 300], 'z', M.skewer, 8);
   box(x - 6, RY + 2, -90, x + 6, RY + 14, -40, M.log);
   for (let z = 170; z <= 430; z += 52) box(x - 20, RY - 12, z, x + 20, RY + 28, z + 40, M.meat);
 });
