@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 18 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 19 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -130,7 +130,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
       <li>Під мангалом замість дров висувний ящик для пательні, казана, кришок: корпус 700 × 545 × 275 з листа 1,5 мм, фасад 710 × 304, ручка-рейлінг 320</li>
       <li>Ящик на 2 напрямних повного висуву 500 (45 кг), нижнього кріплення на полицю 140; висув 450</li>
       <li>Між ящиком і дном короба повітряний зазор ≈ 55, дно короба під 65 мм шамоту</li>
-      <li>Тримач шампурів на лівому боці: угорі смуга 40×4 L 560 на 780, 12 прорізів 8 × 25 з кроком 45, на двох кронштейнах за 30 від стінки; унизу на 100 ловець вістер з кутника 25×25×3. Шампури ≈ 650–700 висять вертикально за ручку, виступ 50 від мангала</li>
+      <li>Тримач шампурів на лівому боці: шампури лежать по діагоналі, вістря ззаду внизу, ручки спереду вгорі на 610–750, виходять на 40 за передній край — під ліву руку кухаря. Нахил 31°. Дві гребінки зі смуги 40×4: задня на 62 від заднього краю (на бічних обв'язках), передня на 560 (на ніжці і стінці короба); по 9 прорізів 12 × 30 з кроком 24. Шампури за 45 від стінки, збоку і нижче краю короба (800), ручки не гріються</li>
     </ul>
   </div>
   <div class="block">
@@ -203,7 +203,8 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
   <h2>Що змінилось</h2>
   <ul class="log">
-    <li><strong>v18</strong> Тримач шампурів на лівому боці мангала. Дверцята під мийкою теж відкриваються кліком або галочкою.</li>
+    <li><strong>v19</strong> Тримач шампурів переробено: шампури лежать по діагоналі в двох гребінках, ручки спереду вгорі під ліву руку кухаря, збоку і нижче краю короба — не гріються, поки палає вогонь.</li>
+    <li><strong>v18</strong> Тримач шампурів на лівому боці мангала (у v19 перенесено нижче). Дверцята під мийкою теж відкриваються кліком або галочкою.</li>
     <li><strong>v17</strong> Під мангалом замість дров висувний ящик для пательні й казана. Габіон між піччю і тумбою замінено нішею з карго: фасад — фальшгабіон, усередині рейка з гачками під приладдя. Кришка, ящик і карго відкриваються і закриваються кліком по деталі або галочками на панелі.</li>
     <li><strong>v16</strong> Панель «Шари» на моделі: можна сховати цеглу, метал, камінь габіонів, бетон з плиткою, холодильник з умивальником, казан з дровами і шампурами, стовпи — і подивитися, що всередині.</li>
     <li><strong>v15</strong>На мангал додано кришку-ковпак з листа 2 мм на двох приварних петлях ззаду; перемикач «Кришка відкрита». Ручки шампурів перенесено наперед, щоб не заважали петлям.</li>
@@ -438,22 +439,35 @@ parent = rig;
   cyl(10, 80, [x, LID_P[0], LID_P[1]], 'x', M.skewer, 16);  /* hinge knuckle with pin */
   box(x - 40, 806, -8, x + 40, 829, 0, M.angle);            /* lower leaf on the rear angle leg */
 });
-/* v18: skewer holder on the left side of the mangal (in the 100 gap to the post).
-   Top rail: flat bar 40x4, L 560, at 780..784, 30 off the tray wall on two brackets 40x4; 12 slots 8 x 25, pitch 45.
-   Skewers hang by the handle, tips stand in a catcher of angle 25x25x3 at 100..125, on two brackets to the side ring.
-   Sticks out 50 from the mangal; the lid side wall (x 97) clears the handles. */
+/* v19: diagonal skewer rack on the left side: skewers run from the rear-bottom up to the front-top,
+   handles at the front, at 600..730, towards the cook's left hand. Slope 0.6 (31°), skewer ~700.
+   Rear comb at z 62: spine flat bar 40x4 from the bottom to the top side ring (y 100..498), teeth 55 out, 9 slots 12 x 30,
+   pitch 24, at 210..402. Front comb at z 560: spine on the front leg and the tray wall (y 480..790), slots at 510..702.
+   Skewers sit 45 off the tray wall, outside the grill opening and under its edge (800), so the handles stay cool. */
+const RACK_K = 0.6, RACK_Y = [];
+for (let i = 0; i < 9; i++) RACK_Y.push(210 + i * 24);
+function comb(z, y0, y1, slots) {
+  box(85, y0, z, 100, y1, z + 4, M.angle);
+  const t0 = slots[0] - 20, t1 = slots[slots.length - 1] + 20;
+  let prev = t0; slots.forEach(y => { box(30, prev, z, 85, y - 6, z + 4, M.angle); prev = y + 6; });
+  box(30, prev, z, 85, t1, z + 4, M.angle);
+  box(60, t0, z, 85, t1, z + 4, M.angle);                          /* slot bottoms: skewer rests at x 55 */
+}
+comb(62, 100, 498, RACK_Y);
+comb(560, 480, 790, RACK_Y.map(y => y + RACK_K * 498));
+function rod(p0, p1, w, h, mat) {
+  const a = new THREE.Vector3(...p0), b = new THREE.Vector3(...p1), d = b.clone().sub(a);
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d.length()), mat);
+  m.position.copy(a).add(b).multiplyScalar(0.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), d.normalize());
+  m.castShadow = m.receiveShadow = true; parent.add(m); return m;
+}
 {
-  const SL = [];
-  for (let i = 0; i < 12; i++) SL.push(52 + i * 45);
-  box(50, 780, 20, 62, 784, 580, M.angle); box(78, 780, 20, 90, 784, 580, M.angle);
-  let prev = 20; SL.forEach(z => { box(62, 780, prev, 78, 784, z - 4, M.angle); prev = z + 4; }); box(62, 780, prev, 78, 784, 580, M.angle);
-  [25, 565].forEach(z => box(90, 770, z, 100, 784, z + 10, M.angle));
-  box(55, 100, 20, 80, 103, 580, M.angle); box(55, 103, 20, 58, 125, 580, M.angle); /* catcher 25x25 */
-  [25, 565].forEach(z => box(80, 100, z, 100, 106, z + 10, M.angle));
   const rackG = new THREE.Group(); rig.add(rackG); parent = rackG;
-  SL.filter((_, i) => i % 2 === 0).forEach(z => {
-    box(68, 106, z - 2, 72, 790, z + 2, M.skewer);       /* flat skewer blade */
-    box(63, 790, z - 7, 77, 850, z + 7, M.log);          /* handle above the rail */
+  RACK_Y.filter((_, i) => i % 2 === 0).forEach(yr => {
+    const y = z => yr + RACK_K * (z - 62);
+    rod([55, y(22), 22], [55, y(570), 570], 2, 10, M.skewer);     /* blade */
+    rod([55, y(570), 570], [55, y(640), 640], 14, 14, M.log);     /* handle, front-top */
   });
   parent = rig;
   window.__rackG = rackG;
