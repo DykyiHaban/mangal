@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 21 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 22 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -85,7 +85,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   </div>
 </header>
 
-<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cargo2"> Карго зліва (шампури)</label><label class="tg"><input type="checkbox" id="tg-cargo"> Карго біля печі</label><label class="tg"><input type="checkbox" id="tg-door"> Дверцята під мийкою</label></div></details><div id="hint">Клік по кришці, ящику, карго чи дверцятах — відкрити або закрити · тягніть, щоб обертати · коліщатко, щоб наблизити</div></div>
+<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cargo2"> Карго зліва (шампури)</label><label class="tg"><input type="checkbox" id="tg-cargo"> Карго біля печі</label><label class="tg"><input type="checkbox" id="tg-door"> Дверцята під мийкою</label></div><div class="sub">Механізми</div><div class="moving"><label class="tg"><input type="checkbox" id="tg-mech"> Показати механізми</label></div></details><div id="hint">Клік по кришці, ящику, карго чи дверцятах — відкрити або закрити · тягніть, щоб обертати · коліщатко, щоб наблизити</div></div>
 
 <aside>
   <h2>Загальне</h2>
@@ -213,6 +213,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v22</strong> Галочка «Показати механізми»: усе інше стає напівпрозорим, напрямні, ролики, кульки напрямних, петлі підсвічено, ящик і карго висуваються.</li>
     <li><strong>v21</strong> Висування на підшипниках: ящик — на кульових нержавіючих напрямних збоку, обидва карго — на телескопічних роликових напрямних (ролики на закритих підшипниках 625-2RS у С-профілях), повний висув, проміжна балка їде на половину ходу.</li>
     <li><strong>v20</strong> Мангал звужено з 800 до 650 (праворуч усе як було). Тримач шампурів прибрано, натомість зліва від мангала карго 200 з фальшгабіоном: шампури висять за ручку, поруч решітка-гриль. Ящик і кришка мангала теж вужчі.</li>
     <li><strong>v19</strong> Тримач шампурів переробено: шампури лежать по діагоналі в двох гребінках, ручки спереду вгорі під ліву руку кухаря, збоку і нижче краю короба — не гріються, поки палає вогонь.</li>
@@ -312,11 +313,13 @@ const rig = new THREE.Group(); rig.position.x = SHIFT; scene.add(rig);
 const mod2 = new THREE.Group(); rig.add(mod2);
 const modK = new THREE.Group(); rig.add(modK);
 let parent = scene;
+/* v22: parts built while mechTag is set are mechanism parts (guides, rollers, slides, hinges) */
+const MECH = []; let mechTag = false;
 function box(x0, y0, z0, x1, y1, z1, mat) {
   const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, y1 - y0, z1 - z0), mat);
   m.position.set((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
   m.castShadow = m.receiveShadow = true;
-  parent.add(m);
+  parent.add(m); if (mechTag) MECH.push(m);
   return m;
 }
 function cyl(r, len, pos, axis, mat, seg = 20) {
@@ -325,7 +328,7 @@ function cyl(r, len, pos, axis, mat, seg = 20) {
   if (axis === 'z') m.rotation.x = Math.PI / 2;
   m.position.set(...pos);
   m.castShadow = m.receiveShadow = true;
-  parent.add(m);
+  parent.add(m); if (mechTag) MECH.push(m);
   return m;
 }
 
@@ -449,12 +452,14 @@ box(LX1 - 5, LID_TOP - 27, 2, LX1 - 2, LID_TOP - 2, 598, M.angle);
 [MXC - 80, MXC + 80].forEach(x => box(x - 3, 915, 603, x + 3, 945, 643, M.angle)); /* handle brackets, strip 25x6 */
 cyl(14, 220, [MXC, 930, 640], 'x', M.log, 14);              /* wooden handle */
 const HINGE_X = [MX0 + 50, MX1 - 50];
-HINGE_X.forEach(x => box(x - 40, 846, -7, x + 40, 900, -3, M.angle)); /* upper hinge leaves on the lid */
+mechTag = true; HINGE_X.forEach(x => box(x - 40, 846, -7, x + 40, 900, -3, M.angle)); mechTag = false; /* upper hinge leaves on the lid */
 parent = rig;
+mechTag = true;
 HINGE_X.forEach(x => {
   cyl(10, 80, [x, LID_P[0], LID_P[1]], 'x', M.skewer, 16);  /* hinge knuckle with pin */
   box(x - 40, 806, -8, x + 40, 829, 0, M.angle);            /* lower leaf on the rear angle leg */
 });
+mechTag = false;
 const LID_OPEN = -100 * Math.PI / 180;
 let lidTarget = LID_OPEN;
 lidPivot.rotation.x = LID_OPEN;
@@ -466,11 +471,17 @@ const DRAWER_TRAVEL = 450;
 /* v21: side-mounted ball-bearing slides (stainless, 45 mm, 500, 70 kg): fixed part on a flat bar 40x4 welded between
    the front and rear leg on each side, 12.7 mm slide gap; the moving member is screwed to the drawer side. */
 const DX0 = MX0 + 57, DX1 = MX1 - 57;
+mechTag = true;
 [[MX0 + 40, MX0 + 44], [MX1 - 44, MX1 - 40]].forEach(([x0, x1]) => box(x0, 270, 40, x1, 310, 560, M.angle)); /* side bars */
 [[MX0 + 44, MX0 + 50], [MX1 - 50, MX1 - 44]].forEach(([x0, x1]) => box(x0, 268, 45, x1, 313, 555, M.skewer)); /* fixed slide members */
+mechTag = false;
 const drawerG = new THREE.Group(); rig.add(drawerG); parent = drawerG;
 const drawerMid = new THREE.Group(); rig.add(drawerMid);
+mechTag = true;
 [[MX0 + 50, MX0 + 57], [MX1 - 57, MX1 - 50]].forEach(([x0, x1]) => box(x0, 272, 52, x1, 309, 590, M.skewer));  /* moving members */
+/* balls in the slides, drawn as a row of small cylinders so the bearing races read in the 'mechanisms' view */
+[MX0 + 50, MX1 - 50].forEach(x => { for (let z = 70; z <= 570; z += 25) cyl(2.5, 4, [x, 290, z], 'x', M.skewer, 8); });
+mechTag = false;
 box(DX0, 166, 50, DX1, 168, 595, M.body);              /* bottom */
 box(DX0, 168, 50, DX0 + 2, 441, 595, M.body);          /* sides */
 box(DX1 - 2, 168, 50, DX1, 441, 595, M.body);
@@ -727,7 +738,7 @@ parent = doorG;
 box(2096, 50, 630, 2098, 700, 1070, cladM);
 box(2088, 300, 650, 2096, 420, 662, M.angle);
 parent = mod2;
-[150, 600].forEach(y => cyl(6, 50, [2097, y, 1068], 'y', M.skewer, 10));
+mechTag = true; [150, 600].forEach(y => cyl(6, 50, [2097, y, 1068], 'y', M.skewer, 10)); mechTag = false;
 const fridgeM = std(0xb9bec3, { metalness: 0.5, roughness: 0.35 });
 box(1685, 62, 110, 2157, 554, 556, fridgeM);
 box(1685, 66, 556, 2157, 550, 560, fridgeM);
@@ -877,7 +888,7 @@ parent = rig;
    bottom) runs on the beam on 2 more rollers -> two stages, full extension 450, the beam travels half.
    Top: C-profile 30x20 open downwards under the top, 2 rollers with vertical axles on stems of the cargo keep it upright. */
 function rollerGuide(par, cx, zs, ze, topY, topX, cargoGroup, stems) {
-  const keep = parent;
+  const keep = parent; mechTag = true;
   parent = par;
   box(cx - 20, 62, zs, cx + 20, 65, ze, M.angle);                                   /* C-profile web */
   box(cx - 20, 65, zs, cx - 17, 88, ze, M.angle); box(cx + 17, 65, zs, cx + 20, 88, ze, M.angle);
@@ -894,7 +905,7 @@ function rollerGuide(par, cx, zs, ze, topY, topX, cargoGroup, stems) {
     box(x - 3, y0, z - 3, x + 3, topY - 12, z + 3, M.angle);
     cyl(8, 8, [topX, topY - 12, z], 'y', M.skewer, 12);
   });
-  parent = keep;
+  parent = keep; mechTag = false;
   return mid;
 }
 const cargoMid = rollerGuide(mod2, 1550, 45, 515, 690, 1550, cargoG, [[1550, 60, 650], [1550, 505, 682]]);
@@ -1029,6 +1040,24 @@ document.getElementById('tg-drawer').addEventListener('change', e => {
 document.getElementById('tg-cargo').addEventListener('change', e => {
   cargoTarget = e.target.checked ? CARGO_TRAVEL : 0; if (reduceMotion) { cargoG.position.z = cargoTarget; cargoMid.position.z = cargoTarget / 2; }
 });
+/* v22 'show mechanisms': everything else turns into a faint ghost, guides, rollers, slides and hinges light up;
+   the drawer and both cargos run out so the mechanisms can be seen working */
+const ghostM = new THREE.MeshStandardMaterial({ color: 0x9aa3a8, transparent: true, opacity: 0.1, depthWrite: false, roughness: 1 });
+const mechM = std(0xff7a1a, { metalness: 0.4, roughness: 0.35, emissive: 0x6a2400, emissiveIntensity: 0.5 });
+const MECH_SET = new Set(MECH);
+document.getElementById('tg-mech').addEventListener('change', e => {
+  const on = e.target.checked;
+  scene.traverse(o => {
+    if (o === g || o.material === M.paving) return;
+    if (o.isMesh) {
+      if (on) { o.userData.mat0 = o.userData.mat0 || o.material; o.material = MECH_SET.has(o) ? mechM : ghostM; o.castShadow = !!MECH_SET.has(o); }
+      else if (o.userData.mat0) { o.material = o.userData.mat0; o.castShadow = true; }
+    } else if (o.isLineSegments) {
+      if (on) { o.userData.vis0 = o.visible; o.visible = false; } else if ('vis0' in o.userData) o.visible = o.userData.vis0;
+    }
+  });
+  if (on) ['tg-drawer', 'tg-cargo', 'tg-cargo2'].forEach(id => { const cb = document.getElementById(id); if (!cb.checked) { cb.checked = true; cb.dispatchEvent(new Event('change')); } });
+});
 /* click on a moving part toggles it; a drag (orbit) is not a click */
 const MOVING = [[lidPivot, 'tg-lid'], [drawerG, 'tg-drawer'], [cargoG, 'tg-cargo'], [cargo2G, 'tg-cargo2'], [doorPivot, 'tg-door']];
 const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
@@ -1091,5 +1120,5 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-window.__mangal = { scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cargo: cargoG, cargo2: cargo2G, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+window.__mangal = { mech: MECH, scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cargo: cargoG, cargo2: cargo2G, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
 </script>
