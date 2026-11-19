@@ -35,12 +35,19 @@ h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: .01em; }
 .tg input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
 #view { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
 #view canvas { display: block; }
-.labels { position: absolute; inset: 0; pointer-events: none; }
+.labels { position: absolute; inset: 0; pointer-events: none; z-index: 1; } /* own stacking context: label z-indexes stay under the layers panel */
 .lbl { font: 500 12px var(--font-mono); background: var(--panel); color: var(--fg); border: 1px solid var(--line);
   padding: 1px 6px; border-radius: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .lbl.name { font-family: var(--font-ui); color: var(--accent); border-color: var(--accent); }
 #hint { position: absolute; left: 12px; bottom: 12px; font-size: 12px; color: var(--muted); background: var(--panel);
   border: 1px solid var(--line); padding: 4px 8px; border-radius: 4px; pointer-events: none; }
+#layers { position: absolute; left: 12px; top: 12px; z-index: 2; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 6px; padding: 6px 10px; max-width: calc(100% - 24px); }
+#layers summary { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); cursor: pointer; padding: 2px 0; }
+#layer-list { display: grid; gap: 6px; margin: 6px 0 8px; }
+#layers-all { font: 500 12px var(--font-ui); background: transparent; color: var(--accent); border: 1px solid var(--line);
+  border-radius: 4px; padding: 3px 8px; cursor: pointer; }
+#layers-all:focus-visible, #layers summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 aside { overflow: auto; border-left: 1px solid var(--line); background: var(--panel);
   padding-block: 16px 24px; padding-left: 20px; padding-right: max(20px, env(safe-area-inset-right, 0px)); }
 aside h2 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 22px 0 8px; }
@@ -62,7 +69,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 15 · 19.11.2026</span>
+  <span class="ver" id="ver">Версія 16 · 19.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -77,7 +84,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   </div>
 </header>
 
-<div id="view"><div id="hint">Тягніть, щоб обертати · коліщатко або два пальці, щоб наблизити</div></div>
+<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button></details><div id="hint">Тягніть, щоб обертати · коліщатко або два пальці, щоб наблизити</div></div>
 
 <aside>
   <h2>Загальне</h2>
@@ -177,7 +184,8 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
   <h2>Що змінилось</h2>
   <ul class="log">
-    <li><strong>v15</strong> На мангал додано кришку-ковпак з листа 2 мм на двох приварних петлях ззаду; перемикач «Кришка відкрита». Ручки шампурів перенесено наперед, щоб не заважали петлям.</li>
+    <li><strong>v16</strong> Панель «Шари» на моделі: можна сховати цеглу, метал, камінь габіонів, бетон з плиткою, холодильник з умивальником, казан з дровами і шампурами, стовпи — і подивитися, що всередині.</li>
+    <li><strong>v15</strong>На мангал додано кришку-ковпак з листа 2 мм на двох приварних петлях ззаду; перемикач «Кришка відкрита». Ручки шампурів перенесено наперед, щоб не заважали петлям.</li>
     <li><strong>v14</strong>Каркас тумби з труби 40×40 замість суцільного блока: 9 стійок на ніжках, обшивка, дверцята під умивальником. Перегородку відсіку зсунуто, просвіт під холодильник 502. Умивальник зсунуто на 50 мм від країв, щоб не лягав на обв'язку; змішувач праворуч.</li>
     <li><strong>v13</strong> Об'єднано дві гілки: кутник на мангалі з v12 і нова піч під казан (шамот на ребро, спереду облицювальна цегла лежма, розрізана вздовж; плита в поясі на шнурі; глуха задня стінка; саморобні дверцята на каркасі).</li>
     <li><strong>v12</strong> Знімні опори на пінах прибрано. Торці переднього і заднього рядів шамоту накриті кутником 75×50×6: він захищає цеглу, продовжує стінку і тримає шампури в пропилах на 840.</li>
@@ -439,7 +447,8 @@ const aroundDoor = (y0, y1, z0, z1, mat) => {
   box(934, y0, z0, 1060, y1, z1, mat); box(1300, y0, z0, 1426, y1, z1, mat);
   box(1060, 675, z0, 1300, y1, z1, mat); if (y0 < 445) box(1060, y0, z0, 1300, 445, z1, mat);
 };
-aroundDoor(445, BT, 534, 539, std(0x9a9890, { roughness: 1 }));
+const basaltM = std(0x9a9890, { roughness: 1 });
+aroundDoor(445, BT, 534, 539, basaltM);
 const clinkerMats = [0x8e3b22, 0x7a3220, 0x9c4528, 0x6e2d1d].map(c => std(c, { roughness: 0.75 }));
 function clinkerRun(a0, a1, y, off) {
   let c = a0, piece = off > 0 ? off : 250;
@@ -454,7 +463,8 @@ for (let c = 0; c < 5; c++) {
   if (c >= 1 && c <= 3) { clinkerRun(934, 1060, y, off); clinkerRun(1300, 1426, y, c % 2 ? 0 : 126); }
   else clinkerRun(934, 1426, y, off);
 }
-aroundDoor(377, 756, 541, 593, std(0x5b5650, { roughness: 1 }));
+const mortarM = std(0x5b5650, { roughness: 1 });
+aroundDoor(377, 756, 541, 593, mortarM);
 /* lintel: angle 50x5 under chamotte course 3 and the last facing course */
 box(1040, 677, 469, 1320, 682, 596, M.angle);
 /* corner angles and top ring, welded to the legs */
@@ -602,6 +612,7 @@ const lidShape = () => {
   s.holes.push(h); return s;
 };
 const tileM = std(0xcfc6b8, { roughness: 0.4 });
+const groutM = new THREE.LineBasicMaterial({ color: 0x8a8378 });
 const concreteM = std(0x9a9a95, { roughness: 1 });
 [[LID + 10, 50, concreteM], [LID + 60, 10, tileM]].forEach(([y, d, mat]) => {
   const m = new THREE.Mesh(new THREE.ExtrudeGeometry(lidShape(), { depth: d, bevelEnabled: false }), mat);
@@ -636,7 +647,7 @@ parent = mod2;
     if (!inHole((x0 + x1) / 2, (z0 + z1) / 2)) p.push(x0, y, z0, x1, y, z1); } };
   for (let x = 1430 + T; x < 2800; x += T) { seg([x, 3], [x, 617]); if (x > 2083) seg([x, 617], [x, 1317]); }
   for (let z = T; z < 1320; z += T) { if (z < 617) seg([1433, z], [2797, z]); else seg([2083, z], [2797, z]); }
-  const gl = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(p, 3)), new THREE.LineBasicMaterial({ color: 0x8a8378 }));
+  const gl = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(p, 3)), groutM);
   lidGroup.add(gl);
 }
 const sinkM = std(0xd0d4d8, { metalness: 0.85, roughness: 0.25, side: THREE.DoubleSide });
@@ -651,6 +662,41 @@ box(2405, 1040, 838, 2420, 1052, 862, sinkM);
 box(1430, 690, -6, 1520, 790, -1, M.angle);
 [[1460, 715], [1500, 715], [1460, 765], [1500, 765]].forEach(([x, y]) => box(x - 9, y - 9, -10, x + 9, y + 9, -6, M.angle));
 parent = rig;
+
+/* v16 layers: every part of the model belongs to one layer, each layer can be hidden to look inside */
+const LAYERS = [
+  { id: 'brick', name: 'Цегла і кладка', mats: [...brickMats, ...clinkerMats, basaltM, mortarM, cordM] },
+  { id: 'metal', name: 'Метал', mats: [M.sheet, M.tube, M.angle, M.body, M.iron, M.skewer, capAngle, cladM, meshMat] },
+  { id: 'stone', name: 'Камінь у габіонах', mats: stoneMats },
+  { id: 'top', name: 'Бетон і плитка', mats: [concreteM, tileM, groutM] },
+  { id: 'appl', name: 'Холодильник, умивальник', mats: [fridgeM, sinkM] },
+  { id: 'food', name: 'Казан, дрова, шампури', mats: [M.log, M.meat, M.coal, M.ember] },
+  { id: 'posts', name: 'Стовпи', mats: [M.post] }
+];
+LAYERS.forEach(l => { l.objs = []; });
+const byId = Object.fromEntries(LAYERS.map(l => [l.id, l]));
+const foodObjs = new Set([kz, rim]); skewerG.traverse(o => foodObjs.add(o));
+const unassigned = [];
+scene.traverse(o => {
+  if (!(o.isMesh || o.isLineSegments) || o === g) return;
+  if (o.material === M.paving) return;
+  const l = foodObjs.has(o) ? byId.food : LAYERS.find(l => l.mats.includes(o.material));
+  if (l) l.objs.push(o); else unassigned.push(o);
+});
+{
+  const listEl = document.getElementById('layer-list');
+  LAYERS.forEach(l => {
+    const lab = document.createElement('label'); lab.className = 'tg';
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = true; cb.dataset.layer = l.id;
+    cb.addEventListener('change', () => { l.on = cb.checked; l.objs.forEach(o => { o.visible = cb.checked; }); });
+    l.on = true; l.cb = cb;
+    lab.append(cb, ' ' + l.name); listEl.append(lab);
+  });
+  document.getElementById('layers-all').addEventListener('click', () => {
+    LAYERS.forEach(l => { if (!l.cb.checked) { l.cb.checked = true; l.cb.dispatchEvent(new Event('change')); } });
+  });
+  if (matchMedia('(max-width: 760px)').matches) document.getElementById('layers').open = false;
+}
 
 /* labels and dimensions */
 const labels = [];
@@ -763,5 +809,5 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-window.__mangal = { scene, camera, controls, rig, lid: lidPivot, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+window.__mangal = { scene, camera, controls, rig, lid: lidPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
 </script>
