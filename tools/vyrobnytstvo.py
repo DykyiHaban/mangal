@@ -161,12 +161,14 @@ CSS = '''
 @page { size: A4 landscape; margin: 10mm; }
 * { box-sizing: border-box; }
 body { font: 10pt/1.35 Arial, sans-serif; color: #1c2226; margin: 0; }
-.page { page-break-after: always; break-after: page; position: relative; min-height: 186mm; padding-bottom: 14mm; }
+.page { page-break-after: always; break-after: page; }
+.page.fix { position: relative; height: 186mm; overflow: hidden; padding-bottom: 12mm; }   /* one sheet exactly: never spills onto a blank page */
+.page.flow .tb { position: static; margin-top: 4mm; }
 .page:last-child { page-break-after: auto; break-after: auto; }
 h1 { font-size: 18pt; margin: 0 0 4mm; } h2 { font-size: 13pt; margin: 0 0 3mm; }
 .tb { position: absolute; left: 0; right: 0; bottom: 0; border-top: 1.2pt solid #1c2226; display: flex; justify-content: space-between; font-size: 8.5pt; padding-top: 1.5mm; }
-.dw { display: flex; align-items: center; justify-content: center; height: 168mm; }
-.dw svg { max-width: 100%; max-height: 168mm; width: auto; height: auto; }
+.dw { display: flex; align-items: center; justify-content: center; height: 160mm; }
+.dw svg { max-width: 100%; max-height: 160mm; width: auto; height: auto; }
 table { border-collapse: collapse; width: 100%; font-size: 9pt; }
 th, td { border-bottom: .5pt solid #b9c2bf; padding: 1.2mm 2mm; text-align: left; vertical-align: top; }
 th { background: #1c2226; color: #fff; } td.n { text-align: right; font-variant-numeric: tabular-nums; }
@@ -186,14 +188,14 @@ def tb(i, title):
 
 
 toc = ''.join(f'<li>{html.escape(t)}</li>' for _, t in DRAWINGS)
-pages.append(f'''<section class="page"><h1>Зона мангала — креслення для виробництва</h1>
+pages.append(f'''<section class="page fix"><h1>Зона мангала — креслення для виробництва</h1>
 <p>{html.escape(version)}. Розміри в мм, висоти від плитки майданчика. Довжини деталей узято з 3D-моделі; перед різкою звірити по місцю.</p>
 <h2>Зміст</h2><ol>{toc}<li>Різка труби і смуги</li><li>Карти різки хлистів 6 м</li><li>Замовлення матеріалів</li></ol>
 <p class="lbl">Файли поруч: zamovlennya.xlsx (замовлення, різка, карти), rozkriy.html.</p>{tb(1, 'Титул')}</section>''')
 for i, (fn, title) in enumerate(DRAWINGS, 2):
     path = os.path.join(ROOT, 'kreslennia', fn)
     svg = open(path, encoding='utf-8').read() if os.path.exists(path) else f'<p>немає файлу {fn}</p>'
-    pages.append(f'<section class="page"><h2>{html.escape(title)}</h2><div class="dw">{svg}</div>{tb(i, title)}</section>')
+    pages.append(f'<section class="page fix"><h2>{html.escape(title)}</h2><div class="dw">{svg}</div>{tb(i, title)}</section>')
 pn = len(DRAWINGS) + 2
 rows = ''
 for s in secs:
@@ -201,7 +203,7 @@ for s in secs:
     for (L, z), q in sorted(groups[s].items(), key=lambda t: (-t[0][0], t[0][1])):
         rows += f'<tr><td class="n">{L}</td><td class="n">{q}</td><td>{html.escape(z)}</td><td class="n">{L * q / 1000:.2f}</td></tr>'
 cut_html = f'<div class="cols"><table><tr><th>Довжина, мм</th><th>Шт</th><th>Куди</th><th>м</th></tr>{rows}</table></div>'
-pages.append(f'<section class="page"><h2>Різка труби і смуги</h2>{cut_html}{tb(pn, "Різка")}</section>')
+pages.append(f'<section class="page flow"><h2>Різка труби і смуги</h2>{cut_html}{tb(pn, "Різка")}</section>')
 maps = ''
 for s in secs:
     maps += f'<p><b>{html.escape(SEC_NAME[s])}</b> — {plan[s]["n"]} хлист. по 6 м, відхід {plan[s]["waste"] / 1000:.1f} м</p>'
@@ -211,14 +213,14 @@ for s in secs:
         spans = ''.join(f'<span style="width:{L / STICK * 100:.2f}%">{L}</span>' for L in st['cuts'])
         if st['free'] > 0: spans += f'<span class="w" style="width:{st["free"] / STICK * 100:.2f}%"></span>'
         maps += f'<div class="lbl">№{i}: {" + ".join(map(str, st["cuts"]))} · залишок {st["free"]}</div><div class="stick">{spans}</div>'
-pages.append(f'<section class="page"><h2>Карти різки хлистів 6 м (різ {KERF} мм)</h2><div class="cols">{maps}</div>{tb(pn + 1, "Карти різки")}</section>')
+pages.append(f'<section class="page flow"><h2>Карти різки хлистів 6 м (різ {KERF} мм)</h2><div class="cols">{maps}</div>{tb(pn + 1, "Карти різки")}</section>')
 orows = ''.join(f'<tr><td>{html.escape(SEC_NAME[s])}</td><td class="n">{plan[s]["n"]}</td><td>хлист 6 м</td></tr>' for s in secs)
 cur = None
 for cat, b, c, d, e, f in other:
     if cat != cur:
         cur = cat; orows += f'<tr class="g"><td colspan="3">{html.escape(str(cat))}</td></tr>'
     orows += f'<tr><td>{html.escape(str(b))}</td><td class="n">{html.escape(str(c)).replace(".", ",")}</td><td>{html.escape(str(d))}</td></tr>'
-pages.append(f'<section class="page"><h2>Замовлення матеріалів</h2><div class="cols"><table><tr><th>Позиція</th><th>К-сть</th><th>Од.</th></tr>'
+pages.append(f'<section class="page flow"><h2>Замовлення матеріалів</h2><div class="cols"><table><tr><th>Позиція</th><th>К-сть</th><th>Од.</th></tr>'
              f'<tr class="g"><td colspan="3">Профільна труба і смуга — з розкрою</td></tr>{orows}</table></div>{tb(pn + 2, "Замовлення")}</section>')
 doc = f'<!doctype html><html lang="uk"><meta charset="utf-8"><title>Зона мангала — виробництво</title><style>{CSS}</style><body>{"".join(pages)}</body></html>'
 doc = doc.replace('{TOTAL}', str(len(pages)))
