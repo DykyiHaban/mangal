@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 30 · 22.11.2026</span>
+  <span class="ver" id="ver">Версія 31 · 22.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -256,8 +256,21 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
     </ul>
   </div>
 
+  <div class="block">
+    <h3>Дровники-стінки з боків</h3>
+    <ul>
+      <li>Зліва і справа, зовні за стовпами, під випусками даху по 1 м: стінка з дров 400 × 1500, висота 1800 — нижче підкосів даху</li>
+      <li>Поліна ≈ 400 лежать поперек, торцями назовні й до кухні — з обох боків видно зрізи</li>
+      <li>Знизу рама з труби 40×40 на 4 регульованих ніжках, 150 від землі, 3 поперечки — дрова не лежать на землі й провітрюються</li>
+      <li>Спереду і ззаду — драбинки з двох стійок 40×40 і трьох перекладин (700, 1250, 1800): тримають торці стосу, щоб не розсипався</li>
+      <li>Зверху по зовнішньому краю поздовжня зв'язка 40×40 між драбинками; внутрішні стійки прикручені пластинами до стовпів</li>
+      <li>У кожній стінці ≈ 0,9 скл. м³ дров; дах закриває їх від дощу з запасом ≈ 550 по боках</li>
+    </ul>
+  </div>
+
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v31</strong> Декоративні стінки з дров зліва і справа під випусками даху: рама-основа на ніжках, драбинки спереду і ззаду, зв'язка зверху, поліна 400 торцями назовні.</li>
     <li><strong>v30</strong> Односкатний дах з нахилом назад: балки 100×100 з випусками по 1 м з боків, крокви 60×40, профнастил НС35, водостік ззаду; передні стовпи надставлені до 2750, труби проходять крізь покрівлю.</li>
     <li><strong>v29</strong> Витяжка над мангалом без вентилятора: високий зонт (низ на 1950) із заднім екраном і боковими щоками до 1450, труба Ø250 на 1,6 м з турбодефлектором; стоїть на двох стійках позаду мангала.</li>
     <li><strong>v28</strong> Тримачі над стільницями: над правою тумбою рейлінгова стінка (рейлінг для ополоників, магнітна планка для ножів, полиця для спецій, тримач рушників), зліва біля мангала рейлінг для інструменту мангала.</li>
@@ -1074,6 +1087,51 @@ box(RX0 - 20, sheetY(RZB + 30) - 80, RZB + 28, RX1 + 20, sheetY(RZB + 30) + 36, 
 }
 parent = rig;
 
+/* v31: decorative firewood walls left and right, outside the posts, under the 1 m roof overhangs.
+   Logs ~400 long lie across (ends out and in), stack 400 deep x 1400 long, up to 1800 (under the knee braces).
+   Holders: a base frame of tube 40x40 (400 x 1500, 3 cross bars, 150 high on 4 adjustable feet) keeps the logs off the
+   ground; at the FRONT and the REAR a ladder frame (2 uprights 40x40 + 3 rungs) stops the stack from sliding out;
+   a top tie along the outer edge keeps the two ladders parallel; the inner uprights are bolted with plates to the posts. */
+const logBarkM = std(0x5a3b26, { roughness: 1 });
+const logEndM = std(0xc99a62, { roughness: 0.9 });
+const woodG = new THREE.Group(); scene.add(woodG); parent = woodG;
+function firewoodWall(xi, xo) {             /* xi = edge next to the post, xo = outer edge (400 apart) */
+  const x0 = Math.min(xi, xo), x1 = Math.max(xi, xo), t = 40, FY = 150, TOP = 1800, Z0 = 0, Z1 = 1500;
+  /* base frame and feet */
+  box(x0, FY - t, Z0, x0 + t, FY, Z1, M.tube); box(x1 - t, FY - t, Z0, x1, FY, Z1, M.tube);
+  [Z0, 730, Z1 - t].forEach(z => box(x0 + t, FY - t, z, x1 - t, FY, z + t, M.tube));
+  [[x0 + 8, 8], [x1 - 32, 8], [x0 + 8, Z1 - 32], [x1 - 32, Z1 - 32]].forEach(([x, z]) => box(x, -41, z, x + 24, FY - t, z + 24, M.skewer));
+  /* front and rear ladder frames */
+  [[Z0, Z0 + t], [Z1 - t, Z1]].forEach(([za, zb]) => {
+    box(x0, FY, za, x0 + t, TOP, zb, M.tube); box(x1 - t, FY, za, x1, TOP, zb, M.tube);
+    [700, 1250, TOP - t].forEach(y => box(x0 + t, y, za, x1 - t, y + t, zb, M.tube));
+  });
+  /* top tie along the outer edge, plates to the post on the inner side */
+  const xoT = xo < xi ? x0 : x1 - t; box(xoT, TOP - t, Z0 + t, xoT + t, TOP, Z1 - t, M.tube);
+  [[50, 1000], [1450, 1000], [50, 1600], [1450, 1600]].forEach(([z, y]) => {
+    const xp = xi < xo ? xi - 50 : xi; box(xp, y - 30, z - 30, xp + 50, y + 30, z + 30, M.angle);
+  });
+  /* logs: packed in the cross-section z 45..1455, y 152..1795, instanced */
+  const P = [];
+  for (let i = 0; i < 9000 && P.length < 600; i++) {
+    const r = 40 + rnd() * 38, z = 45 + r + rnd() * (1410 - 2 * r), y = FY + 2 + r + rnd() * (TOP - FY - 8 - 2 * r);
+    if (P.every(q => (q[0] - z) ** 2 + (q[1] - y) ** 2 >= (q[2] + r + 1) ** 2)) P.push([z, y, r]);
+  }
+  const geo = new THREE.CylinderGeometry(1, 1, 1, 9);
+  const bark = new THREE.InstancedMesh(geo, logBarkM, P.length), ends = new THREE.InstancedMesh(geo, logEndM, P.length);
+  P.forEach(([z, y, r], i) => {
+    const xc = (x0 + x1) / 2 + (rnd() - 0.5) * 30, L = 380 + rnd() * 40;
+    _dummy.position.set(xc, y, z); _dummy.rotation.set(0, 0, Math.PI / 2 + (rnd() - 0.5) * 0.04);
+    _dummy.scale.set(r, L, r); _dummy.updateMatrix(); bark.setMatrixAt(i, _dummy.matrix);
+    _dummy.scale.set(r - 5, L + 4, r - 5); _dummy.updateMatrix(); ends.setMatrixAt(i, _dummy.matrix);
+    const v = 0.85 + rnd() * 0.25; ends.setColorAt(i, _col.setRGB(v, v, v));
+  });
+  [bark, ends].forEach(m => { m.castShadow = m.receiveShadow = true; woodG.add(m); });
+  return P.length;
+}
+const LOGS_L = firewoodWall(-50, -450), LOGS_R = firewoodWall(3050, 3450);
+parent = rig;
+
 /* v16 layers: every part of the model belongs to one layer, each layer can be hidden to look inside */
 const LAYERS = [
   { id: 'brick', name: 'Цегла і кладка', mats: [...brickMats, ...clinkerMats, basaltM, mortarM, cordM] },
@@ -1083,6 +1141,7 @@ const LAYERS = [
   { id: 'appl', name: 'Холодильник, умивальник', mats: [fridgeM, sinkM] },
   { id: 'food', name: 'Казан, посуд, приладдя', mats: [M.log, M.meat, M.coal, M.ember] },
   { id: 'posts', name: 'Стовпи', mats: [M.post] },
+  { id: 'firewood', name: 'Дрова (стінки)', mats: [logBarkM, logEndM] },
   { id: 'roof', name: 'Дах', mats: [roofSteelM, roofSheetM, gutterM, window.__bootM] }
 ];
 LAYERS.forEach(l => { l.objs = []; });
@@ -1281,5 +1340,5 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-window.__mangal = { mech: MECH, scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cab: cabPivot, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+window.__mangal = { logs: () => [LOGS_L, LOGS_R], mech: MECH, scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cab: cabPivot, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
 </script>
