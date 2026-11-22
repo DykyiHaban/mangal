@@ -24,153 +24,123 @@ def stones(v, x0, x1, y0, y1):
     mesh_lines(v, x0, x1, y0, y1, 50 if (x1 - x0) < 400 else 100)
     v.rect(x0, y0, x1, y1, 'ol')
 
-# ======================= 1. PLAN =======================
-p = View(0, 3000, -160, 1500, pad=(190, 90, 90, 240), flip=False, k=2.6)
+# ======================= 1. PLAN (v33) =======================
+# world x from the left edge of the paving (rig-local + 100), z from the rear edge
+MX0, MX1 = 480, 1130; MW = MX1 - MX0; MXC = (MX0 + MX1) // 2
+NOTCH = list(range(MX0 + 55, MX1 - 54, 60))
+KX = 1380                                   # kazan centre, rig-local
+p = View(-1100, 4100, -560, 1850, pad=(150, 90, 90, 220), flip=False, k=3.4)
+p.rect(-1000, -450, 4000, 1750, 'hid'); p.text(-980, -470, 'дах 5000 × 2200 (пунктир)', 'note')
 p.rect(0, 0, 3000, 1500, 'ol thin')
 for x, z in ((0, 0), (2900, 0), (0, 1400), (2900, 1400)): p.rect(x, z, x + 100, z + 100, 'fill')
-# part 1 mangal
-# v20: mangal 650 wide (x 250..900), cargo for skewers on its left (x 50..250)
-MX0, MX1 = 250, 900; MW = MX1 - MX0; MXC = (MX0 + MX1) // 2
-NOTCH = list(range(MX0 + 55, MX1 - 54, 60))
+for x0 in (-400, 3000):                      # firewood walls with trusses at the posts
+    p.rect(x0, 70, x0 + 400, 1430, 'brick'); p.rect(x0, 70, x0 + 400, 1430, 'ol thin')
+    for zc in (50, 1450): p.rect(x0, zc - 20, x0 + 400, zc + 20, 'fill')
+    p.text(x0 + 200, 760, 'дрова', 'note', 'middle')
+p.rect(gx(50), 0, gx(480), 610); p.text(gx(265), 300, 'тумба', 'note', 'middle')      # left cabinet worktop
 p.rect(gx(MX0), 0, gx(MX1), 600)
 p.rect(gx(MX0 + 73), 73, gx(MX1 - 73), 527, 'brick'); p.rect(gx(MX0 + 73), 73, gx(MX1 - 73), 527, 'ol thin')
 for z0, z1 in ((0, 75), (525, 600)): p.rect(gx(MX0), z0, gx(MX1), z1, 'fill')
-for x in NOTCH[3:7]: p.line(gx(x), -40, gx(x), 640, 'ol thin')
-p.text(gx(MXC), 310, 'мангал · частина 1', 'note', 'middle')
-p.rect(gx(50), 0, gx(250), 600); p.text(gx(150), 300, 'карго', 'note', 'middle')
-# gap + part 2 kazan
-p.rect(gx(897), 0, gx(933), 600, 'ol thin')
-p.rect(gx(930), 0, gx(1430), 600)
-p.rect(gx(937), 7, gx(1423), 593, 'ol thin')
-p.circle(gx(1180), 270, 170); p.circle(gx(1180), 270, 150, 'hid')
-p.circle(gx(1180), -92, 55); p.text(gx(1180) + 70, -100, 'труба Ø110', 'note')
-p.text(gx(1180), 520, 'казан · частина 2', 'note', 'middle')
-# part 3: lid outline, gabions and fridge under it
-lid = [(gx(1430), 0), (gx(2800), 0), (gx(2800), 1320), (gx(2080), 1320), (gx(2080), 620), (gx(1430), 620)]
-p.poly(lid)
-p.rect(gx(1430), 0, gx(1630), 600, 'hid'); p.text(gx(1530), 300, 'карго', 'note', 'middle')
-p.rect(gx(2100), 1220, gx(2800), 1300, 'hid'); p.text(gx(2450), 1270, 'габіон 80', 'note', 'middle')
-p.rect(gx(2720), 0, gx(2800), 1220, 'hid'); p.text(gx(2700), 700, 'габіон 80', 'note', 'end')
-p.rect(gx(1685), 110, gx(2157), 556, 'hid'); p.text(gx(1921), 340, 'холодильник', 'note', 'middle')
-p.rect(gx(2160), 660, gx(2540), 1040); p.rect(gx(2180), 680, gx(2520), 1020, 'ol thin')
-p.circle(gx(2350), 850, 25, 'ol thin'); p.circle(gx(2600), 850, 18)
-p.text(gx(2350), 1080, 'умивальник', 'note', 'middle')
-p.text(gx(1800), 680, 'стільниця · частина 3', 'note', 'middle')
-p.line(gx(2350), 560, gx(2350), 1360, 'cl'); p.text(gx(2350) + 8, 1390, 'А', 'ttl'); p.text(gx(2350) + 8, 590, 'А', 'ttl')
-# dims
-p.dimH(0, 3000, -140, ext_from=0)
-p.dimH(0, 100, 1560, ext_from=1500); p.dimH(100, gx(50), 1560, '50'); p.dimH(gx(50), gx(MX0), 1560, '200'); p.dimH(gx(MX0), gx(MX1), 1560, '650')
-p.dimH(gx(900), gx(930), 1640, '30', ext_from=600); p.dimH(gx(930), gx(1430), 1560, '500', ext_from=600)
-p.dimH(gx(1430), gx(2800), 1560, '1370', ext_from=1320); p.dimH(gx(2800), 3000, 1560, '200')
-p.dimH(gx(50), gx(2800), 1720, '2750')
-p.dimV(0, 1500, -50, ext_from=0)
-p.dimV(0, 600, gx(50) - 30, '600', ext_from=gx(50))
-p.dimV(620, 1320, gx(2080) - 30, '700', ext_from=gx(2080))
-p.dimH(gx(2080), gx(2800), 1360, '720', ext_from=1320)
-p.dimH(gx(2160), gx(2540), 630, '380'); p.dimV(660, 1040, gx(2540) + 30, '380', side='right')
-p.dimV(1040, 1320, gx(2540) + 30, '280', side='right')
+p.text(gx(MXC), 310, 'мангал', 'note', 'middle')
+p.rect(gx(1130), 0, gx(1630), 600); p.circle(gx(KX), 270, 170); p.circle(gx(KX), 270, 150, 'hid')
+p.circle(gx(KX), -92, 55); p.text(gx(KX) + 70, -110, 'труба Ø110', 'note')
+p.text(gx(KX), 520, 'піч під казан', 'note', 'middle')
+p.rect(gx(1630), 0, gx(2780), 610); p.rect(gx(1733), 110, gx(2113), 490)              # right cabinet, sink cut-out
+p.text(gx(1923), 560, 'умивальник', 'note', 'middle')
+p.rect(gx(2231), 110, gx(2703), 556, 'hid'); p.text(gx(2467), 340, 'холодильник', 'note', 'middle')
+p.rect(gx(380), -320, gx(1230), 650, 'hid'); p.circle(gx(805), 260, 125, 'hid'); p.text(gx(805), -340, 'витяжка 850 × 970', 'note', 'middle')
+p.rect(gx(1670), 40, gx(2800), 160, 'hid'); p.text(gx(2300), 190, 'полиця на 1500', 'note', 'middle')
+p.line(gx(1923), 640, gx(1923), 1500, 'cl'); p.text(gx(1923) + 10, 1530, 'А', 'ttl'); p.text(gx(1923) + 10, -10, 'А', 'ttl')
+p.dimH(-1000, 4000, -520, '5000', ext_from=-450)
+p.dimH(-400, 0, 1800, '400', ext_from=1500); p.dimH(0, gx(50), 1800, '150'); p.dimH(gx(50), gx(480), 1800, '430')
+p.dimH(gx(480), gx(1130), 1800, '650'); p.dimH(gx(1130), gx(1630), 1800, '500'); p.dimH(gx(1630), gx(2780), 1800, '1150')
+p.dimH(gx(2780), 3000, 1800, '120'); p.dimH(3000, 3400, 1800, '400')
+p.dimV(0, 1500, -1060, '1500', ext_from=-1000, side='left'); p.dimV(0, 610, gx(2780) + 160, '610', ext_from=gx(2780), side='right')
 plan_svg = p.svg('План')
 
-# ======================= 2. FRONT ELEVATION =======================
-f = View(0, 3000, 0, 1150, pad=(200, 220, 60, 280), k=2.6)
-f.line(-60, 0, 3060, 0, 'ol')
-for x in (0, 2900): f.rect(x, 0, x + 100, 1150, 'fill')
-f.text(50, 1120, '', 'note')
-def frame_front(x0, x1, top, rings):
-    for x in (x0, x1 - 40): f.rect(x, 0, x + 40, top)
-    for y in rings: f.rect(x0 + 40, y, x1 - 40, y + 40)
-    f.rect(x0, 140, x1, 143, 'ol thin')
-# mangal
-frame_front(gx(MX0), gx(MX1), 498, (100, 458))
-f.rect(gx(MX0), 498, gx(MX1), 800, 'fill')
-f.rect(gx(MX0), 800, gx(MX1), 840, 'fill')
-prev = gx(MX0)
-for x in NOTCH:
-    f.rect(prev, 840, gx(x) - 6, 850, 'fill'); prev = gx(x) + 6
-f.rect(prev, 840, gx(MX1), 850, 'fill')
-for x in NOTCH[3:7]: f.circle(gx(x), 844, 4)
-# v15 lid over the mangal, drawn open-ended (dashed) so the skewer rest stays readable
-f.rect(gx(MX0 - 3), 830, gx(MX1 + 3), 1000, 'hid'); f.rect(gx(MXC - 110), 920, gx(MXC + 110), 942, 'ol thin')
-f.text(gx(MXC), 1015, 'кришка', 'note', 'middle')
-# v17 drawer under the mangal (front 710 x 304, bar handle) instead of firewood
+# ======================= 2. FRONT ELEVATION (v33) =======================
+f = View(-1100, 4100, -60, 4200, pad=(160, 160, 60, 240), k=3.4)
+f.line(-1100, 0, 4100, 0, 'ol')
+f.rect(-1020, 2925 + 80, 4020, 2925 + 115, 'fill')                                  # front edge of the roof (sheet on the rafters)
+f.rect(-1020, 2925, 4020, 2925 + 80, 'ol thin')                                      # rafter ends + purlin
+f.rect(-1000, 2750, 4000, 2850, 'fill')                                               # front beam
+for x0 in (0, 2900): f.rect(x0, 0, x0 + 100, 2750, 'fill')
+for xa, xb in ((0, -600), (100, 700), (2900, 2300), (3000, 3600)): f.line(xa, 2150, xb, 2750, 'ol thin')
+for x0, d in ((-400, 1), (3000, 1)):                 # firewood walls: log ends between the truss
+    for yy in range(190, 1960, 75):                                                  # log ends
+        for xx in range(x0 + 40, x0 + 400, 75): f.circle(xx + (yy // 75 % 2) * 30 - 15, yy, 34, 'ol thin')
+    xo = x0 if x0 < 0 else x0 + 360
+    f.rect(xo, -41, xo + 40, 2000, 'fill'); f.rect(x0, 110, x0 + 400, 150, 'fill'); f.rect(x0, 1960, x0 + 400, 2000, 'fill')
+    xp, xq = (0, -380) if x0 < 0 else (3000, 3380)
+    ys = [150, 600, 1050, 1500, 1960]
+    for i in range(4): f.line(xp if i % 2 == 0 else xq, ys[i], xq if i % 2 == 0 else xp, ys[i + 1], 'ol')
+# left cabinet: stone-panel door
+f.rect(gx(50), 0, gx(480), 788, 'ol thin'); f.rect(gx(50), 788, gx(480), 800, 'fill')
+f.rect(gx(52), 40, gx(455), 780, 'stone'); f.rect(gx(52), 40, gx(455), 780, 'ol')
+# mangal: frame, box, angle, drawer, closed lid dashed
+for x in (gx(MX0), gx(MX1) - 40): f.rect(x, 0, x + 40, 498)
+f.rect(gx(MX0), 498, gx(MX1), 800, 'fill'); f.rect(gx(MX0), 800, gx(MX1), 850, 'fill')
 f.rect(gx(MX0 + 45), 148, gx(MX1 - 45), 452); f.rect(gx(MXC - 160), 389, gx(MXC + 160), 401, 'ol thin')
-f.text(gx(MXC), 260, 'ящик', 'note', 'middle')
-# v20 left cargo: carcass 200 to 800, false-gabion front 182 x 731
-f.rect(gx(50), 20, gx(250), 800); f.rect(gx(50), 797, gx(250), 800, 'fill')
-stones(f, gx(53), gx(237), 25, 756)
-f.text(gx(145), 400, 'карго', 'note', 'middle')
-# kazan
-frame_front(gx(930), gx(1430), 374, (100, 334))
-f.rect(gx(934), 377, gx(1426), 750, 'brick')
-f.rect(gx(930), 374, gx(1430), 377, 'ol thin')
-for x in (gx(930), gx(1390)): f.rect(x, 377, x + 40, 796)
-f.rect(gx(930), 756, gx(1430), 796)
-for a in (995, 1325): f.rect(gx(a), 334, gx(a + 40), 756)
-f.rect(gx(1040), 425, gx(1320), 695, 'fill')
-f.rect(gx(937), 795, gx(1423), 800, 'ol thin')
+f.rect(gx(MX0 - 3), 830, gx(MX1 + 3), 1000, 'hid')
+# oven: frame, facing brick, door, kazan, flue
+for x in (gx(1130), gx(1590)): f.rect(x, 0, x + 40, 796)
+f.rect(gx(1134), 377, gx(1626), 756, 'brick'); f.rect(gx(1130), 756, gx(1630), 796)
+f.rect(gx(1240), 425, gx(1520), 695, 'fill')
 pts = []
-for i in range(0, 21):
-    y = 800 + 80 * i / 20; hw = math.sqrt(max(0, 170 ** 2 - (880 - y) ** 2)); pts.append((gx(1180) - hw, y))
+for i in range(21):
+    y = 800 + 80 * i / 20; hw = math.sqrt(max(0, 170 ** 2 - (880 - y) ** 2)); pts.append((gx(KX) - hw, y))
 for i in range(20, -1, -1):
-    y = 800 + 80 * i / 20; hw = math.sqrt(max(0, 170 ** 2 - (880 - y) ** 2)); pts.append((gx(1180) + hw, y))
-f.poly(pts, 'fill'); f.rect(gx(1003), 876, gx(1357), 884, 'fill')
-f.rect(gx(1125), 884, gx(1235), 1150, 'hid'); f.text(gx(1235) + 10, 1120, 'труба Ø110 до ≈ 2300', 'note')
-# part 3
-# v17 cargo niche: post 40 + false-gabion front 156 x 661 on the pull-out
-f.rect(gx(1430), 20, gx(1470), 730); f.rect(gx(1438), 0, gx(1462), 20, 'ol thin')
-f.rect(gx(1470), 690, gx(1630), 730)
-stones(f, gx(1472), gx(1628), 25, 686)
-f.text(gx(1550), 360, 'карго', 'note', 'middle')
-for x in (1630, 2172):
-    f.rect(gx(x), 20, gx(x + 40), 730); f.rect(gx(x + 8), 0, gx(x + 32), 20, 'ol thin')
-for y0 in (20, 690): f.rect(gx(1670), y0, gx(2172), y0 + 40)
-f.rect(gx(1670), 600, gx(2172), 602, 'ol thin')
-f.rect(gx(1685), 62, gx(2157), 554, 'ol thin'); f.text(gx(1921), 300, 'холодильник', 'note', 'middle')
-stones(f, gx(2100), gx(2800), 0, 730)  # v24: thin pebble cassette on the end of the return
-f.rect(gx(1430), 730, gx(2800), 800, 'fill'); f.line(gx(1430), 790, gx(2800), 790, 'ol thin')
-f.rect(gx(2582), 800, gx(2618), 1060, 'ol thin'); f.rect(gx(2410), 1040, gx(2618), 1064, 'ol thin')
+    y = 800 + 80 * i / 20; hw = math.sqrt(max(0, 170 ** 2 - (880 - y) ** 2)); pts.append((gx(KX) + hw, y))
+f.poly(pts, 'fill'); f.rect(gx(KX) - 55, 884, gx(KX) + 55, 3100, 'hid')
+# right cabinet: sink cabinet door, fridge stone-panel door, worktop, side panel
+f.rect(gx(1630), 0, gx(2780), 788, 'ol thin'); f.rect(gx(1630), 788, gx(2780), 800, 'fill')
+f.rect(gx(1672), 60, gx(2172), 760); f.rect(gx(2140), 360, gx(2150), 480, 'fill')
+f.rect(gx(2180), 50, gx(2756), 750, 'stone'); f.rect(gx(2180), 50, gx(2756), 750, 'ol')
+f.rect(gx(1911), 800, gx(1935), 1060, 'ol thin')                                         # mixer
+# rail wall above the right cabinet
+for x in (1630, 2176): f.rect(gx(x), 800, gx(x + 40), 1650, 'fill')
+f.rect(gx(1670), 1610, gx(2800), 1650, 'fill'); f.rect(gx(1670), 1500, gx(2800), 1522, 'ol')
+f.rect(gx(1670), 1142, gx(2176), 1158, 'ol'); f.rect(gx(2300), 1325, gx(2750), 1355, 'fill')
+f.text(gx(2235), 1540, 'полиця', 'note', 'middle'); f.text(gx(1923), 1175, 'рейлінг Ø16', 'note', 'middle')
+f.rect(0, 1142, gx(460), 1158, 'ol'); f.rect(gx(440), 800, gx(460), 1160, 'fill')    # left rail
+# hood and chimney
+f.rect(gx(380), 1950, gx(1230), 1975, 'fill')
+f.poly([(gx(380), 1975), (gx(1230), 1975), (gx(930), 2300), (gx(680), 2300)], 'ol')
+f.rect(gx(680), 2300, gx(930), 3900, 'ol'); f.poly([(gx(630), 3920), (gx(980), 3920), (gx(805), 4120)], 'fill')
+f.rect(gx(380), 1450, gx(390), 1950, 'hid'); f.rect(gx(1220), 1450, gx(1230), 1950, 'hid')
 # dims
-for x0, x1 in ((0, 100), (100, gx(50)), (gx(50), gx(MX0)), (gx(MX0), gx(MX1)), (gx(900), gx(930)), (gx(930), gx(1430)), (gx(1430), gx(1630)),
-               (gx(1630), gx(2100)), (gx(2100), gx(2600)), (gx(2600), gx(2800)), (gx(2800), 3000)):
-    f.dimH(x0, x1, -45, ext_from=0)
-f.dimH(0, 3000, -170)
-f.dimV(0, 800, gx(50) - 40, '800', ext_from=gx(50))
-f.dimV(800, 850, gx(50) - 40, '50', side='left')
-f.dimV(0, 498, gx(50) - 150, '498', ext_from=gx(50))
-f.dimV(0, 730, gx(2800) + 40, '730', ext_from=gx(2800), side='right')
-f.dimV(730, 800, gx(2800) + 40, '70', side='right')
-f.dimV(0, 374, gx(1430) - 25, '374', ext_from=gx(1430), side='left')
+f.dimH(-1000, 4000, -170, '5000', ext_from=0)
+for x0, x1, t in ((-400, 0, '400'), (gx(50), gx(480), '430'), (gx(480), gx(1130), '650'), (gx(1130), gx(1630), '500'),
+                  (gx(1630), gx(2780), '1150'), (3000, 3400, '400')):
+    f.dimH(x0, x1, -60, t, ext_from=0)
+f.dimV(0, 800, -1060, '800', ext_from=-1000, side='left'); f.dimV(0, 2000, -540, '2000', ext_from=-400, side='left')
+f.dimV(0, 2750, 4060, '2750', ext_from=3000, side='right'); f.dimV(0, 1950, gx(1230) + 60, '1950', ext_from=gx(1230), side='right')
+f.dimV(0, 3900, gx(930) + 80, '3900', ext_from=gx(930), side='right'); f.dimV(800, 1650, gx(1630) - 60, '850', side='left')
 front_svg = f.svg('Фасад')
 
-# ======================= 3. SECTION A-A through the sink =======================
-a = View(-50, 1500, 0, 1000, pad=(110, 200, 60, 120), k=1.9)
-a.line(-50, 0, 1500, 0, 'ol')
-a.rect(-2, 20, 0, 730, 'fill')                                  # back cladding
-for z0 in (0, 600, 1060):                                         # cut rails: rear, inner tie, front
-    for y0 in (20, 690): a.rect(z0, y0, z0 + 40, y0 + 40, 'fill')
-for z0 in (0, 560, 1060): a.rect(z0, 20, z0 + 40, 730, 'hid')     # posts beyond the cut
-a.rect(0, 60, 1060, 62, 'ol thin'); a.rect(1058, 60, 1060, 690, 'ol thin')
-a.text(300, 400, 'каркас тумби, розріз', 'note', 'middle')
-a.rect(1180, 20, 1220, 730, 'hid'); a.rect(1218, 20, 1220, 730, 'fill')
-stones(a, 1220, 1300, 0, 730)  # v24: frame end + thin cassette
-# lid layers
-a.rect(-20 + 20, 730, 1320, 740, 'hid')
-a.rect(0, 740, 660, 790, 'brick'); a.rect(1040, 740, 1320, 790, 'brick')
-a.rect(0, 790, 660, 800, 'fill'); a.rect(1040, 790, 1320, 800, 'fill')
-a.rect(0, 730, 3, 800, 'fill'); a.rect(1317, 730, 1320, 800, 'fill')
-for z in range(50, 1320, 100):
-    if not (660 < z < 1040): a.rect(z - 5, 730, z + 5, 740, 'fill')
-# sink bowl
-a.rect(660, 600, 1040, 800, 'ol'); a.line(660, 604, 1040, 604, 'ol thin')
-a.rect(840, 520, 860, 600, 'ol thin'); a.text(870, 540, 'сифон', 'note')
-# dims
-a.dimH(0, 600, -40, ext_from=0); a.dimH(600, 1100, -40, '500'); a.dimH(1100, 1300, -40, '200')
-a.dimH(0, 1320, 870, '1320 кришка', ext_from=800)
-a.dimH(1300, 1320, 830, '20')
-a.dimV(0, 730, 1400, '730', ext_from=1320, side='right'); a.dimV(730, 800, 1400, '70', side='right')
-a.dimV(600, 800, 610, '200', ext_from=660, side='left')
-a.dimH(660, 1040, 900, '380', ext_from=800)
-a.text(1150, 960, 'зад ліворуч, перед праворуч', 'note', 'middle')
+# ======================= 3. SECTION A-A through the sink (v33) =======================
+a = View(-560, 1850, -60, 3100, pad=(120, 200, 60, 120), k=2.4)
+a.line(-560, 0, 1850, 0, 'ol')
+a.rect(0, -40, 1500, 0, 'fill')                                                      # paving
+for z0, top in ((0, 2400), (1400, 2750)): a.rect(z0, 0, z0 + 100, top, 'hid')       # posts beyond the cut
+a.rect(-2, 20, 0, 788, 'fill')                                                         # back sheet
+for z0 in (0, 560):
+    for y0 in (20, 748): a.rect(z0, y0, z0 + 40, y0 + 40, 'fill')
+a.rect(0, 788, 610, 790, 'fill'); a.rect(0, 790, 610, 800, 'brick'); a.rect(0, 790, 610, 800, 'ol thin')   # sheet + tile
+a.rect(110, 600, 490, 800, 'ol'); a.rect(290, 520, 310, 600, 'ol thin'); a.text(320, 540, 'сифон', 'note')
+a.rect(42, 800, 78, 1060, 'ol thin'); a.rect(60, 1040, 245, 1060, 'ol thin')          # mixer
+a.rect(600, 60, 622, 760, 'ol'); a.text(640, 400, 'дверцята', 'note')
+a.rect(0, 800, 40, 1650, 'fill'); a.rect(0, 1610, 20, 1650, 'fill')                    # rail-wall upright, top bar
+a.rect(40, 1500, 160, 1502, 'fill'); a.rect(157, 1502, 160, 1522, 'fill'); a.text(60, 1530, 'полиця', 'note')
+a.circle(60, 1150, 8, 'fill'); a.text(80, 1160, 'рейлінг', 'note')
+ry_ = lambda z: 2500 + 0.25 * (z - 50)
+a.poly([(-450, ry_(-450)), (1750, ry_(1750)), (1750, ry_(1750) + 60), (-450, ry_(-450) + 60)], 'ol')
+a.poly([(-480, ry_(-480) + 80), (1780, ry_(1780) + 80), (1780, ry_(1780) + 115), (-480, ry_(-480) + 115)], 'fill')
+a.rect(0, 2400, 100, 2500, 'fill'); a.rect(1400, 2750, 1500, 2850, 'fill')
+a.dimH(0, 610, -40 - 0, '610', ext_from=0); a.dimH(110, 490, 900, '380', ext_from=800)
+a.dimV(0, 800, 1620, '800', ext_from=1500, side='right'); a.dimV(800, 1650, 1620, '850', side='right')
+a.dimV(1650, ry_(0), 1620, '≈ 840', side='right')
+a.text(700, 2950, 'дах · нахил 1 : 4', 'note', 'middle'); a.text(700, -110, 'зад ліворуч, перед праворуч', 'note', 'middle')
 sect_svg = a.svg('Розріз А–А')
 
 # ======================= 4. MANGAL front + section =======================
@@ -743,7 +713,7 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
   <header class="tb">
     <div>
       <h1>Зона мангала · креслення комплексу</h1>
-      <p>Мангал, піч під казан і тумба з умивальником на майданчику 3000 × 1500. Три частини на болтах. Каркас печі окремо: <a href="https://claude.ai/artifact/H1J2R72iAaprnuJkxpDk69">креслення для зварювальника</a>.</p>
+      <p>Версія 33: в одну лінію глибиною 600 — тумба зліва 430, мангал 650 і піч під казан 500 на спільному каркасі, тумба з умивальником і холодильником 1150; над мангалом витяжка, над тумбою рейлінгова стінка; односкатний дах з випусками по 1 м, з боків дровники 2 м на фермах, приварених до стовпів. Майданчик 3000 × 1500.</p>
     </div>
     <dl class="meta">
       <dt>Модель</dt><dd>v33 · 22.11.2026</dd>
@@ -754,24 +724,24 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
 
   <h2 class="sheet-h">Аркуш 1 · Комплекс</h2>
   <div class="grid">
-    <section class="v wide"><h2>План <span>зад угорі, кришка тумби суцільною лінією, тонкі габіони, карго і холодильник під нею пунктиром</span></h2><div class="sc">{plan_svg}</div></section>
+    <section class="v wide"><h2>План <span>зад угорі; дах, витяжка, полиця і холодильник пунктиром; лінія А–А через умивальник</span></h2><div class="sc">{plan_svg}</div></section>
     <section class="v wide"><h2>Фасад <span>стовпи і труба обрізані</span></h2><div class="sc">{front_svg}</div></section>
     <section class="v"><h2>Розріз А–А <span>через умивальник</span></h2><div class="sc">{sect_svg}</div></section>
     <section class="notes">
       <h2>Збирання</h2>
       <ul>
-        <li>Три частини ставляться окремо і стягуються болтами M10 через ніжки на висоті 120 і 300.</li>
-        <li>Між мангалом і піччю зазор 30 на дистанційних втулках, зверху знімна накладка.</li>
-        <li>Піч і тумба: 4 болти через ніжки + накладка 90×100 ззаду вгорі на 4 болти M8.</li>
-        <li>Кришка тумби цільна, ≈ 210 кг: ставити вчотирьох або лебідкою за 4 вушка, кріпити болтами M8 знизу.</li>
-        <li>Кришка звисає на 20 мм над габіонами.</li>
-        <li>Майданчик і стовпи 100×100 вже є, у перелік не входять.</li>
-        <li>Каркас тумби окремо: kreslennia-tumba.html.</li>
+        <li>Мангал і піч стоять на спільному каркасі з 4 ніжками; права тумба прикручена до правих ніжок печі 4 болтами M10 і пластиною ззаду.</li>
+        <li>Ліва тумба стоїть окремо на своїх ніжках, впритул до мангала; бік до мангала з базальтовим картоном.</li>
+        <li>Стільниці: лист 0,5 на обв'язці й поперечках 20×20, плитка на герметику, верх на 800.</li>
+        <li>Рейлінгова стінка: стійки продовжують задні стійки правої тумби, правий кінець — на болтах до стовпа.</li>
+        <li>Витяжка стоїть на двох стійках 60×40 позаду мангала; труба Ø250 крізь дах.</li>
+        <li>Дровники: ферми 40×40 приварені до стовпів, зовнішні пояси на ніжках.</li>
+        <li>Майданчик і стовпи 100×100 вже є; передні стовпи надставлені до 2750.</li>
       </ul>
     </section>
   </div>
 
-  <h2 class="sheet-h">Аркуш 2 · Частина 1, мангал 650 × 600 і карго для шампурів</h2>
+  <h2 class="sheet-h">Аркуш 2 · Мангал 650 × 600, витяжка, дах, ліва тумба, дровник</h2>
   <div class="grid">
     <section class="v"><h2>Вид спереду</h2><div class="sc">{mangal_front_svg}</div></section>
     <section class="v"><h2>Розріз поперек <span>зад ліворуч</span></h2><div class="sc">{mangal_side_svg}</div></section>
@@ -790,7 +760,7 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
         <li>Кутник 75×50×6, L 650, 2 шт: полиця 75 лягає на цеглу і край короба, полиця 50 вгору до 850, 10 пропилів 12×10 з кроком 60, перший і останній за 55 від краю.</li>
         <li>Кришка — ковпак з листа 2 мм: верх 656×606, передній і задній борт 656×170 (до 830, заходять на 20 на кутник), бокові 606×195 (до 805); зсередини по верху рамка з кутника 25×25×3; ручка дерев'яна Ø28×220 на двох кронштейнах зі смуги 25×6, винос 40.</li>
         <li>Ящик під мангалом для пательні, казана, кришок: корпус 550 × 545 × 275 з листа 1,5 мм, фасад 560 × 304 з листа 1,5 мм з відбортовкою, ручка-рейлінг 320; висув 450. Між ящиком і дном короба повітряний зазор ≈ 55, дно короба під шамотом.</li>
-        <li>Карго для шампурів зліва від мангала: корпус 200 × 600 до 800 з листа 2 мм з відбортовками (без стійок, уся ширина — проріз), дно 2 мм на 60, задня стінка 1,5 мм, верх 3 мм — бічна полиця врівень з мангалом; 4 регульовані ніжки. Бік до мангала — лист 2 мм + базальтовий картон 8, 2 болти M8 до ніжок мангала через втулки. Висування — найпростіші роликові напрямні на підшипниках, без телескопа: знизу і вгорі гнутий швелер 30×25×2 на корпусі, на карго смуга 30×6 на ребро; на кожну напрямну 3 підшипники 608-2RS на болтах M8 — один нерухомий спереду швелера несе карго, два ззаду на смузі котяться в швелері під бортиками; висув ≈ 400 з 466. У кошику рейка зі смуги 40×4 на 715 з 10 прорізами 9 × 25 (крок 45): шампури до ≈ 700 висять за ручку, вістря в ловці з кутника 25×25×3 на дні. Поруч на ребрі решітка-гриль до ≈ 450 × 350 з ручкою (загалом до ≈ 650) у П-профілі на дні. Фасад — тонкий габіон 182 × 731 × 80 з гальки 20–40. До стовпа 50.</li>
+        <li>Тумба зліва на інвентар 430 × 600: каркас 40×40, дверцята — кам'яна панель 403 × 740 на петлях з зовнішнього боку, полиця на 420, рейка для шампурів на 740, бік до мангала з базальтовим картоном.</li>
         <li>Петлі приварні Ø20 × 80, 2 шт, на 50 від країв: нижня половина до заднього кутника нижче борту кришки, верхня — до заднього борту; вісь на 840, на 16 за кутником. Кришка відкривається на 100°, тримають 2 ланцюжки-обмежувачі. Ручки шампурів — спереду.</li>
       </ol>
     </section>
