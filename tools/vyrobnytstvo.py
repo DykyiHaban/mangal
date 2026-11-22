@@ -3,6 +3,7 @@
 #   rozkriy.html                 cut list: every tube/bar piece (length x qty, where) + cutting maps of 6 m sticks
 #   zamovlennya.xlsx             order workbook: what to buy (sticks from the nesting + all other materials), cut list, maps
 #   kreslennia-druk.html / .pdf  printable pack, A4 landscape: drawings + cut list + order
+#   model-3d.html                copy of the interactive 3D model (opens in any browser, needs internet)
 # The nesting is first-fit decreasing on 6000 mm sticks with a 3 mm saw kerf.
 import html
 import json
@@ -226,6 +227,10 @@ open(os.path.join(OUT, 'kreslennia-druk.html'), 'w', encoding='utf-8').write(doc
 cut_doc = (f'<!doctype html><html lang="uk"><meta charset="utf-8"><title>Різка — зона мангала</title><style>{CSS}</style><body>'
            f'{pages[-3]}{pages[-2]}</body></html>').replace('{TOTAL}', str(len(pages)))
 open(os.path.join(OUT, 'rozkriy.html'), 'w', encoding='utf-8').write(cut_doc)
+
+# ---- the interactive 3D model for the workshop (a copy, refreshed every run) ----
+import shutil
+shutil.copyfile(os.path.join(ROOT, 'zona-mangala.html'), os.path.join(OUT, 'model-3d.html'))
 
 # ---- PDF through a headless Edge / Chrome ----
 for exe in (r'C:\Program Files\Google\Chrome\Application\chrome.exe', r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'):
