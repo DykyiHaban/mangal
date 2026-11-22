@@ -368,6 +368,51 @@ g.dimH(760, 783, 740, '22', ext_from=700); g.text(800, 360, 'лист 0,5 + ра
 g.text(800, 300, 'панелі: дверцята холодильника 576 × 700,', 'note'); g.text(800, 270, 'бік біля стовпа 600 × 788,', 'note'); g.text(800, 240, 'дверцята лівої тумби 403 × 740', 'note')
 gab_svg = g.svg('Кам\'яна панель')
 
+# ======================= 7. COMMON FRAME of the mangal and the kazan oven (v33) =======================
+# x as in the model (rig-local): mangal 480..1130, oven 1130..1630; heights from the paving
+cf = View(420, 1690, -60, 860, pad=(130, 120, 60, 120), k=1.9)
+cf.line(420, 0, 1690, 0, 'ol')
+for x, top in ((480, 498), (1590, 374)): cf.rect(x, 0, x + 40, top, 'fill')              # legs 40x40x3
+cf.rect(1090, 160, 1130, 498, 'fill'); cf.rect(1130, 160, 1170, 374, 'fill')             # joint stubs
+cf.rect(520, 458, 1090, 498, 'fill'); cf.rect(1170, 334, 1590, 374, 'fill')              # upper rings, front
+cf.rect(520, 100, 1590, 160, 'fill')                                                     # bottom rail 60x40x3
+cf.rect(1110, 100, 1150, 160, 'ol')                                                      # cross rail end
+cf.rect(480, 498, 1130, 800, 'hid'); cf.text(805, 650, 'короб мангала', 'note', 'middle')
+cf.rect(1130, 374, 1630, 796, 'hid'); cf.text(1380, 600, 'піч: кутники, пояс, кладка', 'note', 'middle')
+cf.dimH(480, 1130, 840, '650', ext_from=800); cf.dimH(1130, 1630, 840, '500', ext_from=796)
+cf.dimH(520, 1590, -40, '1070 нижня обв\'язка 60×40×3', ext_from=100)
+cf.dimV(0, 498, 440, '498', ext_from=480, side='left'); cf.dimV(458, 498, 1060, '40', side='left')
+cf.dimV(0, 374, 1660, '374', ext_from=1630, side='right'); cf.dimV(100, 160, 1660, '60', side='right')
+cf.dimV(0, 100, 1660, '100', side='right')
+cf.pos(1, 500, 250, 450, 300); cf.pos(2, 1610, 200, 1650, 260); cf.pos(3, 1110, 300, 1060, 380); cf.pos(4, 1150, 250, 1200, 300)
+cf.pos(5, 800, 478, 800, 560); cf.pos(6, 1380, 354, 1380, 430); cf.pos(7, 900, 130, 900, 60)
+frame_front_svg = cf.svg('Спільний каркас спереду')
+
+cp = View(420, 1690, -60, 660, pad=(130, 120, 60, 110), flip=False, k=1.9)
+for x in (480, 1590):
+    for z in (0, 560): cp.rect(x, z, x + 40, z + 40, 'fill')
+for x in (1090, 1130):
+    for z in (0, 560): cp.rect(x, z, x + 40, z + 40, 'fill')
+cp.rect(520, 0, 1090, 40, 'ol'); cp.rect(520, 560, 1090, 600, 'ol'); cp.rect(480, 40, 520, 560, 'ol'); cp.rect(1090, 40, 1130, 560, 'ol')
+cp.rect(1170, 0, 1590, 40, 'ol'); cp.rect(1170, 560, 1590, 600, 'ol'); cp.rect(1130, 40, 1170, 560, 'ol'); cp.rect(1590, 40, 1630, 560, 'ol')
+cp.rect(1110, 40, 1150, 560, 'hid')
+cp.text(805, 300, 'кільце 458–498 під коробом', 'note', 'middle'); cp.text(1380, 300, 'кільце 334–374 під кладкою', 'note', 'middle')
+cp.dimH(480, 1630, -30, '1150', ext_from=0); cp.dimV(0, 600, 1670, '600', ext_from=1630, side='right')
+cp.text(1130, 640, 'пунктир — поперечка 60×40 під стиком', 'note', 'middle')
+frame_plan_svg = cp.svg('Спільний каркас згори')
+
+cs = View(-60, 700, -60, 560, pad=(130, 120, 60, 110), k=1.6)
+cs.line(-60, 0, 700, 0, 'ol')
+for z in (0, 560): cs.rect(z, 160, z + 40, 498, 'fill')                                 # stubs (mangal side)
+for z in (0, 560): cs.rect(z, 100, z + 40, 160, 'fill')                                 # bottom rails in section
+cs.rect(40, 100, 560, 160, 'ol'); cs.text(300, 125, 'поперечка 60×40×3 під стиком', 'note', 'middle')
+cs.rect(40, 458, 560, 498, 'ol'); cs.text(300, 478, 'кільце мангала', 'note', 'middle')
+cs.rect(40, 334, 560, 374, 'hid'); cs.text(300, 354, 'кільце печі (за стиком)', 'note', 'middle')
+cs.rect(40, 160, 560, 163, 'fill')
+cs.dimH(0, 600, -40, '600', ext_from=0); cs.dimV(160, 498, 640, '338 стійка-вставка', ext_from=600, side='right')
+cs.dimV(0, 100, 640, '100', side='right'); cs.text(300, 540, 'розріз по стику мангала і печі, зад ліворуч', 'note', 'middle')
+frame_side_svg = cs.svg('Спільний каркас — стик')
+
 # ======================= BILL OF MATERIALS =======================
 TUBE = 2.31; A40 = 2.42; F40 = 1.26; A25 = 1.12; A75 = 5.69; A50 = 3.77; A30 = 1.36; SQ10 = 0.785
 SH3 = 23.55; SH5 = 39.25; SH2 = 15.7; SH15 = 11.78
@@ -766,9 +811,24 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
     </section>
   </div>
 
-  <h2 class="sheet-h">Аркуш 3 · Частина 2, піч під казан</h2>
-  <div class="notes">
-    <p style="margin:0">Окреме креслення з усіма розмірами: <a href="https://claude.ai/artifact/H1J2R72iAaprnuJkxpDk69">Каркас печі під казан</a> (у репозиторії — kreslennia-pich.html і kreslennia/pich-*.svg).</p>
+  <h2 class="sheet-h">Аркуш 3 · Спільний каркас мангала і печі під казан</h2>
+  <div class="grid">
+    <section class="v wide"><h2>Каркас спереду <span>короб мангала і піч пунктиром</span></h2><div class="sc">{frame_front_svg}</div></section>
+    <section class="v"><h2>Каркас згори <span>верхні кільця</span></h2><div class="sc">{frame_plan_svg}</div></section>
+    <section class="v"><h2>Розріз по стику <span>стійки-вставки і поперечка</span></h2><div class="sc">{frame_side_svg}</div></section>
+    <section class="notes">
+      <h2>Каркас: позиції</h2>
+      <ol>
+        <li>Ніжки мангала — труба 40×40×3, L 498, 2 шт (зовнішні кути зліва).</li>
+        <li>Ніжки печі — труба 40×40×3, L 374, 2 шт (зовнішні кути справа).</li>
+        <li>Стійки-вставки на стику з боку мангала — 40×40×3, L 338 (від 160 до 498), 2 шт; до підлоги не доходять.</li>
+        <li>Стійки-вставки з боку печі — 40×40×3, L 214 (від 160 до 374), 2 шт.</li>
+        <li>Верхнє кільце мангала 458–498: 40×40×2, 2 × 570 і 2 × 520.</li>
+        <li>Верхнє кільце печі 334–374: 40×40×2, 2 × 420 і 2 × 520; на ньому лист 3 мм під кладку 500 × 600.</li>
+        <li>Нижні поздовжні обв'язки — 60×40×3 на ребро (100–160), L 1070, 2 шт; поперечка під стиком 60×40×3, L 520; бічні нижні 40×40×2, L 520, 2 шт; полиці з листа 3 мм на 160.</li>
+      </ol>
+      <p>Кутники 40×40×4, пояс 40×4, задня стінка, плита і дверцята печі — як на окремих кресленнях печі; точні довжини всіх труб — у пакеті «виробництво».</p>
+    </section>
   </div>
 
   <h2 class="sheet-h">Аркуш 4 · Стільниці і кам'яні панелі</h2>
@@ -803,6 +863,9 @@ f.save(os.path.join(K, 'kompleks-2-fasad.svg'), 'Зона мангала · фа
 a.save(os.path.join(K, 'kompleks-3-rozriz-AA.svg'), 'Зона мангала · розріз А–А через умивальник')
 m.save(os.path.join(K, 'mangal-1-vyd-speredu.svg'), 'Мангал · вид спереду')
 ms.save(os.path.join(K, 'mangal-2-rozriz.svg'), 'Мангал · розріз поперек')
+cf.save(os.path.join(K, 'karkas-1-speredu.svg'), 'Спільний каркас мангала і печі · спереду')
+cp.save(os.path.join(K, 'karkas-2-zgory.svg'), 'Спільний каркас · згори')
+cs.save(os.path.join(K, 'karkas-3-styk.svg'), 'Спільний каркас · розріз по стику')
 hd.save(os.path.join(K, 'mangal-4-vytyazhka.svg'), 'Витяжка над мангалом · розріз збоку')
 rs.save(os.path.join(K, 'dakh-1-rozriz.svg'), 'Дах · розріз збоку')
 rf.save(os.path.join(K, 'dakh-2-speredu.svg'), 'Дах · вид спереду')
