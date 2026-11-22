@@ -1376,5 +1376,47 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-window.__mangal = { logs: () => [LOGS_L, LOGS_R], mech: MECH, scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cab: cabPivot, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
+/* v34: cut list export. Every straight steel member drawn as a box of profile tube (M.tube, roofSteelM) or flat bar
+   40x4 (M.angle) is reported with its section, length and the part of the build it belongs to. Used by
+   tools/vyrobnytstvo.py to make the cut list, the 6 m stick nesting and the order workbook. */
+function cutParts() {
+  scene.updateMatrixWorld(true);
+  const inside = (o, g) => { for (let q = o; q; q = q.parent) if (q === g) return true; return false; };
+  const out = [], v = new THREE.Vector3();
+  scene.traverse(o => {
+    if (!o.isMesh || !o.geometry || o.geometry.type !== 'BoxGeometry') return;
+    const isTube = o.material === M.tube || o.material === roofSteelM, isBar = o.material === M.angle;
+    if (!isTube && !isBar) return;
+    const pr = o.geometry.parameters, d = [pr.width, pr.height, pr.depth].map(x => Math.round(x));
+    const s3 = [...d].sort((a, b) => a - b), L = s3[2];
+    let sec = s3[0] + 'x' + s3[1];
+    if (isBar && sec !== '4x40') return;
+    if (L < 60) return;                                      /* feet, nuts, plates */
+    const map = { '40x40': '40×40', '40x60': '60×40', '20x20': '20×20', '20x40': '40×20', '100x100': '100×100', '4x40': 'смуга 40×4' };
+    if (!map[sec]) return;
+    o.getWorldPosition(v);
+    const lx = v.x - SHIFT;                                   /* rig-local x */
+    let zone;
+    if (inside(o, roofG)) zone = 'Дах';
+    else if (inside(o, woodG)) zone = 'Дровники';
+    else if (inside(o, hoodG)) zone = 'Витяжка';
+    else if (inside(o, holderG)) zone = 'Тримачі над стільницями';
+    else if (o.material === roofSteelM) zone = 'Дах';
+    else if (sec === '20x20') zone = v.y > 790 ? 'Стільниці (поперечки)' : 'Кам\'яні панелі';
+    else if (lx < 480) zone = 'Ліва тумба';
+    else if (lx < 1630) zone = 'Мангал і піч';
+    else zone = 'Права тумба';
+    let name = map[sec];
+    const axis = d.indexOf(L) === 1 ? 'верт.' : 'гориз.';
+    if (sec === '40x40' && zone === 'Мангал і піч' && axis === 'верт.') name = '40×40×3';
+    else if (sec === '40x40') name = '40×40×2';
+    else if (sec === '40x60') name = zone === 'Дах' ? '60×40×2' : '60×40×3';
+    else if (sec === '20x20') name = '20×20×1,5';
+    else if (sec === '20x40') name = '40×20×2';
+    else if (sec === '100x100') name = '100×100×3';
+    out.push({ sec: name, L, zone, axis });
+  });
+  return out;
+}
+window.__mangal = { cutParts, logs: () => [LOGS_L, LOGS_R], mech: MECH, scene, camera, controls, renderNow: () => { controls.update(); renderer.render(scene, camera); labelRenderer.render(scene, camera); }, rig, lid: lidPivot, drawer: drawerG, cab: cabPivot, door: doorPivot, layers: LAYERS, unassigned, ground: g, dims: [dimGroup, dimGroup2, dimGroupR, dimGroupK] };
 </script>
