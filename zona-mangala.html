@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 29 · 22.11.2026</span>
+  <span class="ver" id="ver">Версія 30 · 22.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -91,7 +91,8 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   <h2>Загальне</h2>
   <dl>
     <dt>Майданчик</dt><dd>3000 × 1500</dd>
-    <dt>Стовпи</dt><dd>4 × 100×100</dd>
+    <dt>Стовпи</dt><dd>4 × 100×100: задні 2400, передні 2750 (надставки 350)</dd>
+    <dt>Дах</dt><dd>односкатний на задню сторону, 5000 × 2200, нахил 14°, з боків випуски по 1 м</dd>
     <dt>Стійка</dt><dd>тумба 430 + мангал 650 + піч 500 + тумба 1150 = 2730 × 600, усе в одну лінію</dd>
     <dt>Розміщення</dt><dd>справа 20 до стовпа, зліва 50</dd>
     <dt>Висота</dt><dd>800</dd>
@@ -242,8 +243,22 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
     </ul>
   </div>
 
+  <div class="block">
+    <h3>Дах односкатний</h3>
+    <ul>
+      <li>Скат назад: задня балка на задніх стовпах (верх 2400), передня — на передніх, піднятих надставками 100×100×3 на 350 (верх 2750); нахил 1 : 4 ≈ 14° — для профнастилу НС35 достатньо</li>
+      <li>Балки труба 100×100×3, довжина 5000: з боків випуски по 1 м за стовпи, під кожним випуском і біля кожного стовпа підкоси 40×40</li>
+      <li>Крокви труба 60×40×2, 10 шт з кроком до 600 (оминають обидві труби), від −450 позаду (над стійками витяжки і трубою печі) до 1750 спереду (виліт 250 за передні стовпи)</li>
+      <li>Обрешітка труба 40×20 з кроком ≈ 440; покриття — профнастил НС35 0,5 мм з полімерним покриттям на саморізах з EPDM-шайбою; торцеві вітрові планки, спереду карнизна</li>
+      <li>Висота під дахом: ззаду по карнизу ≈ 2,4 м, спереду ≈ 2,9 м; над витяжкою (горловина 2300) крокви ≈ на 2540</li>
+      <li>Ззаду водостік: жолоб Ø125 на всю довжину 5 м, труба Ø90 у правому задньому куті</li>
+      <li>Труба витяжки Ø250 і труба печі Ø110 виходять крізь покрівлю через гумові прохідники (майстер-флеш) з утепленою сендвіч-ділянкою в зоні даху; труба печі подовжена до 3100</li>
+    </ul>
+  </div>
+
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v30</strong> Односкатний дах з нахилом назад: балки 100×100 з випусками по 1 м з боків, крокви 60×40, профнастил НС35, водостік ззаду; передні стовпи надставлені до 2750, труби проходять крізь покрівлю.</li>
     <li><strong>v29</strong> Витяжка над мангалом без вентилятора: високий зонт (низ на 1950) із заднім екраном і боковими щоками до 1450, труба Ø250 на 1,6 м з турбодефлектором; стоїть на двох стійках позаду мангала.</li>
     <li><strong>v28</strong> Тримачі над стільницями: над правою тумбою рейлінгова стінка (рейлінг для ополоників, магнітна планка для ножів, полиця для спецій, тримач рушників), зліва біля мангала рейлінг для інструменту мангала.</li>
     <li><strong>v27</strong> Ще один варіант (v26 збережено окремо). Права тумба без повернення — усе в одну лінію глибиною 600: біля печі шафа з умивальником, біля стовпа холодильник. Стільниці обох тумб — лист 0,5 мм із загнутими краями на поперечках 20×20, зверху плитка на герметику; бетонна кришка з решіткою більше не потрібна. Холодильник закритий дверцятами з кам'яною панеллю — панелей три.</li>
@@ -278,7 +293,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   <h2>Ще не вирішено</h2>
   <ul>
     <li>Матеріал стільниці</li>
-    <li>Висота і матеріал стовпів, дах</li>
+    <li>Матеріал стовпів (у моделі — сталь 100×100)</li>
     <li>Підведення води і злив для умивальника</li>
     <li>Вулична розетка IP44 з УЗО для холодильника</li>
   </ul>
@@ -429,6 +444,9 @@ const g = new THREE.Mesh(new THREE.PlaneGeometry(14000, 14000), M.ground);
 g.rotation.x = -Math.PI / 2; g.position.set(1500, -41, 750); g.receiveShadow = true; scene.add(g);
 box(0, -40, 0, 3000, 0, 1500, M.paving);
 [[0, 0], [2900, 0], [0, 1400], [2900, 1400]].forEach(([x, z]) => box(x, 0, z, x + 100, 2400, z + 100, M.post));
+/* v30: front posts raised by 350 (extensions 100x100x3 welded/bolted on top) for the shed roof */
+const roofSteelM = std(0x2b2e31, { metalness: 0.45, roughness: 0.55 });
+[[0, 1400], [2900, 1400]].forEach(([x, z]) => box(x, 2400, z, x + 100, 2750, z + 100, roofSteelM));
 
 parent = rig;
 /* mangal: v20 narrowed to 650. v25: mangal and kazan are one part on a common frame with 4 legs, shifted 200 to the right:
@@ -643,7 +661,8 @@ box(1295, 548, 603, 1305, 572, 634, M.angle);
 box(1275, 555, 630, 1325, 565, 636, M.log);
 cyl(55, 95, [1180, 700, -45], 'z', M.sheet);
 const elbow = new THREE.Mesh(new THREE.SphereGeometry(55, 16, 12), M.sheet); elbow.position.set(1180, 700, -92); modK.add(elbow);
-cyl(55, 1600, [1180, 1500, -92], 'y', M.sheet);
+cyl(55, 2400, [1180, 1900, -92], 'y', M.sheet);   /* v30: up to 3100, 0.5+ above the roof */
+{ const cap = new THREE.Mesh(new THREE.ConeGeometry(110, 70, 20), M.sheet); cap.position.set(1180, 3160, -92); modK.add(cap); }
 [[200, 188], [300, 188], [400, 188], [250, 270], [350, 270]].forEach(([z, y]) => cyl(44, 320, [1180, y, z], 'x', M.log, 12));
 
 parent = modK;
@@ -962,7 +981,7 @@ parent = rig;
      paving), clear of the opened mangal lid (its back face ~ -280, the screen plane at -320); the chimney is braced to the
      roof / posts. The kazan oven keeps its own Ø110 flue. */
 const hoodG = new THREE.Group(); rig.add(hoodG); parent = hoodG;
-const HX0 = 380, HX1 = 1230, HZ0h = -320, HZ1h = 650, HB = 1950, HT = 2300, CX = (380 + 1230) / 2, CZ = 200, CR = 125;
+const HX0 = 380, HX1 = 1230, HZ0h = -320, HZ1h = 650, HB = 1950, HT = 2300, CX = (380 + 1230) / 2, CZ = 260, CR = 125; /* v30: collar moved to 260 so the chimney clears the rear roof beam */
 function quad(a, b, c, d, mat) {
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute([...a, ...b, ...c, ...a, ...c, ...d], 3));
@@ -993,6 +1012,68 @@ for (let a = 0; a < 12; a++) { const v = new THREE.Mesh(new THREE.BoxGeometry(3,
   v.rotation.y = -a / 12 * Math.PI * 2 + 0.5; hoodG.add(v); }                               /* deflector vanes */
 parent = rig;
 
+/* v30: shed (mono-pitch) roof sloping down to the back.
+   Rear beam on the rear posts (top 2400), front beam on the raised front posts (top 2750): both tube 100x100x3, 5000 long,
+   1000 overhang beyond the posts on each side (left and right), knee braces 40x40 at every post and under each overhang.
+   Rafters tube 60x40x2, 10 pcs spaced <= 600 and clear of both flues, from z -450 (rear eave, over the hood uprights and the oven flue)
+   to z 1750 (front eave), slope 1:4 (14°). Purlins tube 40x20 every ~450 across. Profiled sheet НС35, 0.5 mm, polymer
+   coated, screws with EPDM washers; wind trims at the ends, eave trim at the front. Gutter Ø125 along the rear eave with a
+   downpipe Ø90 at the right rear corner. The hood chimney Ø250 and the oven flue Ø110 go through the sheet with
+   roof boots (master-flash) and an insulated (sandwich) section in the roof zone. */
+const roofG = new THREE.Group(); scene.add(roofG); parent = roofG;
+const RK = 0.25, RY0 = 2500, RZ0 = 50;                    /* rafter underside: y = RY0 + RK * (z - RZ0) */
+const ry = z => RY0 + RK * (z - RZ0);
+const RX0 = -1000, RX1 = 4000, RZA = -450, RZB = 1750;
+function slab(x0, x1, z0, z1, y0f, h, mat) {               /* sloped box between z0..z1, underside on y0f(z), thickness h */
+  const L = Math.hypot(z1 - z0, y0f(z1) - y0f(z0));
+  const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, h, L), mat);
+  m.position.set((x0 + x1) / 2, (y0f(z0) + y0f(z1)) / 2 + h / 2, (z0 + z1) / 2);
+  m.rotation.x = -Math.atan2(y0f(z1) - y0f(z0), z1 - z0);
+  m.castShadow = m.receiveShadow = true; parent.add(m); return m;
+}
+const roofSheetM = std(0x3a3f44, { metalness: 0.35, roughness: 0.5, side: THREE.DoubleSide });
+const gutterM = std(0x4a4f55, { metalness: 0.5, roughness: 0.45 });
+/* beams on the posts, 1000 overhang each side */
+box(RX0, 2400, 0, RX1, 2500, 100, roofSteelM);
+box(RX0, 2750, 1400, RX1, 2850, 1500, roofSteelM);
+/* knee braces 40x40: at each post along the beam, and under each overhang */
+[[0, 0, 2400], [3000, 0, 2400], [0, 1400, 2750], [3000, 1400, 2750]].forEach(([px, pz, top]) => {
+  [-1, 1].forEach(sx => {
+    const xa = sx < 0 ? px - (px ? 0 : 0) : px;
+    const x0 = sx < 0 ? (px === 0 ? 0 : 2900) : (px === 0 ? 100 : 3000);
+    const a = new THREE.Vector3(x0, top - 600, pz + 50), b = new THREE.Vector3(x0 + sx * 600, top, pz + 50);
+    const d = b.clone().sub(a); const m = new THREE.Mesh(new THREE.BoxGeometry(40, 40, d.length()), roofSteelM);
+    m.position.copy(a).add(b).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), d.normalize());
+    m.castShadow = true; roofG.add(m);
+  });
+});
+/* rafters 60x40 */
+const RAFT = [-1000, -400, 200, 640, 1140, 1700, 2300, 2900, 3460, 3960]; /* spaced <= 600, kept clear of the chimney (x 730..1080) and the oven flue (1380..1580) */
+RAFT.forEach(x => slab(x, x + 40, RZA, RZB, z => ry(z), 60, roofSteelM));
+/* purlins 40x20 across, on top of the rafters */
+for (let z = RZA + 20; z <= RZB - 20; z += 440) box(RX0, ry(z) + 60, z - 20, RX1, ry(z) + 80, z + 20, roofSteelM);
+/* profiled sheet with ribs every 200 */
+const sheetY = z => ry(z) + 80;
+slab(RX0 - 20, RX1 + 20, RZA - 30, RZB + 30, sheetY, 1, roofSheetM);
+for (let x = RX0; x <= RX1; x += 200) slab(x - 15, x + 15, RZA - 30, RZB + 30, z => sheetY(z) + 1, 34, roofSheetM);
+/* trims: wind trims at the ends, eave trim in front */
+[RX0 - 20, RX1 + 20].forEach(x => slab(x - 2, x + 2, RZA - 30, RZB + 30, z => sheetY(z) - 60, 100, gutterM));
+box(RX0 - 20, sheetY(RZB + 30) - 80, RZB + 28, RX1 + 20, sheetY(RZB + 30) + 36, RZB + 32, gutterM);
+/* gutter Ø125 along the rear eave and a downpipe Ø90 at the right rear corner */
+{ const gy = sheetY(RZA - 30) - 90;
+  const gt = new THREE.Mesh(new THREE.CylinderGeometry(62, 62, RX1 - RX0 + 40, 20, 1, true, 0, Math.PI), gutterM);
+  gt.rotation.z = Math.PI / 2; gt.position.set((RX0 + RX1) / 2, gy, RZA - 80); gt.castShadow = true; roofG.add(gt);
+  cyl(45, gy + 41, [RX1 - 150, (gy - 41) / 2, RZA - 80], 'y', gutterM, 16);
+}
+/* roof boots round the chimney Ø250 and the oven flue Ø110 */
+{ const zc = CZ, zf = -92, bootM = std(0x7a3a2a, { roughness: 0.8 }); window.__bootM = bootM;
+  cyl(200, 30, [SHIFT + CX, sheetY(zc) + 40, zc], 'y', bootM, 28);
+  cyl(175, 900, [SHIFT + CX, sheetY(zc) - 50, zc], 'y', M.skewer, 28);           /* sandwich section Ø250/350 in the roof zone */
+  cyl(110, 30, [SHIFT + 1180 + KOFF, sheetY(zf) + 40, zf], 'y', bootM, 20);
+  cyl(100, 700, [SHIFT + 1180 + KOFF, sheetY(zf) - 20, zf], 'y', M.skewer, 20);   /* sandwich section Ø110/200 */
+}
+parent = rig;
+
 /* v16 layers: every part of the model belongs to one layer, each layer can be hidden to look inside */
 const LAYERS = [
   { id: 'brick', name: 'Цегла і кладка', mats: [...brickMats, ...clinkerMats, basaltM, mortarM, cordM] },
@@ -1001,7 +1082,8 @@ const LAYERS = [
   { id: 'top', name: 'Плитка стільниць', mats: [tileM, groutM, sealM] },
   { id: 'appl', name: 'Холодильник, умивальник', mats: [fridgeM, sinkM] },
   { id: 'food', name: 'Казан, посуд, приладдя', mats: [M.log, M.meat, M.coal, M.ember] },
-  { id: 'posts', name: 'Стовпи', mats: [M.post] }
+  { id: 'posts', name: 'Стовпи', mats: [M.post] },
+  { id: 'roof', name: 'Дах', mats: [roofSteelM, roofSheetM, gutterM, window.__bootM] }
 ];
 LAYERS.forEach(l => { l.objs = []; });
 const byId = Object.fromEntries(LAYERS.map(l => [l.id, l]));
@@ -1080,7 +1162,7 @@ parent = scene;
 /* views */
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const VIEWS = {
-  persp: { p: [4100, 3000, 4700], t: [1500, 900, 600] }, /* target = middle of the complex, the hood and chimney in frame */
+  persp: { p: [4600, 1900, 5600], t: [1500, 1300, 500] }, /* from under the front eave so the roof does not hide the kitchen */
   front: { p: [1500, 1500, 7200], t: [1500, 1300, 600] },
   top:   { p: [1500, 6200, 670], t: [1500, 420, 660] },
   side:  { p: [7200, 1500, 600], t: [1500, 1300, 600] }
