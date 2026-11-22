@@ -1,5 +1,5 @@
 # Usage: python tools/gen_kompleks.py  ->  kreslennia-kompleks.html, materialy.md, kreslennia/kompleks-*.svg
-# Drawings of the whole grill zone (model v31) and the bill of materials.
+# Drawings of the whole grill zone (model v32) and the bill of materials.
 # Units: mm. Plan: world x from the left edge of the paving, z from the rear edge. Heights from the paving.
 import math
 import os
@@ -301,26 +301,32 @@ rf.dimH(-1000, 0, 3020, '1000', ext_from=2960); rf.dimH(0, 3000, 3020, '3000'); 
 rf.dimH(-1000, 4000, -60, '5000', ext_from=0)
 roof_front_svg = rf.svg('Дах спереду')
 
-# v31 firewood wall: side elevation (rear on the left) and its end (ladder frame)
-fw = View(-150, 2200, -60, 1950, pad=(130, 120, 60, 110), k=2.0)
-fw.line(-150, -41, 2200, -41, 'ol')
-fw.rect(0, 110, 1500, 150, 'fill')                                   # base frame
-for z in (8, 1468): fw.rect(z, -41, z + 24, 110, 'ol thin')           # feet
-for z0 in (0, 1460): fw.rect(z0, 150, z0 + 40, 1800, 'fill')          # ladder uprights (rear, front)
-fw.rect(40, 1760, 1460, 1800, 'fill')                                 # top tie
+# v32 firewood wall: side elevation (rear on the left) and the truss welded to the post (end view)
+fw = View(-150, 2300, -60, 1950, pad=(130, 120, 60, 110), k=2.0)
+fw.line(-150, -41, 2300, -41, 'ol')
+fw.rect(0, 0, 100, 1900, 'ol'); fw.rect(1400, 0, 1500, 1900, 'ol')     # main posts (cut)
+fw.rect(70, 110, 1430, 150, 'fill')                                   # base rail
+fw.rect(70, 1760, 1430, 1800, 'fill')                                 # top tie
+for z in (35, 1435, 735): fw.rect(z, -41, z + 30, 110 if z == 735 else -21, 'ol thin')   # feet
 import random as _rnd
 _g = _rnd.Random(7); _P = []
 for _ in range(6000):
-    r = _g.uniform(40, 78); z = _g.uniform(45 + r, 1455 - r); y = _g.uniform(152 + r, 1755 - r)
+    r = _g.uniform(40, 78); z = _g.uniform(72 + r, 1428 - r); y = _g.uniform(152 + r, 1755 - r)
     if all((q[0] - z) ** 2 + (q[1] - y) ** 2 >= (q[2] + r + 1) ** 2 for q in _P): _P.append((z, y, r))
 for z, y, r in _P: fw.circle(z, y, r, 'ol thin')
-fw.dimH(0, 1500, 1880, '1500', ext_from=1800); fw.dimV(0, 1800, -110, '1800', ext_from=0, side='left')
-fw.dimV(-41, 150, 1560, '150 + ніжки', side='right')
-# end view of the ladder frame, 400 wide, beside
-for x0 in (1800, 2160): fw.rect(x0, 150, x0 + 40, 1800, 'fill')
-for y0 in (110, 700, 1250, 1760): fw.rect(1840, y0, 2160, y0 + 40, 'fill')
-fw.dimH(1800, 2200, -20, '400', ext_from=150)
-fw.text(2000, 1880, 'драбинка спереду / ззаду', 'note', 'middle')
+fw.dimH(100, 1400, 1880, '1300 між стовпами', ext_from=1800); fw.dimV(0, 1800, -110, '1800', ext_from=0, side='left')
+fw.dimV(-41, 150, 1560, '150', side='right')
+# end view: the truss in the plane of the post, the post is the inner chord
+X0 = 1800
+fw.rect(X0, 0, X0 + 100, 1900, 'fill')                                # post
+fw.rect(X0 + 100 + 360, -41, X0 + 100 + 400, 1800, 'fill')            # outer chord 40x40, 400 from the post face
+for y0 in (110, 1760): fw.rect(X0 + 100, y0, X0 + 500, y0 + 40, 'fill')
+ys = [150, 550, 950, 1350, 1760]
+for i in range(4):
+    a_ = (X0 + 100, ys[i]) if i % 2 == 0 else (X0 + 480, ys[i]); b_ = (X0 + 480, ys[i + 1]) if i % 2 == 0 else (X0 + 100, ys[i + 1])
+    fw.line(a_[0], a_[1], b_[0], b_[1], 'ol')
+fw.dimH(X0 + 100, X0 + 500, -20, '400', ext_from=150)
+fw.text(X0 + 300, 1880, 'ферма: стовп + пояс + розкоси 40×40', 'note', 'middle')
 fw.text(750, -110, 'поліна ≈ 400 поперек, торцями назовні', 'note', 'middle')
 firewood_svg = fw.svg('Дровник')
 
@@ -476,9 +482,8 @@ parts = [
    ('Болти M6 × 20 + гайки', '16', 'кріплення бічної панелі; дверцята — на петлях'),
  ]),
  ('Дровники-стінки зліва і справа (2 шт)', [
-   ('Труба 40×40×2', '2 × 15,7 м', 'на кожну: рама-основа 1500×400 з 3 поперечками, 2 драбинки 400×1800 (2 стійки + 3 перекладини), верхня зв\'язка'),
-   ('Ніжки регульовані M10', '2 × 4', ''),
-   ('Пластини 60×60×4 + болти M8 до стовпів', '2 × 4', 'внутрішні стійки драбинок до стовпів'),
+   ('Труба 40×40×2', '2 × 14,1 м', 'на кожну: 2 ферми, приварені до стовпів (зовнішній пояс 1840, горизонталі 2 × 360, 4 розкоси ≈ 540), рейки-основа 2 × 1360 + 2 поперечки, верхня зв\'язка 1360'),
+   ('Ніжки регульовані M10', '2 × 3', 'під зовнішні пояси і посередині зовнішньої рейки'),
    ('Дрова колоті, поліно ≈ 400', '≈ 1,8 скл. м³', 'по ≈ 0,9 на стінку'),
  ]),
  ('Дах односкатний 5000 × 2200', [
@@ -540,7 +545,7 @@ def num(x, d=1):
 
 # ---- materialy.md ----
 md = ['# Зона мангала — список матеріалів', '',
-      'Модель v31 від 22.11.2026 Кількості пораховано з моделі. Креслення ще під v24 — їх треба перерахувати.', '']
+      'Модель v32 від 22.11.2026 Кількості пораховано з моделі. Креслення ще під v24 — їх треба перерахувати.', '']
 # (name, qty, unit, how to buy, what for) — qty/unit feed the Excel sheet
 SHOP = [
  ('Метал', [
@@ -596,9 +601,8 @@ SHOP = [
    ('Ручка + магнітна защіпка', 3, 'компл.', '3 компл.', 'дверцята шафи, холодильника і лівої тумби'),
  ]),
  ('Дровники-стінки', [
-   ('Труба профільна 40×40×2 (дровники)', 6, 'хлист 6 м', '6 хлистів по 6 м', 'потрібно 2 × 15,7 м'),
-   ('Ніжка регульована M10 (дровники)', 8, 'шт', '8 шт', ''),
-   ('Пластина 60×60×4 + болт M8 (дровники)', 8, 'компл.', '8 компл.', 'кріплення драбинок до стовпів'),
+   ('Труба профільна 40×40×2 (дровники)', 6, 'хлист 6 м', '6 хлистів по 6 м', 'потрібно 2 × 14,1 м + різ; ферми варяться до стовпів'),
+   ('Ніжка регульована M10 (дровники)', 6, 'шт', '6 шт', ''),
    ('Дрова колоті, поліно ≈ 400', 1.8, 'скл. м³', '≈ 1,8 скл. м³', 'якщо свої — не купувати'),
  ]),
  ('Дах', [
@@ -745,7 +749,7 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
       <p>Мангал, піч під казан і тумба з умивальником на майданчику 3000 × 1500. Три частини на болтах. Каркас печі окремо: <a href="https://claude.ai/artifact/H1J2R72iAaprnuJkxpDk69">креслення для зварювальника</a>.</p>
     </div>
     <dl class="meta">
-      <dt>Модель</dt><dd>v31 · 22.11.2026</dd>
+      <dt>Модель</dt><dd>v32 · 22.11.2026</dd>
       <dt>Розміри</dt><dd>мм, висоти від плитки</dd>
       <dt>Сталь</dt><dd>≈ {steel_mass:.0f} кг</dd>
     </dl>
@@ -777,7 +781,7 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
     <section class="v"><h2>Витяжка, природна тяга <span>розріз збоку, зад ліворуч</span></h2><div class="sc">{hood_svg}</div></section>
     <section class="v"><h2>Дах, розріз збоку <span>зад ліворуч, скат назад</span></h2><div class="sc">{roof_side_svg}</div></section>
     <section class="v wide"><h2>Дах спереду <span>випуски по 1 м з боків</span></h2><div class="sc">{roof_front_svg}</div></section>
-    <section class="v wide"><h2>Дровник-стінка, вид збоку <span>зад ліворуч; праворуч — драбинка з торця; таких 2: зліва і справа</span></h2><div class="sc">{firewood_svg}</div></section>
+    <section class="v wide"><h2>Дровник-стінка, вид збоку <span>зад ліворуч; праворуч — ферма, приварена до стовпа (з торця); таких 2: зліва і справа</span></h2><div class="sc">{firewood_svg}</div></section>
     <section class="v"><h2>Карго для шампурів <span>розріз уздовж, зад ліворуч, карго засунуте</span></h2><div class="sc">{holder_svg}</div></section>
     <section class="notes">
       <h2>Мангал: позиції</h2>
@@ -858,7 +862,7 @@ WRAP = Alignment(wrap_text=True, vertical='top'); TOP = Alignment(vertical='top'
 wb = Workbook()
 ws = wb.active; ws.title = 'Закупівля'
 ws['A1'] = 'Зона мангала — що купити'; ws['A1'].font = FH
-ws['A2'] = 'Модель v31 від 22.11.2026 Кількості пораховано з моделі й округлено до того, як матеріал продають. Майданчик і стовпи вже є (надставки передніх стовпів — у розділі «Дах»).'
+ws['A2'] = 'Модель v32 від 22.11.2026 Кількості пораховано з моделі й округлено до того, як матеріал продають. Майданчик і стовпи вже є (надставки передніх стовпів — у розділі «Дах»).'
 ws['A2'].font = FM
 ws['A3'] = 'Жовті клітинки — ціна за одиницю: уже вписані орієнтовні ціни (Україна, 2026), замініть на ціни свого магазину. Сума і разом рахуються самі. У колонці «Куплено» ставте «так».'
 ws['A3'].font = FM

@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 31 · 22.11.2026</span>
+  <span class="ver" id="ver">Версія 32 · 22.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -259,17 +259,17 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   <div class="block">
     <h3>Дровники-стінки з боків</h3>
     <ul>
-      <li>Зліва і справа, зовні за стовпами, під випусками даху по 1 м: стінка з дров 400 × 1500, висота 1800 — нижче підкосів даху</li>
-      <li>Поліна ≈ 400 лежать поперек, торцями назовні й до кухні — з обох боків видно зрізи</li>
-      <li>Знизу рама з труби 40×40 на 4 регульованих ніжках, 150 від землі, 3 поперечки — дрова не лежать на землі й провітрюються</li>
-      <li>Спереду і ззаду — драбинки з двох стійок 40×40 і трьох перекладин (700, 1250, 1800): тримають торці стосу, щоб не розсипався</li>
-      <li>Зверху по зовнішньому краю поздовжня зв'язка 40×40 між драбинками; внутрішні стійки прикручені пластинами до стовпів</li>
-      <li>У кожній стінці ≈ 0,9 скл. м³ дров; дах закриває їх від дощу з запасом ≈ 550 по боках</li>
+      <li>Зліва і справа, зовні впритул до стовпів, під випусками даху по 1 м: стінка з дров 400 × 1360 між фермами, висота 1800 — нижче підкосів даху</li>
+      <li>Тримачі — ферми, як у баштового крана: у площині заднього і переднього стовпа до стовпа приварено решітку з квадратної труби 40×40×2 — стовп працює як внутрішній пояс, зовнішній пояс на 400 від стовпа, горизонталі на 150 і 1800, між ними розкоси під кутом зигзагом (панелі ≈ 400)</li>
+      <li>Знизу між фермами поздовжні рейки і 2 поперечки на 150 від землі — на них лежать дрова, провітрюються; зверху по зовнішньому краю зв'язка</li>
+      <li>Зовнішні пояси стоять на регульованих ніжках, ще одна ніжка посередині зовнішньої рейки — навантаження ≈ 0,9 скл. м³ дров на стінку</li>
+      <li>Поліна ≈ 400 лежать поперек, торцями назовні й до кухні</li>
     </ul>
   </div>
 
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v32</strong> Тримачі дровників переробено на ферми, приварені до стовпів: стовп — внутрішній пояс, зовнішній пояс 40×40 на 400, розкоси під кутом зигзагом, як у баштового крана; знизу рейки-основа, зверху зв'язка.</li>
     <li><strong>v31</strong> Декоративні стінки з дров зліва і справа під випусками даху: рама-основа на ніжках, драбинки спереду і ззаду, зв'язка зверху, поліна 400 торцями назовні.</li>
     <li><strong>v30</strong> Односкатний дах з нахилом назад: балки 100×100 з випусками по 1 м з боків, крокви 60×40, профнастил НС35, водостік ззаду; передні стовпи надставлені до 2750, труби проходять крізь покрівлю.</li>
     <li><strong>v29</strong> Витяжка над мангалом без вентилятора: високий зонт (низ на 1950) із заднім екраном і боковими щоками до 1450, труба Ø250 на 1,6 м з турбодефлектором; стоїть на двох стійках позаду мангала.</li>
@@ -1087,40 +1087,52 @@ box(RX0 - 20, sheetY(RZB + 30) - 80, RZB + 28, RX1 + 20, sheetY(RZB + 30) + 36, 
 }
 parent = rig;
 
-/* v31: decorative firewood walls left and right, outside the posts, under the 1 m roof overhangs.
-   Logs ~400 long lie across (ends out and in), stack 400 deep x 1400 long, up to 1800 (under the knee braces).
-   Holders: a base frame of tube 40x40 (400 x 1500, 3 cross bars, 150 high on 4 adjustable feet) keeps the logs off the
-   ground; at the FRONT and the REAR a ladder frame (2 uprights 40x40 + 3 rungs) stops the stack from sliding out;
-   a top tie along the outer edge keeps the two ladders parallel; the inner uprights are bolted with plates to the posts. */
+/* v32: decorative firewood walls left and right, outside the posts, under the 1 m roof overhangs.
+   The holders are welded to the main posts like a crane mast / truss: in the plane of the rear post and of the front
+   post a lattice of square tube 40x40x2 - the post is the inner chord, an outer chord 400 out, horizontals at 150 and 1800
+   and diagonals at an angle (zigzag, panels ~400) between the post and the outer chord. The two trusses are tied by
+   longitudinal rails at the bottom (the base the logs lie on, 150 off the ground, with 3 cross bars) and an outer top tie.
+   The outer chords stand on adjustable feet (the load is ~0.9 stacked m3 per wall). Logs ~400 lie across between the
+   trusses, ends out and towards the kitchen, up to 1800 (under the roof knee braces). */
 const logBarkM = std(0x5a3b26, { roughness: 1 });
 const logEndM = std(0xc99a62, { roughness: 0.9 });
 const woodG = new THREE.Group(); scene.add(woodG); parent = woodG;
-function firewoodWall(xi, xo) {             /* xi = edge next to the post, xo = outer edge (400 apart) */
-  const x0 = Math.min(xi, xo), x1 = Math.max(xi, xo), t = 40, FY = 150, TOP = 1800, Z0 = 0, Z1 = 1500;
-  /* base frame and feet */
-  box(x0, FY - t, Z0, x0 + t, FY, Z1, M.tube); box(x1 - t, FY - t, Z0, x1, FY, Z1, M.tube);
-  [Z0, 730, Z1 - t].forEach(z => box(x0 + t, FY - t, z, x1 - t, FY, z + t, M.tube));
-  [[x0 + 8, 8], [x1 - 32, 8], [x0 + 8, Z1 - 32], [x1 - 32, Z1 - 32]].forEach(([x, z]) => box(x, -41, z, x + 24, FY - t, z + 24, M.skewer));
-  /* front and rear ladder frames */
-  [[Z0, Z0 + t], [Z1 - t, Z1]].forEach(([za, zb]) => {
-    box(x0, FY, za, x0 + t, TOP, zb, M.tube); box(x1 - t, FY, za, x1, TOP, zb, M.tube);
-    [700, 1250, TOP - t].forEach(y => box(x0 + t, y, za, x1 - t, y + t, zb, M.tube));
+function strut(a, b, w = 40) {                 /* square tube between two points */
+  const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), d = B.clone().sub(A);
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, w, d.length()), M.tube);
+  m.position.copy(A).add(B).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), d.normalize());
+  m.castShadow = m.receiveShadow = true; parent.add(m); return m;
+}
+function firewoodWall(xp, dir) {               /* xp = outer face of the posts, dir = -1 (left) or +1 (right) */
+  const t = 40, FY = 150, TOP = 1800, D = 400, xo = xp + dir * (D - t / 2), xi = xp + dir * t / 2;
+  const x0 = Math.min(xp, xp + dir * D), x1 = Math.max(xp, xp + dir * D);
+  /* two trusses in the post planes (z 50 and 1450) */
+  [50, 1450].forEach(zc => {
+    strut([xo, -41, zc], [xo, TOP, zc]);                                   /* outer chord, from the foot up */
+    strut([xp, FY - t / 2, zc], [xo, FY - t / 2, zc]);                     /* bottom horizontal, welded to the post */
+    strut([xp, TOP - t / 2, zc], [xo, TOP - t / 2, zc]);                   /* top horizontal */
+    const ys = [FY, 550, 950, 1350, TOP - t];
+    for (let i = 0; i < ys.length - 1; i++) {                              /* diagonals, zigzag */
+      const fromPost = i % 2 === 0;
+      strut([fromPost ? xp : xo, ys[i], zc], [fromPost ? xo : xp, ys[i + 1], zc]);
+    }
   });
-  /* top tie along the outer edge, plates to the post on the inner side */
-  const xoT = xo < xi ? x0 : x1 - t; box(xoT, TOP - t, Z0 + t, xoT + t, TOP, Z1 - t, M.tube);
-  [[50, 1000], [1450, 1000], [50, 1600], [1450, 1600]].forEach(([z, y]) => {
-    const xp = xi < xo ? xi - 50 : xi; box(xp, y - 30, z - 30, xp + 50, y + 30, z + 30, M.angle);
-  });
-  /* logs: packed in the cross-section z 45..1455, y 152..1795, instanced */
+  /* base: longitudinal rails and cross bars between the trusses (the logs lie on them) */
+  box(x0, FY - t, 70, x0 + t, FY, 1430, M.tube); box(x1 - t, FY - t, 70, x1, FY, 1430, M.tube);
+  [500, 950].forEach(z => box(x0 + t, FY - t, z, x1 - t, FY, z + t, M.tube));
+  box(xo - t / 2, TOP - t, 70, xo + t / 2, TOP, 1430, M.tube);             /* outer top tie */
+  [50, 1450].forEach(z => box(xo - 15, -41, z - 15, xo + 15, -21, z + 15, M.skewer));   /* adjustable feet */
+  box(xo - 15, -41, 735, xo + 15, FY - t, 765, M.skewer);                 /* middle foot under the outer rail */
+  /* logs between the trusses: cross-section z 72..1428, y 152..1795, instanced */
   const P = [];
   for (let i = 0; i < 9000 && P.length < 600; i++) {
-    const r = 40 + rnd() * 38, z = 45 + r + rnd() * (1410 - 2 * r), y = FY + 2 + r + rnd() * (TOP - FY - 8 - 2 * r);
+    const r = 40 + rnd() * 38, z = 72 + r + rnd() * (1356 - 2 * r), y = FY + 2 + r + rnd() * (TOP - FY - 8 - 2 * r);
     if (P.every(q => (q[0] - z) ** 2 + (q[1] - y) ** 2 >= (q[2] + r + 1) ** 2)) P.push([z, y, r]);
   }
   const geo = new THREE.CylinderGeometry(1, 1, 1, 9);
   const bark = new THREE.InstancedMesh(geo, logBarkM, P.length), ends = new THREE.InstancedMesh(geo, logEndM, P.length);
   P.forEach(([z, y, r], i) => {
-    const xc = (x0 + x1) / 2 + (rnd() - 0.5) * 30, L = 380 + rnd() * 40;
+    const xc = (x0 + x1) / 2 + (rnd() - 0.5) * 20, L = 370 + rnd() * 30;
     _dummy.position.set(xc, y, z); _dummy.rotation.set(0, 0, Math.PI / 2 + (rnd() - 0.5) * 0.04);
     _dummy.scale.set(r, L, r); _dummy.updateMatrix(); bark.setMatrixAt(i, _dummy.matrix);
     _dummy.scale.set(r - 5, L + 4, r - 5); _dummy.updateMatrix(); ends.setMatrixAt(i, _dummy.matrix);
@@ -1129,7 +1141,7 @@ function firewoodWall(xi, xo) {             /* xi = edge next to the post, xo = 
   [bark, ends].forEach(m => { m.castShadow = m.receiveShadow = true; woodG.add(m); });
   return P.length;
 }
-const LOGS_L = firewoodWall(-50, -450), LOGS_R = firewoodWall(3050, 3450);
+const LOGS_L = firewoodWall(0, -1), LOGS_R = firewoodWall(3000, 1);
 parent = rig;
 
 /* v16 layers: every part of the model belongs to one layer, each layer can be hidden to look inside */
