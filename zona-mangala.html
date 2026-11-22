@@ -39,6 +39,11 @@ h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: .01em; }
 .lbl { font: 500 12px var(--font-mono); background: var(--panel); color: var(--fg); border: 1px solid var(--line);
   padding: 1px 6px; border-radius: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .lbl.name { font-family: var(--font-ui); color: var(--accent); border-color: var(--accent); }
+#zoom { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: grid; gap: 6px; }
+#zoom button { width: 40px; height: 40px; font: 600 20px var(--font-ui); line-height: 1; color: var(--fg); background: var(--panel);
+  border: 1px solid var(--line); border-radius: 8px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+#zoom button:hover { border-color: var(--accent); color: var(--accent); }
+#zoom button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 #hint { position: absolute; left: 12px; bottom: 12px; font-size: 12px; color: var(--muted); background: var(--panel);
   border: 1px solid var(--line); padding: 4px 8px; border-radius: 4px; pointer-events: none; }
 #layers { position: absolute; left: 12px; top: 12px; z-index: 2; background: var(--panel); border: 1px solid var(--line);
@@ -71,7 +76,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 32 · 22.11.2026</span>
+  <span class="ver" id="ver">Версія 33 · 22.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -85,7 +90,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   </div>
 </header>
 
-<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cab"> Тумба зліва</label><label class="tg"><input type="checkbox" id="tg-door"> Дверцята під мийкою</label><label class="tg"><input type="checkbox" id="tg-fdoor"> Дверцята холодильника</label></div><div class="sub">Механізми</div><div class="moving"><label class="tg"><input type="checkbox" id="tg-mech"> Показати механізми</label></div></details><div id="hint">Клік по кришці, ящику чи дверцятах — відкрити або закрити · тягніть, щоб обертати · коліщатко, щоб наблизити</div></div>
+<div id="view"><details id="layers" open><summary>Шари</summary><div id="layer-list"></div><button type="button" id="layers-all">Показати все</button><div class="sub">Відкрити <span>або клік по деталі</span></div><div class="moving"><label class="tg"><input type="checkbox" id="tg-lid" checked> Кришка мангала</label><label class="tg"><input type="checkbox" id="tg-drawer"> Ящик під мангалом</label><label class="tg"><input type="checkbox" id="tg-cab"> Тумба зліва</label><label class="tg"><input type="checkbox" id="tg-door"> Дверцята під мийкою</label><label class="tg"><input type="checkbox" id="tg-fdoor"> Дверцята холодильника</label></div><div class="sub">Механізми</div><div class="moving"><label class="tg"><input type="checkbox" id="tg-mech"> Показати механізми</label></div></details><div id="zoom" role="group" aria-label="Масштаб"><button type="button" id="z-in" title="Наблизити (+)" aria-label="Наблизити">+</button><button type="button" id="z-out" title="Віддалити (−)" aria-label="Віддалити">−</button><button type="button" id="z-reset" title="Вид за замовчуванням (0)" aria-label="Вид за замовчуванням">⟲</button></div><div id="hint">Клік по кришці, ящику чи дверцятах — відкрити або закрити · тягніть, щоб обертати · коліщатко, два пальці або кнопки +/− — наблизити й віддалити</div></div>
 
 <aside>
   <h2>Загальне</h2>
@@ -247,7 +252,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
     <h3>Дах односкатний</h3>
     <ul>
       <li>Скат назад: задня балка на задніх стовпах (верх 2400), передня — на передніх, піднятих надставками 100×100×3 на 350 (верх 2750); нахил 1 : 4 ≈ 14° — для профнастилу НС35 достатньо</li>
-      <li>Балки труба 100×100×3, довжина 5000: з боків випуски по 1 м за стовпи, під кожним випуском і біля кожного стовпа підкоси 40×40</li>
+      <li>Балки труба 100×100×3, довжина 5000: з боків випуски по 1 м за стовпи, під кожним випуском і біля кожного стовпа підкоси 40×40; біля задніх стовпів підкоси починаються на 2050 (над дровниками)</li>
       <li>Крокви труба 60×40×2, 10 шт з кроком до 600 (оминають обидві труби), від −450 позаду (над стійками витяжки і трубою печі) до 1750 спереду (виліт 250 за передні стовпи)</li>
       <li>Обрешітка труба 40×20 з кроком ≈ 440; покриття — профнастил НС35 0,5 мм з полімерним покриттям на саморізах з EPDM-шайбою; торцеві вітрові планки, спереду карнизна</li>
       <li>Висота під дахом: ззаду по карнизу ≈ 2,4 м, спереду ≈ 2,9 м; над витяжкою (горловина 2300) крокви ≈ на 2540</li>
@@ -259,16 +264,17 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
   <div class="block">
     <h3>Дровники-стінки з боків</h3>
     <ul>
-      <li>Зліва і справа, зовні впритул до стовпів, під випусками даху по 1 м: стінка з дров 400 × 1360 між фермами, висота 1800 — нижче підкосів даху</li>
-      <li>Тримачі — ферми, як у баштового крана: у площині заднього і переднього стовпа до стовпа приварено решітку з квадратної труби 40×40×2 — стовп працює як внутрішній пояс, зовнішній пояс на 400 від стовпа, горизонталі на 150 і 1800, між ними розкоси під кутом зигзагом (панелі ≈ 400)</li>
+      <li>Зліва і справа, зовні впритул до стовпів, під випусками даху по 1 м: стінка з дров 400 × 1360 між фермами, висота 2000; підкоси даху біля задніх стовпів підняті — починаються на 2050, коротші й крутіші</li>
+      <li>Тримачі — ферми, як у баштового крана: у площині заднього і переднього стовпа до стовпа приварено решітку з квадратної труби 40×40×2 — стовп працює як внутрішній пояс, зовнішній пояс на 400 від стовпа, горизонталі на 150 і 2000, між ними розкоси під кутом зигзагом (панелі ≈ 450)</li>
       <li>Знизу між фермами поздовжні рейки і 2 поперечки на 150 від землі — на них лежать дрова, провітрюються; зверху по зовнішньому краю зв'язка</li>
-      <li>Зовнішні пояси стоять на регульованих ніжках, ще одна ніжка посередині зовнішньої рейки — навантаження ≈ 0,9 скл. м³ дров на стінку</li>
+      <li>Зовнішні пояси стоять на регульованих ніжках, ще одна ніжка посередині зовнішньої рейки — навантаження ≈ 1 скл. м³ дров на стінку</li>
       <li>Поліна ≈ 400 лежать поперек, торцями назовні й до кухні</li>
     </ul>
   </div>
 
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v33</strong> Стінки з дров підняті до 2 м; задні підкоси даху починаються на 2050, щоб не заважали. Кнопки «+», «−», «⟲» і клавіші +/−/0 для наближення й віддалення, віддалити можна вдвічі далі.</li>
     <li><strong>v32</strong> Тримачі дровників переробено на ферми, приварені до стовпів: стовп — внутрішній пояс, зовнішній пояс 40×40 на 400, розкоси під кутом зигзагом, як у баштового крана; знизу рейки-основа, зверху зв'язка.</li>
     <li><strong>v31</strong> Декоративні стінки з дров зліва і справа під випусками даху: рама-основа на ніжках, драбинки спереду і ззаду, зв'язка зверху, поліна 400 торцями назовні.</li>
     <li><strong>v30</strong> Односкатний дах з нахилом назад: балки 100×100 з випусками по 1 м з боків, крокви 60×40, профнастил НС35, водостік ззаду; передні стовпи надставлені до 2750, труби проходять крізь покрівлю.</li>
@@ -339,7 +345,8 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI; /* free orbit, the model can be turned to any side, also from below */
 controls.minDistance = 400;
-controls.maxDistance = 15000;
+controls.maxDistance = 30000; /* v33: room to zoom out with the roof and the chimney */
+controls.zoomToCursor = true;
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x8b8070, 1.6));
 const sun = new THREE.DirectionalLight(0xffffff, 2.4);
@@ -1054,7 +1061,8 @@ box(RX0, 2750, 1400, RX1, 2850, 1500, roofSteelM);
   [-1, 1].forEach(sx => {
     const xa = sx < 0 ? px - (px ? 0 : 0) : px;
     const x0 = sx < 0 ? (px === 0 ? 0 : 2900) : (px === 0 ? 100 : 3000);
-    const a = new THREE.Vector3(x0, top - 600, pz + 50), b = new THREE.Vector3(x0 + sx * 600, top, pz + 50);
+    const drop = Math.min(600, top - 2050); /* v33: braces start above the 2 m firewood stacks */
+    const a = new THREE.Vector3(x0, top - drop, pz + 50), b = new THREE.Vector3(x0 + sx * drop, top, pz + 50);
     const d = b.clone().sub(a); const m = new THREE.Mesh(new THREE.BoxGeometry(40, 40, d.length()), roofSteelM);
     m.position.copy(a).add(b).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), d.normalize());
     m.castShadow = true; roofG.add(m);
@@ -1093,7 +1101,7 @@ parent = rig;
    and diagonals at an angle (zigzag, panels ~400) between the post and the outer chord. The two trusses are tied by
    longitudinal rails at the bottom (the base the logs lie on, 150 off the ground, with 3 cross bars) and an outer top tie.
    The outer chords stand on adjustable feet (the load is ~0.9 stacked m3 per wall). Logs ~400 lie across between the
-   trusses, ends out and towards the kitchen, up to 1800 (under the roof knee braces). */
+   trusses, ends out and towards the kitchen, up to 2000 (v33; the roof knee braces now start at 2050). */
 const logBarkM = std(0x5a3b26, { roughness: 1 });
 const logEndM = std(0xc99a62, { roughness: 0.9 });
 const woodG = new THREE.Group(); scene.add(woodG); parent = woodG;
@@ -1104,14 +1112,14 @@ function strut(a, b, w = 40) {                 /* square tube between two points
   m.castShadow = m.receiveShadow = true; parent.add(m); return m;
 }
 function firewoodWall(xp, dir) {               /* xp = outer face of the posts, dir = -1 (left) or +1 (right) */
-  const t = 40, FY = 150, TOP = 1800, D = 400, xo = xp + dir * (D - t / 2), xi = xp + dir * t / 2;
+  const t = 40, FY = 150, TOP = 2000, D = 400, xo = xp + dir * (D - t / 2), xi = xp + dir * t / 2;
   const x0 = Math.min(xp, xp + dir * D), x1 = Math.max(xp, xp + dir * D);
   /* two trusses in the post planes (z 50 and 1450) */
   [50, 1450].forEach(zc => {
     strut([xo, -41, zc], [xo, TOP, zc]);                                   /* outer chord, from the foot up */
     strut([xp, FY - t / 2, zc], [xo, FY - t / 2, zc]);                     /* bottom horizontal, welded to the post */
     strut([xp, TOP - t / 2, zc], [xo, TOP - t / 2, zc]);                   /* top horizontal */
-    const ys = [FY, 550, 950, 1350, TOP - t];
+    const ys = [FY, 600, 1050, 1500, TOP - t];
     for (let i = 0; i < ys.length - 1; i++) {                              /* diagonals, zigzag */
       const fromPost = i % 2 === 0;
       strut([fromPost ? xp : xo, ys[i], zc], [fromPost ? xo : xp, ys[i + 1], zc]);
@@ -1246,6 +1254,22 @@ function goView(k, instant) {
   document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === k)));
 }
 document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => goView(b.dataset.view)));
+/* v33 zoom buttons and keys: move the camera along the line to the target, within the controls' limits */
+function zoomBy(f) {
+  anim = null;
+  const off = camera.position.clone().sub(controls.target);
+  const d = THREE.MathUtils.clamp(off.length() * f, controls.minDistance, controls.maxDistance);
+  camera.position.copy(controls.target).add(off.setLength(d)); controls.update();
+}
+document.getElementById('z-in').addEventListener('click', () => zoomBy(0.8));
+document.getElementById('z-out').addEventListener('click', () => zoomBy(1.25));
+document.getElementById('z-reset').addEventListener('click', () => goView('persp'));
+window.addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('input, textarea')) return;
+  if (e.key === '+' || e.key === '=') zoomBy(0.8);
+  else if (e.key === '-' || e.key === '_') zoomBy(1.25);
+  else if (e.key === '0') goView('persp');
+});
 camera.position.set(...VIEWS.persp.p); controls.target.set(...VIEWS.persp.t); controls.update();
 controls.addEventListener('start', () => { anim = null; });
 
