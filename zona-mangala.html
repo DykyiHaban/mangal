@@ -71,7 +71,7 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
 
 <header>
   <h1>Зона мангала</h1>
-  <span class="ver" id="ver">Версія 27 · 20.11.2026</span>
+  <span class="ver" id="ver">Версія 28 · 22.11.2026</span>
   <div class="controls">
     <div class="seg" role="group" aria-label="Вид">
       <button id="v-persp" data-view="persp" aria-pressed="true">3D</button>
@@ -216,8 +216,22 @@ ul { margin: 0; padding-left: 18px; line-height: 1.55; }
     </ul>
   </div>
 
+  <div class="block">
+    <h3>Тримачі над стільницями</h3>
+    <ul>
+      <li>Над правою тумбою рейлінгова стінка: дві стійки з труби 40×40×2 продовжують задні стійки тумби (біля печі і над перегородкою) вгору до 1650, через вирізи в куті плитки; правий кінець — пластиною на болтах до лівої грані заднього стовпа; зверху перекладина 40×20</li>
+      <li>Рейлінг Ø16 нерж. на 1150 між стійками, на S-гачках ополоник, шумівка, лопатка, щипці; над змішувачем нічого не висить</li>
+      <li>Магнітна планка для ножів 450 на смузі 40×4 на висоті 1340, над робочою стільницею біля холодильника; ножі висять лезом униз, ручкою вгору</li>
+      <li>Тримач паперових рушників під полицею на 1430, над стороною умивальника</li>
+      <li>Полиця для олії, солі, спецій: перфорований лист 1,5, глибина 120, на 1500, на 3 кронштейнах зі смуги 40×4, спереду бортик 20</li>
+      <li>Зліва біля мангала рейлінг Ø16 на 1150 від лівого стовпа до стійки 20×20 на задній обв'язці лівої тумби (x 440–460, кришка мангала починається з 477 — не заважає); на гачках щипці, лопатка, щітка, рукавиця</li>
+      <li>Над мангалом і піччю нічого немає — там жар, дим, труба і кришка, що відкидається назад</li>
+    </ul>
+  </div>
+
   <h2>Що змінилось</h2>
   <ul class="log">
+    <li><strong>v28</strong> Тримачі над стільницями: над правою тумбою рейлінгова стінка (рейлінг для ополоників, магнітна планка для ножів, полиця для спецій, тримач рушників), зліва біля мангала рейлінг для інструменту мангала.</li>
     <li><strong>v27</strong> Ще один варіант (v26 збережено окремо). Права тумба без повернення — усе в одну лінію глибиною 600: біля печі шафа з умивальником, біля стовпа холодильник. Стільниці обох тумб — лист 0,5 мм із загнутими краями на поперечках 20×20, зверху плитка на герметику; бетонна кришка з решіткою більше не потрібна. Холодильник закритий дверцятами з кам'яною панеллю — панелей три.</li>
     <li><strong>v26</strong> Габіони замінено кам'яними панелями: рамка з профільної труби 20×20, дно — лист 0,5 мм, залито поліефірною смолою з декоративним камінцем, товщина ≈ 22 мм. Такою панеллю зроблено фасад лівої тумби (це її дверцята) і обидві бічні панелі тумби з умивальником; каркас тумби розширено на місце колишніх касет.</li>
     <li><strong>v25</strong> Інший варіант розкладки (v24 збережено як план В). Мангал і піч під казан — одна частина на 4 ніжках, зсунута на 200 праворуч, без зазору між ними. Карго між піччю і тумбою прибрано разом зі шматком стільниці. Умивальник переїхав на прямий ряд над шафою з дверцятами, холодильник — у повернення на місце умивальника. Зліва замість карго для шампурів — тумба 430 з дверцятами на інвентар.</li>
@@ -861,6 +875,66 @@ box(LC1 - 60, 350, 622, LC1 - 48, 490, 638, M.angle);    /* vertical grip */
 parent = rig;
 mechTag = true; [120, 680].forEach(y => cyl(6, 50, [LC0, y, 602], 'y', M.skewer, 10)); mechTag = false;
 const lidLeft = new THREE.Group(); rig.add(lidLeft); tileTop(lidLeft, LC0, LC1, 0, 610, null);   /* v27: left top = sheet 0.5 + tile on sealant */
+/* v28: holders above the worktops.
+   RIGHT (prep and sink area, x 1630..2800): two uprights of tube 40x40x2 continue the rear posts of the right cabinet
+   (over the kazan side x 1630 and over the partition x 2176) up to 1650, through notches in the tile corner; the right end is
+   bolted with a plate to the left face of the rear post. Top bar tube 40x20 at 1610..1650 ties everything together.
+   - rail Ø16 stainless at 1150 between the first two uprights, S-hooks: ladle, skimmer, spatula, tongs (nothing over the mixer);
+   - magnetic knife strip 450 on a flat bar 40x4 at 1320..1360 over the fridge cabinet (the prep worktop), knives hang blade down;
+   - paper towel holder under the shelf at 1430, over the sink side;
+   - shelf for oil, salt and spices: perforated sheet 1.5, 120 deep, at 1500, on 3 brackets of flat bar 40x4, lip 20 at the front.
+   LEFT (by the mangal, for the grill tools): rail Ø16 at 1150 from the left post to an upright of tube 20x20 standing on the rear
+   ring of the left cabinet at x 440..460 - clear of the mangal lid (from 477), hooks: tongs, spatula, brush, glove. */
+const holderG = new THREE.Group(); rig.add(holderG); parent = holderG;
+const HZ0 = 0, HZ1 = 40, RAILY = 1150;
+[[1630, 1670], [2176, 2216]].forEach(([x0, x1]) => box(x0, 800, HZ0, x1, 1650, HZ1, M.tube));     /* uprights */
+box(1670, 1610, HZ0, 2800, 1650, 20, M.tube);                                                     /* top bar 40x20 */
+box(2794, 1600, 0, 2800, 1660, 60, M.angle); box(2794, 1300, 0, 2800, 1380, 60, M.angle);       /* plates on the post */
+box(2216, 1320, 36, 2800, 1360, 40, M.angle);                                                     /* flat bar for the knife strip */
+box(1670, 1320, 36, 2176, 1360, 40, M.angle);
+cyl(8, 506, [1923, RAILY, 60], 'x', M.skewer, 12);                                              /* rail Ø16 */
+[1670, 2176].forEach(x => box(x === 1670 ? x : x - 14, RAILY - 6, 40, x === 1670 ? x + 14 : x, RAILY + 6, 68, M.skewer)); /* rail brackets */
+/* shelf: perforated sheet 120 deep at 1500 on 3 brackets */
+box(1670, 1500, 40, 2800, 1502, 160, M.angle); box(1670, 1502, 157, 2800, 1522, 160, M.angle);
+[1700, 2196, 2780].forEach(x => box(x - 2, 1440, 40, x + 2, 1500, 150, M.angle));
+/* left rail for grill tools */
+box(440, 800, 10, 460, 1160, 30, M.tube);                                                        /* upright 20x20 */
+cyl(8, 440, [220, RAILY, 20], 'x', M.skewer, 12);
+box(0, RAILY - 25, 0, 6, RAILY + 25, 40, M.angle);                                               /* plate on the left post */
+const utensilG = new THREE.Group(); rig.add(utensilG); parent = utensilG;
+const hookAt = (x, z) => { const h = new THREE.Mesh(new THREE.TorusGeometry(9, 2, 6, 14, Math.PI * 1.5), toolM); h.position.set(x, RAILY - 6, z); utensilG.add(h); };
+/* right rail: ladle, skimmer, spatula, tongs - none over the mixer (x 1880..1970) */
+[[1715, 'ladle'], [1790, 'skimmer'], [2030, 'spatula'], [2110, 'tongs']].forEach(([x, kind]) => {
+  hookAt(x, 60);
+  if (kind === 'ladle') { box(x - 3, 880, 58, x + 3, RAILY - 12, 62, toolM); const b = new THREE.Mesh(new THREE.SphereGeometry(45, 16, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), toolM); b.position.set(x, 900, 75); utensilG.add(b); }
+  if (kind === 'skimmer') { box(x - 3, 920, 58, x + 3, RAILY - 12, 62, toolM); cyl(55, 3, [x, 890, 62], 'z', toolM, 20); }
+  if (kind === 'spatula') { cyl(7, 220, [x, 1020, 60], 'y', M.log, 10); box(x - 40, 840, 59, x + 40, 910, 61, toolM); }
+  if (kind === 'tongs') { box(x - 10, 870, 56, x - 4, RAILY - 12, 64, toolM); box(x + 4, 870, 56, x + 10, RAILY - 12, 64, toolM); }
+});
+/* knives on the magnetic strip */
+box(2300, 1325, 40, 2750, 1355, 52, M.iron);                                                     /* magnetic strip 450 */
+[2340, 2400, 2470, 2550, 2630, 2700].forEach((x, i) => {
+  const L = [200, 160, 230, 120, 180, 210][i];
+  box(x - 8, 1360, 52, x + 8, 1470, 66, M.log);                                                  /* handle up */
+  box(x - 1, 1360 - L, 52, x + 1, 1360, 70, toolM);                                              /* blade down, edge forward */
+});
+/* paper towel roll */
+/* paper towel roll under the shelf over the sink side, clear of the knives and the rail tools */
+cyl(4, 270, [1850, 1430, 95], 'x', toolM, 8); cyl(55, 240, [1850, 1430, 95], 'x', std(0xf3f1ea, { roughness: 1 }), 20);
+box(1712, 1410, 40, 1718, 1440, 100, toolM); box(1982, 1410, 40, 1988, 1440, 100, toolM);
+/* bottles and jars on the shelf */
+[[1760, 70, 260], [1840, 45, 140], [1900, 45, 140], [1960, 45, 140], [2300, 70, 230], [2420, 50, 120], [2490, 50, 120]].forEach(([x, r, h], i) =>
+  cyl(r / 2, h, [x, 1502 + h / 2, 100], 'y', std([0x6e7f3a, 0xa8432a, 0xd9c08a, 0x7a5a3a, 0x3f5f2a, 0xc8b28a, 0x9b2c22][i], { roughness: 0.5 }), 16));
+/* left rail: grill tools */
+[[90, 'tongs'], [190, 'spatula'], [290, 'brush'], [390, 'glove']].forEach(([x, kind]) => {
+  const h = new THREE.Mesh(new THREE.TorusGeometry(9, 2, 6, 14, Math.PI * 1.5), toolM); h.position.set(x, RAILY - 6, 20); utensilG.add(h);
+  if (kind === 'tongs') { box(x - 10, 830, 16, x - 4, RAILY - 12, 24, toolM); box(x + 4, 830, 16, x + 10, RAILY - 12, 24, toolM); }
+  if (kind === 'spatula') { cyl(7, 240, [x, 1010, 20], 'y', M.log, 10); box(x - 45, 820, 19, x + 45, 890, 21, toolM); }
+  if (kind === 'brush') { cyl(8, 250, [x, 1015, 20], 'y', M.log, 10); box(x - 20, 815, 12, x + 20, 890, 28, M.coal); }
+  if (kind === 'glove') box(x - 55, 900, 12, x + 55, RAILY - 12, 30, std(0x8a5a32, { roughness: 1 }));
+});
+parent = rig;
+
 /* v16 layers: every part of the model belongs to one layer, each layer can be hidden to look inside */
 const LAYERS = [
   { id: 'brick', name: 'Цегла і кладка', mats: [...brickMats, ...clinkerMats, basaltM, mortarM, cordM] },
@@ -873,7 +947,7 @@ const LAYERS = [
 ];
 LAYERS.forEach(l => { l.objs = []; });
 const byId = Object.fromEntries(LAYERS.map(l => [l.id, l]));
-const foodObjs = new Set([kz, rim]); [skewerG, drawerFood, cabFood].forEach(gr => gr.traverse(o => foodObjs.add(o)));
+const foodObjs = new Set([kz, rim]); [skewerG, drawerFood, cabFood, utensilG].forEach(gr => gr.traverse(o => foodObjs.add(o)));
 const unassigned = [];
 scene.traverse(o => {
   if (!(o.isMesh || o.isLineSegments) || o === g) return;
