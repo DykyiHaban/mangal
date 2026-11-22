@@ -330,76 +330,73 @@ fw.text(X0 + 300, 2080, 'ферма: стовп + пояс + розкоси 40×
 fw.text(750, -110, 'поліна ≈ 400 поперек, торцями назовні', 'note', 'middle')
 firewood_svg = fw.svg('Дровник')
 
-# v20 left cargo for skewers, section along the depth (rear on the left), cargo pushed in
-hs = View(-30, 640, 0, 860, pad=(130, 150, 60, 110), k=1.3)
-hs.rect(0, 20, 600, 797, 'ol thin')                       # carcass side wall outline
-hs.rect(0, 797, 600, 800, 'fill'); hs.rect(0, 22, 515, 24, 'fill'); hs.rect(-2, 20, 0, 797, 'fill')
-for z in (10, 570): hs.rect(z, 0, z + 20, 20, 'ol thin')
-hs.rect(5, 24, 515, 49, 'ol thin'); hs.rect(5, 772, 515, 797, 'ol thin')   # fixed channels, bottom and top
-hs.rect(10, 48, 516, 79, 'ol thin'); hs.rect(10, 742, 516, 773, 'ol thin') # cargo bars
-for y in (37, 785): hs.circle(495, y, 11, 'fill'); hs.circle(30, y, 11, 'fill')
-hs.text(260, 60, 'швелер 30×25 + смуга 30×6, ролики 608-2RS', 'note', 'middle')
-hs.rect(10, 79, 516, 82, 'fill'); hs.rect(10, 82, 13, 752, 'fill')            # basket bottom, rear upright
-hs.rect(520, 25, 600, 756, 'stone'); hs.rect(520, 25, 600, 756, 'ol')         # false-gabion cassette
-hs.rect(13, 715, 516, 719, 'fill'); hs.rect(13, 82, 516, 107, 'ol thin')      # slotted rail, tip catcher
-for i, z in enumerate(range(55, 500, 45)):
-    if i % 2 == 0:
-        hs.line(z, 93, z, 719, 'ol'); hs.rect(z - 7, 719, z + 7, 789, 'ol')
-hs.dimV(0, 800, 620, '800', ext_from=600, side='right'); hs.dimV(0, 715, 660, '715', ext_from=600, side='right')
-hs.dimH(0, 600, 830, '600', ext_from=800); hs.dimH(520, 600, 30, '80')
-hs.text(260, 640, '10 прорізів 9 × 25, крок 45', 'note', 'middle')
-hs.text(260, 400, 'шампури до ≈ 700 висять за ручку', 'note', 'middle')
-hs.text(260, 125, 'ловець вістер, кутник 25×25×3', 'note', 'middle')
-hs.rect(40, 110, 490, 460, 'hid'); hs.text(265, 250, 'решітка-гриль на ребрі (за шампурами)', 'note', 'middle')
-holder_svg = hs.svg('Карго для шампурів')
+# v34 left inventory cabinet 430 x 600, top 800: front view (left) and section along the depth (right, rear on the left)
+hs = View(-40, 1260, -41, 900, pad=(130, 150, 60, 110), k=1.6)
+LC0, LC1 = 50, 480
+hs.line(-40, -41, 1260, -41, 'ol')
+for x in (LC0, LC1 - 40): hs.rect(x, 20, x + 40, 788, 'hid')               # posts behind the door
+for x in (LC0 + 8, LC1 - 32): hs.rect(x, -41, x + 24, 20, 'ol thin')        # feet
+hs.rect(LC0, 788, LC1, 800, 'fill')                                          # sheet + tile
+hs.rect(LC0 + 2, 40, LC1 - 25, 780, 'stone'); hs.rect(LC0 + 2, 40, LC1 - 25, 780, 'ol')   # door: stone panel
+hs.rect(LC1 - 25, 40, LC1 - 2, 780, 'fill')                                  # fixed strip next to the mangal
+for y in (150, 650): hs.rect(LC0 - 2, y - 25, LC0 + 4, y + 25, 'fill')      # hinges, outer side
+hs.rect(LC1 - 60, 360, LC1 - 48, 480, 'fill')                                # grip
+hs.dimH(LC0, LC1, 860, '430', ext_from=800); hs.dimH(LC0 + 2, LC1 - 25, 40 - 80, '403', ext_from=40)
+hs.dimV(0, 800, LC0 - 70, '800', ext_from=LC0, side='left'); hs.dimV(40, 780, LC1 + 30, '740', side='right')
+hs.text((LC0 + LC1) / 2, 420, 'дверцята — кам\'яна панель 22', 'note', 'middle')
+Z = 620                                                                        # section origin
+hs.rect(Z, 20, Z + 600, 788, 'ol thin'); hs.rect(Z, 788, Z + 610, 800, 'fill'); hs.rect(Z - 2, 20, Z, 788, 'fill')
+for z in (0, 560): hs.rect(Z + z, 20, Z + z + 40, 788, 'hid')
+for y in (20, 748): hs.rect(Z + 40, y, Z + 560, y + 40, 'fill')
+hs.rect(Z + 40, 60, Z + 560, 62, 'fill')                                      # bottom
+hs.rect(Z + 40, 420, Z + 560, 422, 'fill'); hs.text(Z + 300, 440, 'полиця на 420 (зліва)', 'note', 'middle')
+hs.rect(Z + 50, 728, Z + 550, 732, 'fill'); hs.text(Z + 300, 705, 'рейка для шампурів на 740, 10 прорізів', 'note', 'middle')
+for i, z in enumerate(range(80, 530, 45)):
+    if i % 2 == 0: hs.line(Z + z, 120, Z + z, 732, 'ol thin'); hs.rect(Z + z - 6, 732, Z + z + 6, 790, 'ol thin')
+hs.rect(Z + 600, 40, Z + 622, 780, 'stone')                                   # door in section
+hs.dimH(Z, Z + 600, 860, '600', ext_from=800)
+hs.text(Z + 300, 250, 'мішок вугілля на дні', 'note', 'middle')
+holder_svg = hs.svg('Тумба зліва')
 
-# ======================= 5. LID plan + layers =======================
-L = View(gx(1430), gx(2800), 0, 1320, pad=(140, 160, 90, 110), flip=False, k=2.0)
-L.poly(lid)
-for z in range(50, 1320, 100):
-    x0 = gx(1433) if z < 620 else gx(2083); x1 = gx(2797)
-    if 660 < z < 1040: L.line(x0, z, gx(2160), z, 'hid'); L.line(gx(2540), z, x1, z, 'hid')
-    else: L.line(x0, z, x1, z, 'hid')
-for x in range(1480, 2800, 100):
-    z1 = 617 if x < 2080 else 1317
-    if 2160 < x < 2540: L.line(gx(x), 3, gx(x), 660, 'hid'); L.line(gx(x), 1040, gx(x), z1, 'hid')
-    else: L.line(gx(x), 3, gx(x), z1, 'hid')
-L.rect(gx(2160), 660, gx(2540), 1040)
-for x, z in ((gx(1470), 40), (gx(2760), 40), (gx(2760), 1280), (gx(1470), 580)): L.circle(x, z, 10)
-L.dimH(gx(1430), gx(2800), -30, '1370', ext_from=0)
-L.dimH(gx(2080), gx(2800), 1360, '720', ext_from=1320)
-L.dimV(0, 620, gx(1430) - 30, '620', ext_from=gx(1430))
-L.dimV(0, 1320, gx(2800) + 40, '1320', ext_from=gx(2800), side='right')
-L.dimH(gx(2540), gx(2800), 1010, '260'); L.dimV(0, 660, gx(2350), '660', side='right')
-L.dimH(gx(1430), gx(1480), 50, '50'); L.dimH(gx(1480), gx(1580), 50, '100')
-L.text(gx(1700), 1000, 'решітка: квадрат 10×10, крок 100', 'note', 'middle')
-L.text(gx(1700), 1030, '○ — вушка для підйому, 4 шт', 'note', 'middle')
-lid_svg = L.svg('Кришка тумби')
+# ======================= 5. WORKTOPS plan + layers (v34) =======================
+L = View(gx(0), gx(2840), -40, 700, pad=(140, 160, 90, 110), flip=False, k=2.6)
+for x0, x1 in ((50, 480), (1630, 2780)):
+    L.rect(gx(x0), 0, gx(x1), 610)                                            # tile top, 10 over the front
+for x0, x1 in ((50, 480), (1630, 2758)):                                      # frame rings
+    L.rect(gx(x0), 0, gx(x1), 600, 'hid')
+L.rect(gx(255), 40, gx(275), 560, 'hid')                                      # cross bar, left
+for x in (1700, 2146, 2457): L.rect(gx(x), 40, gx(x + 20), 560, 'hid')        # cross bars, right
+for z in (110, 470): L.rect(gx(1720), z, gx(2146), z + 20, 'hid')
+L.rect(gx(1733), 110, gx(2113), 490); L.text(gx(1923), 300, 'виріз 380 × 380', 'note', 'middle')
+L.text(gx(265), 650, 'ліва 430 × 610', 'note', 'middle'); L.text(gx(2205), 650, 'права 1150 × 610', 'note', 'middle')
+L.text(gx(800), 300, 'мангал', 'note', 'middle'); L.text(gx(1380), 300, 'піч', 'note', 'middle')
+L.dimH(gx(50), gx(480), -20, '430', ext_from=0); L.dimH(gx(1630), gx(2780), -20, '1150', ext_from=0)
+L.dimV(0, 610, gx(2780) + 40, '610', ext_from=gx(2780), side='right')
+L.dimH(gx(1630), gx(1733), 540, '103'); L.dimH(gx(1733), gx(2113), 540, '380')
+L.text(gx(2205), 690, 'пунктир — обв\'язка 40×40 і поперечки 20×20 під листом', 'note', 'middle')
+lid_svg = L.svg('Стільниці')
 
-ls = View(0, 220, 0, 100, pad=(80, 170, 40, 50))
-ls.rect(0, 0, 3, 80, 'fill')
-for z in (50, 150): ls.rect(z - 5, 0, z + 5, 10, 'fill')
-ls.rect(3, 10, 220, 18, 'ol thin'); ls.rect(3, 18, 220, 68, 'brick'); ls.rect(3, 18, 220, 68, 'ol thin'); ls.rect(3, 70, 220, 80, 'fill')
-ls.text(228, 8, 'квадрат 10×10', 'note'); ls.text(228, 20, 'ЦСП 8–10 (незнімна)', 'note')
-ls.text(228, 46, 'бетон 50', 'note'); ls.text(228, 78, 'плитка на клею 10', 'note')
-ls.dimV(0, 80, -30, '80', ext_from=0); ls.dimH(0, 3, 95, '3')
-ls.text(-10, -20, 'борт 70 × 3', 'note')
-lid_layers_svg = ls.svg('Шари кришки')
+ls = View(-30, 260, -60, 60, pad=(80, 190, 40, 50), k=0.9)
+ls.rect(0, -40, 40, 0, 'fill'); ls.text(48, -24, 'обв\'язка 40×40', 'note')
+ls.rect(120, -20, 140, 0, 'fill'); ls.text(148, -14, 'поперечка 20×20', 'note')
+ls.rect(-10, 0, 240, 0.5 * 4, 'fill'); ls.rect(-10, -20, -8, 0, 'fill')       # sheet 0.5 (drawn x4), front edge bent down 20
+ls.rect(-10, 2, 240, 8, 'ol thin'); ls.rect(-10, 8, 240, 48, 'brick'); ls.rect(-10, 8, 240, 48, 'ol thin')
+ls.text(248, 1, 'лист 0,5, край загнутий на 20', 'note'); ls.text(248, 6, 'герметик ПУ / MS ≈ 1,5', 'note'); ls.text(248, 30, 'плитка керамограніт 10', 'note')
+ls.dimV(-40, 0, -24, '40', side='left')
+lid_layers_svg = ls.svg('Шари стільниці')
 
-# ======================= 6. Gabion (typical) =======================
-g = View(0, 960, 0, 730, pad=(130, 60, 60, 110), k=1.6)
-g.rect(0, 0, 700, 730, 'stone')
-for x in range(25, 700, 25): g.line(x, 0, x, 730, 'hid')
-for y in range(25, 730, 25): g.line(0, y, 700, y, 'hid')
-for x in (0, 675): g.rect(x, 0, x + 25, 730, 'fill')
-for y in (0, 705): g.rect(25, y, 675, y + 25, 'fill')
-g.dimH(0, 700, -40, ext_from=0); g.dimV(0, 730, -40, ext_from=0)
-g.dimH(300, 325, 760, '25', ext_from=730); g.dimH(0, 25, 760, '25', ext_from=730)
-# section through the cassette: sheet on the frame, 80 of pebbles, mesh both sides
-g.rect(820, 0, 822, 730, 'fill'); g.rect(822, 0, 902, 730, 'stone'); g.rect(822, 0, 902, 730, 'ol')
-g.dimH(822, 902, 760, '80', ext_from=730); g.text(862, -30, 'розріз', 'note', 'middle')
-g.text(350, 360, 'галька 20–40, сітка 25×25', 'note', 'middle')
-gab_svg = g.svg('Тонкий габіон')
+# ======================= 6. Stone panel (typical, v34) =======================
+g = View(-40, 1000, -60, 760, pad=(130, 80, 60, 110), k=1.6)
+g.rect(0, 0, 576, 700, 'stone')
+for x0 in (0, 556): g.rect(x0, 0, x0 + 20, 700, 'fill')
+for y0 in (0, 680): g.rect(20, y0, 556, y0 + 20, 'fill')
+g.dimH(0, 576, 740, '576', ext_from=700); g.dimV(0, 700, -30, '700', ext_from=0, side='left'); g.dimH(0, 20, -40, '20', ext_from=0)
+g.text(288, 350, 'камінець 10–20 у поліефірній смолі', 'note', 'middle')
+# section: sheet 0.5 + frame 20 + resin with stones, ~22
+g.rect(760, 0, 761, 700, 'fill'); g.rect(761, 0, 781, 20, 'fill'); g.rect(761, 680, 781, 700, 'fill'); g.rect(761, 20, 783, 680, 'stone'); g.rect(761, 0, 783, 700, 'ol')
+g.dimH(760, 783, 740, '22', ext_from=700); g.text(800, 360, 'лист 0,5 + рамка 20×20 + смола з камінцем', 'note')
+g.text(800, 300, 'панелі: дверцята холодильника 576 × 700,', 'note'); g.text(800, 270, 'бік біля стовпа 600 × 788,', 'note'); g.text(800, 240, 'дверцята лівої тумби 403 × 740', 'note')
+gab_svg = g.svg('Кам\'яна панель')
 
 # ======================= BILL OF MATERIALS =======================
 TUBE = 2.31; A40 = 2.42; F40 = 1.26; A25 = 1.12; A75 = 5.69; A50 = 3.77; A30 = 1.36; SQ10 = 0.785
@@ -782,7 +779,7 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
     <section class="v"><h2>Дах, розріз збоку <span>зад ліворуч, скат назад</span></h2><div class="sc">{roof_side_svg}</div></section>
     <section class="v wide"><h2>Дах спереду <span>випуски по 1 м з боків</span></h2><div class="sc">{roof_front_svg}</div></section>
     <section class="v wide"><h2>Дровник-стінка, вид збоку <span>зад ліворуч; праворуч — ферма, приварена до стовпа (з торця); таких 2: зліва і справа</span></h2><div class="sc">{firewood_svg}</div></section>
-    <section class="v"><h2>Карго для шампурів <span>розріз уздовж, зад ліворуч, карго засунуте</span></h2><div class="sc">{holder_svg}</div></section>
+    <section class="v"><h2>Тумба зліва на інвентар <span>спереду і розріз уздовж (зад ліворуч)</span></h2><div class="sc">{holder_svg}</div></section>
     <section class="notes">
       <h2>Мангал: позиції</h2>
       <ol>
@@ -804,11 +801,11 @@ html = HEAD.format(title='Зона мангала: креслення', css=PAGE
     <p style="margin:0">Окреме креслення з усіма розмірами: <a href="https://claude.ai/artifact/H1J2R72iAaprnuJkxpDk69">Каркас печі під казан</a> (у репозиторії — kreslennia-pich.html і kreslennia/pich-*.svg).</p>
   </div>
 
-  <h2 class="sheet-h">Аркуш 4 · Частина 3, тумба і кришка</h2>
+  <h2 class="sheet-h">Аркуш 4 · Стільниці і кам'яні панелі</h2>
   <div class="grid">
-    <section class="v wide"><h2>Кришка, вид згори <span>решітка дна пунктиром</span></h2><div class="sc">{lid_svg}</div></section>
-    <section class="v"><h2>Шари кришки <span>переріз біля борту</span></h2><div class="sc">{lid_layers_svg}</div></section>
-    <section class="v"><h2>Тонкий габіон <span>касета 80 мм, на прикладі торця 700 × 730</span></h2><div class="sc">{gab_svg}</div></section>
+    <section class="v wide"><h2>Стільниці, вид згори <span>обв'язка і поперечки під листом пунктиром</span></h2><div class="sc">{lid_svg}</div></section>
+    <section class="v"><h2>Шари стільниці <span>переріз біля переднього краю, не в масштабі по товщині</span></h2><div class="sc">{lid_layers_svg}</div></section>
+    <section class="v"><h2>Кам'яна панель <span>типово, на прикладі дверцят холодильника 576 × 700</span></h2><div class="sc">{gab_svg}</div></section>
   </div>
 
   <section class="bom">
@@ -840,10 +837,10 @@ hd.save(os.path.join(K, 'mangal-4-vytyazhka.svg'), 'Витяжка над ман
 rs.save(os.path.join(K, 'dakh-1-rozriz.svg'), 'Дах · розріз збоку')
 rf.save(os.path.join(K, 'dakh-2-speredu.svg'), 'Дах · вид спереду')
 fw.save(os.path.join(K, 'drovnyk-stinka.svg'), 'Дровник-стінка · вид збоку і з торця')
-hs.save(os.path.join(K, 'mangal-3-kargo-shampury.svg'), 'Карго для шампурів · розріз уздовж')
-L.save(os.path.join(K, 'tumba-1-kryshka.svg'), 'Тумба · кришка, вид згори')
-ls.save(os.path.join(K, 'tumba-2-shary-kryshky.svg'), 'Тумба · шари кришки')
-g.save(os.path.join(K, 'tumba-3-gabion.svg'), 'Тонкий габіон · касета 80 мм')
+hs.save(os.path.join(K, 'mangal-3-tumba-zliva.svg'), 'Тумба зліва · спереду і розріз')
+L.save(os.path.join(K, 'tumba-1-stilnytsi.svg'), 'Стільниці · вид згори')
+ls.save(os.path.join(K, 'tumba-2-shary-stilnytsi.svg'), 'Стільниці · шари')
+g.save(os.path.join(K, 'tumba-3-kamyana-panel.svg'), 'Кам\'яна панель · типово')
 print('ok, steel', round(steel_mass), 'kg; grating', grating, 'mm')
 
 # ======================= EXCEL =======================

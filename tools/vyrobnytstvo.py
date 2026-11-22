@@ -25,6 +25,10 @@ DRAWINGS = [  # current drawings made by tools/gen_kompleks.py, in print order
     ('dakh-1-rozriz.svg', 'Дах · розріз збоку'),
     ('dakh-2-speredu.svg', 'Дах · вид спереду'),
     ('drovnyk-stinka.svg', 'Дровник-стінка · вид збоку і ферма з торця'),
+    ('mangal-3-tumba-zliva.svg', 'Тумба зліва на інвентар · спереду і розріз'),
+    ('tumba-1-stilnytsi.svg', 'Стільниці · вид згори'),
+    ('tumba-2-shary-stilnytsi.svg', 'Стільниці · шари'),
+    ('tumba-3-kamyana-panel.svg', 'Кам’яна панель · типово'),
 ]
 SEC_ORDER = ['40×40×2', '40×40×3', '60×40×3', '60×40×2', '100×100×3', '40×20×2', '20×20×1,5', 'смуга 40×4']
 SEC_NAME = {s: (s if s.startswith('смуга') else 'Труба профільна ' + s) for s in SEC_ORDER}
@@ -218,10 +222,11 @@ cut_doc = (f'<!doctype html><html lang="uk"><meta charset="utf-8"><title>Різ�
 open(os.path.join(OUT, 'rozkriy.html'), 'w', encoding='utf-8').write(cut_doc)
 
 # ---- PDF through a headless Edge / Chrome ----
-for exe in (r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe', r'C:\Program Files\Google\Chrome\Application\chrome.exe'):
+for exe in (r'C:\Program Files\Google\Chrome\Application\chrome.exe', r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'):
     if os.path.exists(exe):
         src = 'file:///' + quote(os.path.join(OUT, 'kreslennia-druk.html').replace('\\', '/'), safe='/:')
         pdf = os.path.join(OUT, 'kreslennia-i-rozkriy.pdf')
+        if os.path.exists(pdf): os.remove(pdf)       # never leave an old PDF behind
         import tempfile
         prof = tempfile.mkdtemp(prefix='pdfprof')   # own profile, so a running browser does not swallow the job
         subprocess.run([exe, '--headless=new', '--disable-gpu', '--no-pdf-header-footer', f'--user-data-dir={prof}', f'--print-to-pdf={pdf}', src],

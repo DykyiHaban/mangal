@@ -1385,12 +1385,14 @@ function cutParts() {
   const out = [], v = new THREE.Vector3();
   scene.traverse(o => {
     if (!o.isMesh || !o.geometry || o.geometry.type !== 'BoxGeometry') return;
-    const isTube = o.material === M.tube || o.material === roofSteelM, isBar = o.material === M.angle;
+    const isPanel = o.material === frameDarkM;                /* 20x20 frames of the stone panels */
+    const isTube = o.material === M.tube || o.material === roofSteelM || isPanel, isBar = o.material === M.angle;
     if (!isTube && !isBar) return;
     const pr = o.geometry.parameters, d = [pr.width, pr.height, pr.depth].map(x => Math.round(x));
     const s3 = [...d].sort((a, b) => a - b), L = s3[2];
     let sec = s3[0] + 'x' + s3[1];
     if (isBar && sec !== '4x40') return;
+    if (isPanel) { if (s3[0] === 20 && s3[1] <= 22) sec = '20x20'; else return; }   /* panel frame: 20 wide, 22 deep (panel thickness) */
     if (L < 60) return;                                      /* feet, nuts, plates */
     const map = { '40x40': '40×40', '40x60': '60×40', '20x20': '20×20', '20x40': '40×20', '100x100': '100×100', '4x40': 'смуга 40×4' };
     if (!map[sec]) return;
@@ -1402,6 +1404,7 @@ function cutParts() {
     else if (inside(o, hoodG)) zone = 'Витяжка';
     else if (inside(o, holderG)) zone = 'Тримачі над стільницями';
     else if (o.material === roofSteelM) zone = 'Дах';
+    else if (isPanel) zone = 'Кам\'яні панелі';
     else if (sec === '20x20') zone = v.y > 790 ? 'Стільниці (поперечки)' : 'Кам\'яні панелі';
     else if (lx < 480) zone = 'Ліва тумба';
     else if (lx < 1630) zone = 'Мангал і піч';
